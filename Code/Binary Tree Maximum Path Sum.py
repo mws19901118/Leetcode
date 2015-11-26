@@ -26,10 +26,10 @@ class Solution:
                 sum+=value
             else:
                 sum=value
-            if sum>max(msum):
+            if sum>msum[-1]:
                 msum.append(sum)
             return sum
                     
         msum=[root.val]                           #'msum' is used to store the max path sum, initialed with 'root.val'
         maxSum(root)                                    
-        return max(msum)
+        return msum[-1]
