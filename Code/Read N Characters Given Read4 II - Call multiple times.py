@@ -5,7 +5,7 @@
 
 class Solution(object):
     def __init__(self):
-        self.buffer = [None for i in range(4)]                        #Use a global variable to store the buffer result of read4 method.
+        self.buffer = [None for _ in range(4)]                        #Use a global variable to store the buffer result of read4 method.
         self.buffer_size = 0                                          #Use a global variable to store the buffer size.
         self.offset = 0                                               #Use a global variable to store the offset, where we start reading next time.
         
@@ -15,29 +15,26 @@ class Solution(object):
         :type n: Maximum number of characters to read (int)
         :rtype: The number of characters read (int)
         """
-        count = 0
-        while n > 0 and self.offset < self.buffer_size:               #While n is not 0 and there is still characters in buffer, add them to buf.
-            buf[count] = self.buffer[self.offset]
-            count += 1
-            self.offset += 1
-            n -= 1
-        while n >= 4:                                                 #Call read4 method as we did in Read N Characters Given Read4.
-            c = read4(self.buffer)
-            for i in range(c):
-                buf[count + i] = self.buffer[i]
-            count += c
-            if c < 4:
-                break
-            else:
-                n -= 4
-        if n == 0 or n >= 4:
-            return count
-        else:                                                         #Deal the last few characters to read.
-            self.buffer_size = read4(self.buffer)                     #Read 4 characters.
-            self.offset = 0                                           #Set offset to the beginning.
-            while n > 0 and self.offset < self.buffer_size:           #While n is not 0 and there is still characters in buffer, add them to buf.
-                buf[count] = self.buffer[self.offset]
-                count += 1
-                self.offset += 1
-                n -= 1
-            return count
+        index = 0                                                     #Indicates the beginning unfilled index in buf.
+        temp = min(n, self.buffersize - self.offset)                  #Find the min value of n and remaining buffer size.
+        buf[:temp] = self.buffer[self.offset:self.offset + temp]      #Fill buf with characters in buffer as many as possible.
+        index += temp                                                 #Update index.
+        self.offset += temp                                           #Update offset.
+        if index == n:                                                #If have already read n characters, return index.
+            return index
+        b = [' ' for i in range(4)]                                   #Construct a list of characters to be read in read4.
+        while True:
+            t = read4(b)                                              #Call read4 and get the actual number of characters read.
+            if index + t <= n:                                        #If number of characters so far don't exceed n, fill buf and update index.
+                buf[index:index + t] = b[:t]
+                index += t
+                if t < 4:                                             #If no characters left to be read, break.
+                    break
+            else:                                                     #Otherwise, we have unused characters to become new buffer.
+                buf[index:] = b[:n - index]                           #Fill buf until it's full.
+                self.buffer[:t - (n - index)] = b[n - index:]         #The rest is new buffer.
+                self.buffersize = t - (n - index)                     #Update buffersize.
+                self.offset = 0                                       #Update offset.
+                index = n                                             #Update index
+                break                                                 #Break.
+        return index                                                  #Return index.
