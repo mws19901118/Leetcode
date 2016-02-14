@@ -1,30 +1,19 @@
-class Solution:
-    # @param num, a list of integer
-    # @return an integer
-    def findPeakElement(self, num):
-        length=len(num)
-        if length==0:
-            return None
-        elif length==1:
-            return 0
-        elif length==2:
-            if num[0]>num[1]:
-                return 0
-            else:
-                return 1
-        else:
-            if num[0]>num[1]:                                               //Check the endpoint.
-                return 0
-            elif num[length-1]>num[length-2]:
-                return length-1
-            else:
-                start=0
-                end=length-1
-                while start<=end:                                           //Binary search.
-                    mid=start+(end-start)/2
-                    if num[mid]>num[mid-1] and num[mid]>num[mid+1]:         //If mid is peak point, return its index.
-                        return mid
-                    elif num[mid]<num[mid-1]:                               //If mid is not peak point and num[mid]<mun[mid-1], there must be at least 1 peak point in the left side of mid, because num[i] ≠ num[i+1].
-                        end=mid-1
-                    else:                                                   //The other side is similar.
-                        start=mid+1
+class Solution(object):
+    def findPeakElement(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        l = len(nums)
+        nums.insert(0, -0x8fffffff)                                         #Add a negative max in the start.
+        nums.append(-0x8fffffff)                                            #Add a negative max in the end.
+        start = 1
+        end = l
+        while start <= end:                                                 #Do binary search from 1 to l.
+            mid = (start + end) / 2
+            if nums[mid] > nums[mid - 1] and nums[mid] > nums[mid + 1]:     #If nums[mid] is a peak element, return mid - 1(becase we added a nagative max in the start).
+                return mid - 1
+            elif nums[mid] > nums[mid - 1] and nums[mid] < nums[mid + 1]:   #If it's in a rising subarray, there must be at least 1 peak element in the second half.
+                start = mid + 1
+            else:                                                           #Otherwise, there must be at least 1 peak element in the first half.
+                end = mid - 1
