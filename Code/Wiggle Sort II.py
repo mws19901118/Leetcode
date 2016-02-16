@@ -47,4 +47,3 @@ class Solution(object):
                         before += 1
                     self.replace(nums, current, before)                                                                                                       #If found such number, replace one of the 2 numbers.
             current += 1
-        print nums
