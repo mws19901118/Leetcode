@@ -24,7 +24,7 @@ class Solution(object):
         current = 0                                                                                                                                           #Record the index of current number.
         before = 0                                                                                                                                            #Record the index of number(before current index) to swap with current number.
         after = 2                                                                                                                                             #Record the index of number(after current index) to swap with current number.
-        while current < len(nums) - 1:                                                                                                                        #Traverse until current number is tha last one.
+        while current < len(nums) - 1:                                                                                                                        #Traverse until current number is the last one.
             if after == current + 1:                                                                                                                          #"after" should be at least 2 numbers ahead "current".
                 after += 1
             if nums[current] != nums[current + 1]:                                                                                                            #If current number does not equal the number after current number, simply wiggle sort the 2 number.
