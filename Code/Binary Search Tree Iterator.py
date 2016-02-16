@@ -1,43 +1,44 @@
 # Definition for a  binary tree node
-# class TreeNode:
+# class TreeNode(object):
 #     def __init__(self, x):
 #         self.val = x
 #         self.left = None
 #         self.right = None
 
-class BSTIterator:
-    # @param root, a binary search tree's root node
+class BSTIterator(object):
     def __init__(self, root):
-        cur=root
-        precursor=None
-        self.result=[]
-        while cur!=None:                                                #Inorder traversal.
-            if cur.left==None:
-                self.result.append(cur.val)
-                cur=cur.right
-            else:
-                precursor=cur.left
-                while precursor.right!=None and precursor.right!=cur:
-                    precursor=precursor.right
-                if precursor.right==None:
-                    precursor.right=cur
-                    cur=cur.left
-                else:
-                    precursor.right=None
-                    self.result.append(cur.val)
-                    cur=cur.right
-        self.result.reverse()                                           #Reverse the list to let the smallest number place in the rear.
+        """
+        :type root: TreeNode
+        """
+        self.stack = []                                                     #Store the path.
+        self.curr = root                                                    #Record current node.
+        while self.curr is not None and self.curr.left is not None:         #Find the leftmost node.
+            self.stack.append(self.curr)
+            self.curr = self.curr.left
 
-    # @return a boolean, whether we have a next smallest number
     def hasNext(self):
-        if len(self.result)!=0:
-            return True
-        else:
-            return False
+        """
+        :rtype: bool
+        """
+        return self.curr is not None                                        #When iterator comes to the end, self.curr is none.
 
-    # @return an integer, the next smallest number
     def next(self):
-        return self.result.pop()
+        """
+        :rtype: int
+        """
+        result = self.curr.val                                              #Buffer current value.
+        if self.curr.right is None:                                         #If current node doesn't has right child, pop item as current node if self.stack is not empty.
+            if self.stack != []:
+                self.curr = self.stack.pop()
+            else:                                                           #Otherwise, set self.curr to be none.
+                self.curr = None
+        else:
+            self.curr = self.curr.right                                     #Set self.curr to be the leftmost node in its right subtree, and push the path to self.stack.
+            while self.curr.left is not None:
+                self.stack.append(self.curr)
+                self.curr = self.curr.left
+        
+        return result                                                       #Return buffer.
 
 # Your BSTIterator will be called like this:
 # i, v = BSTIterator(root), []
