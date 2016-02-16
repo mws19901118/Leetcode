@@ -1,34 +1,23 @@
 class Solution:
-    # @param matrix, a list of lists of integers
-    # @param target, an integer
-    # @return a boolean
+    # @param {integer[][]} matrix
+    # @param {integer} target
+    # @return {boolean}
     def searchMatrix(self, matrix, target):
-        row=len(matrix)
-        if row==0:
+        m = len(matrix)
+        if m == 0:
             return False
-        column=len(matrix[0])
-        if column==0:
+        n = len(matrix[0])
+        if n == 0:
             return False
-        start=0
-        end=row-1
-        while start+1<=end:                                         #Binary search for the row where target belongs to(The statement start+1<=end is to prevent index out of bound).
-            mid=(start+end)/2
-            if matrix[mid][0]<=target and matrix[mid+1][0]>target:
-                start=mid                                           #Find the row.
-                break
-            elif matrix[mid][0]>target:
-                end=mid
-            else:
-                start=mid+1
-        rowIndex=start
-        start=0
-        end=column-1
-        while start<=end:                                           #Binary search for the target in the row it should belong to.
-            mid=(start+end)/2
-            if matrix[rowIndex][mid]==target:
-                return True                                         #If find target, return true.
-            elif matrix[rowIndex][mid]>target:
-                end=mid-1
-            else:
-                start=mid+1
-        return False                                                #If can not find target, return false.
+        if target<matrix[0][0] or target>matrix[m - 1][n - 1]:      #If target is smaller than the first element or greater than the last element, return false.
+            return False
+        i = 0
+        j = n - 1                                                   #Begin search from the last element in the first row.
+        while i < m and j >= 0:
+            if matrix[i][j] == target:                              #If find the target, return true.
+                return True
+            elif matrix[i][j] > target:                             #If current element is smaller than target, target must in the left side of current column.
+                j -= 1
+            else:                                                   #If current element is greater than target, target must in the lower side of current row.
+                i += 1
+        return False
