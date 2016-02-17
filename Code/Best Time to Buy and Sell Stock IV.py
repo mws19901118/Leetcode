@@ -19,7 +19,7 @@ class Solution:
         l=len(peak)
         if k>=l/2:                                                                  #If k is greater than the half length of peak, then we can do transaction whenever we want, return the total profit without restriction.
             return res
-        dp=[[0 for i in range(l+1)] for j in range(2)]                              #Use dp[k][i+1] represents the max profit of using [0,i] data(only consider peak elements) and k transactions.
+        dp=[[0 for i in range(l+1)] for j in range(k)]                              #Use dp[k][i+1] represents the max profit of using [0,i] data(only consider peak elements) and k transactions.
         for i in range(1,k+1):                                                      #dp[k][i+1]=max(dp[k-1][i+1], dp[k][i], peak[i] + max( dp[k-1][j] - peak[j] )) { 0 <= j < i }
             currentmax=-0xFFFFFFFF
             for j in range(l):
