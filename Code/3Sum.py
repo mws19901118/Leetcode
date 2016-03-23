@@ -1,29 +1,25 @@
-class Solution:
-    # @param {integer[]} nums
-    # @return {integer[][]}
+class Solution(object):
     def threeSum(self, nums):
-        nums.sort()                                               #In order that a<=b<=c, sort the list.
-        n=len(nums)
-        dict={}                                                   #Record the index of first appearance of each value.
-        result=[]
-        for i in range(n):
-            if nums[i] not in dict:
-                dict[nums[i]]=i
-        for i in range(n-2):                                      #The last possible index of a is n-3.
-            if nums[i]>0:                                         #a can't be great than 0.
-                break
-            if i>0 and nums[i]==nums[i-1]:                        #To rule out duplicates, only consider the first appearance of each value.
-                continue
-            for j in range(i+1,n-1):                              #The last possible index of a is n-2.
-                if nums[j]>-nums[i]:                              #b can't be great than -a.
-                    break
-                if j>i+1 and nums[j]==nums[j-1]:                  #To rule out duplicates, only consider the first appearance of each value.
-                    continue
-                c=-nums[i]-nums[j]
-                if c in dict:                                     #If c is in dict, there might be a possible solution.
-                    if c>nums[j]:                                 #If c>b, it's ok.
-                        result.append([nums[i],nums[j],c])
-                    elif c==nums[j]:                              #If c=b, only when there are mutipule appearance of b, it's a legal solution.
-                        if nums[j+1]==nums[j]:
-                            result.append([nums[i],nums[j],c])
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        nums.sort()                                                 #Sort nums first.
+        s = set()                                                   #Use set to rule out duplicate tuples.
+        for i in range(len(nums) - 2):                              #Check every possible index of the 1st number.
+            start = i + 1                                           #Use 2 pointers, start and end, to go through from 2 sides to middle.
+            end = len(nums) - 1
+            while start < end:
+                t = nums[i] + nums[start] + nums[end]               #Calculate the temporary sum.
+                if t == 0:                                          #If t is 0, add a tuple to s.
+                    s.add((nums[i], nums[start], nums[end]))
+                    start += 1                                      #Move start forward.
+                    end -= 1                                        #Move end backward.
+                elif t > 0:                                         #If t is greater than 0, move end backward.
+                    end -= 1
+                else:                                               #If t is smaller than 0, move start forward.
+                    start += 1
+        result = []
+        for t in s:                                                 #Convert tuple to list and store them in a list.
+            result.append([t[0], t[1], t[2]])
         return result
