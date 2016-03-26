@@ -1,56 +1,46 @@
-class Solution:
-    # @return a string
-    def minWindow(self, S, T):
-        n=len(S)
-        m=len(T)
-        if n==0 or m==0:
+from collections import Counter
+class Solution(object):
+    def minWindow(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        """
+        m = len(s)
+        n = len(t)
+        if m < n or n == 0:                         #If s is shorter than t or t is empty string, return ''.
+            return ''
+        d = Counter(t)                              #Count the characters in t.
+        minl = m + 1                                #Maintain the min length of window.
+        result = ''                                 #Store the result.
+        count = 0                                   #Count how many unique characters whose counts are matched of t are found in the window
+        i = 0                                       #Two pointers: i indicates the end of window and j in indicates the start of window.
+        j = 0
+        dict= {}                                    #Count the characters of t in the window, initially 0.
+        for x in d:
+            dict[x] = 0
+        while i < m:                                #While haven't reached the end of s, maintain dict as follows.
+            while i < m and count < len(d):         #Move i forward while haven't matched all characters.
+                if s[i] in d:
+                    dict[s[i]] += 1                 #Maintain dict.
+                    if dict[s[i]] == d[s[i]]:       #If match a characters, update count.
+                        count += 1
+                i += 1
+            if count == len(d):                     #If match all characters, update minl and result.
+                if minl > i - j:
+                    minl = i - j
+                    result = s[j:i]
+            while j < i and count == len(d):        #Move j forward j is smaller than i and have matched all characters.
+                if s[j] in d:
+                    dict[s[j]] -= 1                 #Maintain dict.
+                    if dict[s[j]] < d[s[j]]:        #If unmatch a characters, update count.
+                        count -= 1
+                j += 1
+            if count < len(d):                      #If can not match all characters, update minl and result.
+                if minl > i - j + 1:
+                    minl = i - j + 1
+                    result = s[j - 1:i]
+        if minl == m + 1:                           #If can npt find such window, return ''.
             return ""
-        dict={}                                             #Count the number of appearances of each character in T.
-        for c in T:
-            if not dict.has_key(c):
-                dict[c]=1
-            else:
-                dict[c]+=1
-        minLenth=n                                          #Minimum length of window is the length of S.
-        result=""
-        i=0
-        appearance={}                                       #Count the current number of appearances of each character in T.
-        for c in T:
-            appearance[c]=0
-        first=S[i]                                          #Record the beginning index of the window.
-        index=[]                                            #Record the sequence of index of character.
-        count=0                                             #Record the current number of appeared character.
-        j=0
-        while i<n:
-            if S[i] not in T:
-                i+=1
-            else:
-                first=S[i]                                  #Update first.
-                if j<i:                                     #J should be greater than or equal to i.
-                    j=i
-                while j<n and count<m:
-                    if appearance.has_key(S[j]):
-                        index.append(j)                     #Append current index to index.
-                        if appearance[S[j]]<dict[S[j]]:     #If current number of appearances of S[j] is smaller than the total number of appearances of S[j], we find a valid appearance of S[j], so update count.
-                            count+=1
-                        appearance[S[j]]+=1                 #Update appearance.
-                    j+=1
-                if count==m:                                #This means that a window is found.
-                    while appearance[first]>dict[first]:    #Deal with the duplicate characters in the beginning of window.
-                        appearance[first]-=1                #Update appearance.
-                        index.remove(index[0])              #Remove index of duplicate characters.
-                        first=S[index[0]]                   #Update the beginning character of window.
-                        i=index[0]                          #Update the beginning index of window.
-                    length=index[-1]-index[0]+1
-                    if length<=minLenth:                    #If current window length is small than minLength, update minLength.
-                        minLenth=length
-                        result=S[index[0]:index[-1]+1]      #Update result.
-                    
-                if len(index)>1:                            #If the window has more than one characters in T.
-                    index.remove(i)                         #Remove the index of beginning character of window.
-                    appearance[S[i]]-=1                     #Update appearance.
-                    i=index[0]                              #Update i and search for the window beginning with the second valid character of current window.
-                    count-=1                                #Update count.
-                else:                                       #If the window has more than one characters in T.
-                    i=i+1
-        return result                                       #Return result.
+        else:                                       #Otherwise, return result.
+            return result
