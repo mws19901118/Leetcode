@@ -1,41 +1,38 @@
-# Definition for singly-linked list with a random pointer.
-# class RandomListNode:
-#     def __init__(self, x):
-#         self.label = x
-#         self.next = None
-#         self.random = None
-
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, next, random):
+        self.val = val
+        self.next = next
+        self.random = random
+"""
 class Solution:
-    # @param head, a RandomListNode
-    # @return a RandomListNode
-    def copyRandomList(self, head):
-        if head==None:
+    def copyRandomList(self, head: 'Node') -> 'Node':
+        if head is None:
             return None
-        p=head
-        while p!=None:                                      #duplicate every node and insert them after the old ones
-            t=RandomListNode(p.label)
-            t.next=p.next
-            p.next=t
-            t.random=p.random
-            p=t.next
-        p=head.next
-        while True:                                         #process 'random' pointer
-            if p.random!=None:
-                p.random=p.random.next
-            if p!=None and p.next!=None:
-                p=p.next.next
-            else:
-                break
-        newhead=head.next
-        q=head
-        p=newhead
-        while q.next!=None and q.next.next!=None and p.next!=None and p.next.next!=None:              #delete old ones
-            q.next=q.next.next
-            q=q.next
-            p.next=p.next.next
-            p=p.next
-        #if p!=None:
-        p.next=None
-        #if q!=None:
-        q.next=None
-        return newhead
+        
+        pointer = head
+        while pointer is not None:                                      #Duplicate every node and insert them after the old ones.
+            copy = Node(pointer.val, pointer.next, pointer.random)
+            pointer.next = copy
+            pointer = pointer.next.next
+            
+        pointer1 = head.next
+        pointer2 = head
+        while pointer2 is not None:                                     #Set the new node's random pointer to the next node of old node's random pointer.
+            if pointer2.random is not None:
+                pointer1.random = pointer2.random.next
+            pointer2 = pointer2.next.next
+            if pointer1.next is not None:
+                pointer1 = pointer1.next.next
+
+        newHead = head.next
+        pointer1 = head.next
+        pointer2 = head
+        while pointer1 is not None:                                     #Separate old linked list and new linked list.
+            pointer2.next = pointer1.next
+            if pointer1.next is not None:
+                pointer1.next = pointer1.next.next
+            pointer1 = pointer1.next
+            pointer2 = pointer2.next
+        return newHead
