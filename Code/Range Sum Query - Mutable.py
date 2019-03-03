@@ -1,63 +1,22 @@
-class NumArray(object):
+class NumArray:
     def __init__(self, nums):
-        """
-        initialize your data structure here.
-        :type nums: List[int]
-        """
-        self.length = len(nums)                             #Record current length of segment.
-        if self.length == 0:
-            self.sum = 0
-        elif self.length == 1:
-            self.sum = nums[0]
-        else:                                               #If current length is larger than 2, build left segment and right segment recursively.
-            mid = self.length / 2
-            self.left = NumArray(nums[:mid])
-            self.right = NumArray(nums[mid:])
-            self.sum = self.left.sum + self.right.sum       #Update currrent sum.
+        self.nums = [0] * len(nums)                                     #Store the original nums.
+        self.bit = [0] * (len(nums) + 1)                                #Binary Indexed Tree, the index starts with 0 here for convenience. Thus self.bit[i + 1] is corresponding to self.nums[i].
+        for i, n in enumerate(nums):                                    #Because both nums and bit are intialed with all 0s, update them for each number. 
+            self.update(i, n)
+        self.sumRange = lambda i, j: self.Sum(j + 1) - self.Sum(i)      #The range sum from i to j is the sum from 0 to j minus the sum from 0 to i - 1, so use a lambda function to return the result.
 
-    def update(self, i, val):
-        """
-        :type i: int
-        :type val: int
-        :rtype: int
-        """
-        if self.length == 0:                                #If current length is 0, do nothing.
-            return
-        elif self.length == 1:
-            self.sum = val
-            return
-        else:                                               #If current length is larger than 2, update left segment or right segment recursively.
-            mid = self.length / 2
-            if i < mid:
-                self.left.update(i, val)
-            else:
-                self.right.update(i - mid, val)
-            self.sum = self.left.sum + self.right.sum       #Update current sum.
-            return
-
-    def sumRange(self, i, j):
-        """
-        sum of elements nums[i..j], inclusive.
-        :type i: int
-        :type j: int
-        :rtype: int
-        """
-        if i > j:                                           #If i > j, range does not exist, return.
-            return 0
-        if self.length <= 1:                                #If current length is not larger than 1, directly return current sum.
-            return self.sum
-        elif self.length == j - i + 1:                      #If current length equals the length of range, directly return current sum.
-            return self.sum
-        else:
-            mid = self.length / 2
-            if mid >= i and mid <= j:                       #If mid is between i and j, divide range into 2 ranges and return the sum of sum of each range.
-                return self.left.sumRange(i, mid - 1) + self.right.sumRange(0, j - mid)
-            elif mid < i:                                   #Otherwise, find the sum in left segment or right segment.
-                return self.right.sumRange(i - mid, j - mid)
-            else:
-                return self.left.sumRange(i, j)
-# Your NumArray object will be instantiated and called as such:
-# numArray = NumArray(nums)
-# numArray.sumRange(0, 1)
-# numArray.update(1, 10)
-# numArray.sumRange(1, 2)
+    def update(self, i, val):                                           #Update new value index i.
+        diff, self.nums[i] = val - self.nums[i], val                    #Calculate diff and update self.nums[i].
+        i += 1                                                          #Now update self.bit, so increase the index by 1.
+        while i < len(self.bit):                                        #Update from start to end.
+            self.bit[i] += diff                                         #Update the value in self.bit for current index.
+            i += (i & -i)                                               #Go to next. "i & -i" calculates the max power of 2 which is a divider of i. "i + (i & -i)" is the higher level sum to update.
+                                                                        #For example, i = 10. Then, i in binary is 1010; -i in binary is 0110. i & -i is 2 and i + (i & -i) is 12, the next sum in bit to update(if bit's length is enough).
+    def Sum(self, k):                                                   #Calculate the range sum from 0 to k - 1.
+        result = 0                                                      #Initailize result.
+        while k:
+            result += self.bit[k]                                       #Add the value in self.bit for current index.
+            k -= (k & -k)                                               #Here is the revert process of "i += (i & -i)" in update.
+        return result                                                   #For example, k = 10. Then, k in binary is 1010; -k in binary is 0110. k & -k is 2 and k - (k & -k) is 8.
+                                                                        #Range sum from 0 to 9 is self.bit[8](sum from 0 to 7) + self.bit[10](sum from 8 to 9).
