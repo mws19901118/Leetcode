@@ -1,25 +1,25 @@
-class Solution(object):
-    def threeSum(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[List[int]]
-        """
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
         nums.sort()                                                 #Sort nums first.
-        s = set()                                                   #Use set to rule out duplicate tuples.
-        for i in range(len(nums) - 2):                              #Check every possible index of the 1st number.
+        result = [[-1, -1, -1]]                                     #Create a dummy head for results.
+        i = 0
+        while i < len(nums) - 2 and nums[i] <= 0:                   #Check every possible index of the 1st number.
             start = i + 1                                           #Use 2 pointers, start and end, to go through from 2 sides to middle.
             end = len(nums) - 1
             while start < end:
-                t = nums[i] + nums[start] + nums[end]               #Calculate the temporary sum.
-                if t == 0:                                          #If t is 0, add a tuple to s.
-                    s.add((nums[i], nums[start], nums[end]))
+                s = nums[i] + nums[start] + nums[end]               #Calculate the temporary sum.
+                if s == 0:                                          #If temporary sum is 0, add a list of 3 numbers to result if it's not equal to the last list in result.
+                    t = [nums[i], nums[start], nums[end]] 
+                    if t != result[-1]:
+                        result.append(t)
                     start += 1                                      #Move start forward.
                     end -= 1                                        #Move end backward.
-                elif t > 0:                                         #If t is greater than 0, move end backward.
+                elif s > 0:                                         #If temporary sum is greater than 0, move end backward.
                     end -= 1
-                else:                                               #If t is smaller than 0, move start forward.
+                else:                                               #If temporary sum is smaller than 0, move start forward.
                     start += 1
-        result = []
-        for t in s:                                                 #Convert tuple to list and store them in a list.
-            result.append([t[0], t[1], t[2]])
-        return result
+            j = i
+            while j < len(nums) and nums[j] == nums[i]:             #Go to the next unique value of i.
+                j += 1
+            i = j
+        return result[1:]                                           #Return result exclude dummy head.
