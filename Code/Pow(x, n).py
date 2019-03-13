@@ -1,6 +1,6 @@
 class Solution:
     def myPow(self, x: float, n: int) -> float:
-        b = format(abs(n), '0b')                                #Convert the abs valie of n to binary.
+        b = format(abs(n), '0b')                                #Convert the abs value of n to binary.
         p = [1, x]                                              #Use a list to store the powers of x. Initially, x^0 and x^1.
         while len(p) <= len(b):                                 #While the length of p is not larger than that of b, keep expanding p so the new power is the square of previous power.
             p.append(p[-1] * p[-1])
