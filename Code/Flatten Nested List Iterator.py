@@ -30,34 +30,25 @@ class NestedIterator(object):
         Initialize your data structure here.
         :type nestedList: List[NestedInteger]
         """
-        self.currentList = nestedList                                                                                                       #Store current nested list.
-        self.currentIndex = 0                                                                                                               #Store current index in current nested list.
-        self.stack = []                                                                                                                     #Store the state in the preivous level of DFS.
+        self.stack = []                                                             #Use stack to store nested integers.
+        for x in reversed(nestedList):                                              #Push all the initial nested integers to stack in reverse order.
+            self.stack.append(x)
 
     def next(self):
         """
         :rtype: int
         """
-        temp = self.currentList[self.currentIndex].getInteger()                                                                             #Get current integer.
-        self.currentIndex += 1                                                                                                              #Increase current index by 1.
-        return temp                                                                                                                         #Return value.
-        
+       return self.stack.pop().getInteger()                                         #Pop stack and return its value.
+
     def hasNext(self):
         """
         :rtype: bool
         """
-        while not (self.currentIndex == len(self.currentList) and self.stack == []):                                                        #If current index equals the length of current list and stack is empty, we reach the end of nested list.
-            while self.currentIndex == len(self.currentList) and self.stack:                                                                #If current index reaches the end of current list, pop stack while it's not empty.
-                self.currentList = self.stack[-1][0]
-                self.currentIndex = self.stack[-1][1] + 1
-                self.stack.pop()
-            while self.currentIndex < len(self.currentList) and self.currentList[self.currentIndex].isInteger() is False:                   #If current object is list, push current list and current index to stack and go into the new list.
-                self.stack.append((self.currentList, self.currentIndex))
-                self.currentList = self.currentList[self.currentIndex].getList()
-                self.currentIndex = 0
-            if self.currentIndex < len(self.currentList) and self.currentList[self.currentIndex].isInteger() is True:                       #If current object is integer, return true.
-                return True
-        return False                                                                                                                        #Return false.
+        while self.stack and not self.stack[-1].isInteger():                        #While the stack is not empty and the top of stack is list.
+            for x in reversed(self.stack.pop().getList()):                          #Pop stack and get its list.
+                self.stack.append(x)                                                #Push nested integers in list to stack in reverse order.
+                
+        return self.stack                                                           #Return if the stack is empty
 
 # Your NestedIterator object will be instantiated and called as such:
 # i, v = NestedIterator(nestedList), []
