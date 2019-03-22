@@ -3,7 +3,7 @@ class Solution:
     # @return {integer}
     def calculate(self, s):
         s = re.sub(r'\d+', ' \g<0> ', s)                                                        #Use regular expression to add space between operators and numbers.
-        p = {'+': operator.add, '-': operator.sub, '*': operator.mul, '/': operator.floordiv}   #Use dictionary to store each operation and corresponding character.
+        op = {'+': operator.add, '-': operator.sub, '*': operator.mul, '/': operator.floordiv}   #Use dictionary to store each operation and corresponding character.
         expression = s.split()                                                                  #Split the string to operators and numbers.
         result=0
         number=0                                                                                #Record current number to be operated.
