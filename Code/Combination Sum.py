@@ -1,25 +1,17 @@
+import copy
 class Solution:
-    def backtrack(self, candidates, list, sum, target, ans):
-        if sum==target:
-            temp=[]
-            for i in list:
-                temp.append(i)                                            #If temporary sum equals target, copy list to temp.
-            ans.append(temp)
-        elif sum<target:
-            l=len(candidates)
-            for i in range(l):
-                list.append(candidates[i])
-                sum+=candidates[i]
-                self.backtrack(candidates[i:], list, sum, target, ans)    #Because elements in combination should be non-descending, use candidates[i:] in the next step.
-                list.pop()
-                sum-=candidates[i]
-    # @param {integer[]} candidates
-    # @param {integer} target
-    # @return {integer[][]}
-    def combinationSum(self, candidates, target):
-        candidates.sort()                                                 #Sort the candidates.
-        sum=0                                                             #Record temporary sum.
-        list=[]                                                           #Record the possible combination.
-        ans=[]
-        self.backtrack(candidates, list, sum, target, ans)                #Backtrack.
-        return ans
+    def backtracking(self, candidates, trace, currentSum, target, result):
+        if currentSum == target:                                                        #If current sum equals target, add a deep copy of trace to result.                
+            result.append(copy.deepcopy(trace))
+        for i, x in enumerate(candidates):                                              #Traverse candidates.
+            if currentSum + x > target:                                                 #If current sum plus current number will exceed target, break.
+                break
+            trace.append(x)                                                             #Append current number to trace.
+            self.backtracking(candidates[i:], trace, currentSum + x, target, result)    #Keep backtracting.
+            trace.pop()                                                                 #Pop trace.
+            
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()                                                               #Sort the candidates.
+        result = []                                                                     #Record the possible combination.
+        self.backtracking(candidates, [], 0, target, result)                            #Backtracking.
+        return result
