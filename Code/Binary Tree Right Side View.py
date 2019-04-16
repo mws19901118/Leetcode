@@ -8,20 +8,18 @@
 class Solution:
     # @param root, a tree node
     # @return a list of integers
-    def rightSideView(self, root):                        #Do the binary tree level order traverse.
-        result=[]
-        if root==None:
-            return result
-        current=[root]
-        thenext=[]
-        while current!=[]:
-            for i in range(len(current)):
-                if current[i].left!=None:
-                    thenext.append(current[i].left)
-                if current[i].right!=None:
-                    thenext.append(current[i].right)
-                if i==len(current)-1:
-                    result.append(current[i].val)         #Append value of the last node of each level to result.
-            current=thenext
-            thenext=[]
+    def rightSideView(self, root):                          #Do the binary tree level order traverse using BFS.
+        q = []
+        if root is not None:
+            q.append(root)
+        result = []
+        while q:
+            nextq = []
+            for x in q:
+                if x.left is not None:
+                    nextq.append(x.left)
+                if x.right is not None:
+                    nextq.append(x.right)
+            result.append(q[-1].val)                        #Append value of the last node of each level to result.
+            q = nextq
         return result
