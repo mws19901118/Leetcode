@@ -5,8 +5,7 @@ class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         if not position or not speed:                                               #If no cars, return 0.
             return 0
-        car = [(p, s) for p, s in zip(position, speed)]                             #Use a tuple of (position, speed) to represent each car.
-        car.sort(reverse = True)                                                    #Sort by position in descending order.
+        car = sorted([(p, s) for p, s in zip(position, speed)], reverse = True)     #Use a tuple of (position, speed) to represent each car and sort by position in descending order.
         lead = car[0]                                                               #Initially, the lead car is the first car after sort, and there is one car fleet.
         count = 1
         for i in range(1, len(car)):                                                #For each car behind lead, if current car can not catch up the lead, then there is no more car for the car fleet that the lead car belongs to.
