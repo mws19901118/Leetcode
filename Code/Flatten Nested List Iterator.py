@@ -30,9 +30,7 @@ class NestedIterator(object):
         Initialize your data structure here.
         :type nestedList: List[NestedInteger]
         """
-        self.stack = []                                                             #Use stack to store nested integers.
-        for x in reversed(nestedList):                                              #Push all the initial nested integers to stack in reverse order.
-            self.stack.append(x)
+        self.stack = nestedList[::-1]                                               #Use stack to store nested integers. #Push all the initial nested integers to stack in reverse order.
 
     def next(self):
         """
@@ -45,9 +43,9 @@ class NestedIterator(object):
         :rtype: bool
         """
         while self.stack and not self.stack[-1].isInteger():                        #While the stack is not empty and the top of stack is list.
-            for x in reversed(self.stack.pop().getList()):                          #Pop stack and get its list.
-                self.stack.append(x)                                                #Push nested integers in list to stack in reverse order.
-                
+            top = self.stack.pop().getList()                                        #Pop stack and get its list.
+            self.stack.extend(top[::-1])                                            #Push nested integers in list to stack in reverse order.
+
         return self.stack                                                           #Return if the stack is empty
 
 # Your NestedIterator object will be instantiated and called as such:
