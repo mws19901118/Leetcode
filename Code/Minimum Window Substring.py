@@ -1,46 +1,28 @@
 from collections import Counter
-class Solution(object):
-    def minWindow(self, s, t):
-        """
-        :type s: str
-        :type t: str
-        :rtype: str
-        """
-        m = len(s)
-        n = len(t)
-        if m < n or n == 0:                         #If s is shorter than t or t is empty string, return ''.
-            return ''
-        d = Counter(t)                              #Count the characters in t.
-        minl = m + 1                                #Maintain the min length of window.
-        result = ''                                 #Store the result.
-        count = 0                                   #Count how many unique characters whose counts are matched of t are found in the window
-        i = 0                                       #Two pointers: i indicates the end of window and j in indicates the start of window.
-        j = 0
-        dict= {}                                    #Count the characters of t in the window, initially 0.
-        for x in d:
-            dict[x] = 0
-        while i < m:                                #While haven't reached the end of s, maintain dict as follows.
-            while i < m and count < len(d):         #Move i forward while haven't matched all characters.
-                if s[i] in d:
-                    dict[s[i]] += 1                 #Maintain dict.
-                    if dict[s[i]] == d[s[i]]:       #If match a characters, update count.
-                        count += 1
-                i += 1
-            if count == len(d):                     #If match all characters, update minl and result.
-                if minl > i - j:
-                    minl = i - j
-                    result = s[j:i]
-            while j < i and count == len(d):        #Move j forward j is smaller than i and have matched all characters.
-                if s[j] in d:
-                    dict[s[j]] -= 1                 #Maintain dict.
-                    if dict[s[j]] < d[s[j]]:        #If unmatch a characters, update count.
-                        count -= 1
-                j += 1
-            if count < len(d):                      #If can not match all characters, update minl and result.
-                if minl > i - j + 1:
-                    minl = i - j + 1
-                    result = s[j - 1:i]
-        if minl == m + 1:                           #If can npt find such window, return ''.
-            return ""
-        else:                                       #Otherwise, return result.
-            return result
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        countT, countS = Counter(t), Counter()                                  #countT counts the characters in t, and countS counts the characters in sliding window, initially empty.
+        start, end = 0, 0                                                       #The start and end of sliding window.
+        minLength = len(s) + 1                                                  #Record the minimum length of sliding window.
+        result = ""                                                             #Store result/
+        match = 0                                                               #Store how many distinct characters have been satisfied in sliding window.
+        while end < len(s):                                                     #While the sliding window haven't reached the end of s, find the rightmost end for current start.
+            while end < len(s) and match < len(countT):                         #While not all charcters of t has been satisfied in sliding window.
+                countS[s[end]] += 1                                             #Update count of s[end] in sliding window.
+                if s[end] in countT and countS[s[end]] == countT[s[end]]:       #If s[end] is in t and the count of s[end] is same in both sliding window and t, one more character of t is satisfied.
+                    match += 1
+                end += 1                                                        #Move end to next character.
+            
+            if match < len(countT):                                             #If sliding window reaches end of s but not all characters in t has been satisfied, break.
+                break
+            
+            while start < end and match == len(countT):                         #While all charcters of t has been satisfied in sliding window, find the rightmost start for current end.
+                countS[s[start]] -= 1                                           #Update count of s[end] in sliding window.
+                if s[start] in countT and countS[s[start]] < countT[s[start]]:  #If s[end] is in t and the count of s[end] in sliding window is smaller than that in t, one less character of t is satisfied.
+                    match -= 1
+                start += 1                                                      #Move start to next character.
+                
+            if end - start + 1 < minLength:                                     #If the length of sliding window(from start - 1 to end - 1) is smaller than current minimum length, update minimum length.
+                minLength = end - start + 1
+                result = s[start - 1:end]                                       #Also update result.
+        return result
