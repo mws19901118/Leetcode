@@ -1,16 +1,13 @@
 class Solution(object):
-    def backspaceEffect(self, text, index):                #Simulate the effect of backspace. Find the index of first non backspace character after having a series of backspace.
-        while index >= 0 and text[index] == '#':           #While current character is backspace and the index is valid, start loop.
-            backspaceCount = 0                             #Count the number of backspace.
-            while index >= 0:
-                if text[index] == '#':                     #If current character is backspace, plus one to backspace count.
-                    backspaceCount += 1
-                else:                                      #Otherwise, it offsets a backspace and the current character is deleted, minus one to backspace count.
-                    backspaceCount -= 1
-                index -= 1                                 #Move to previous character.
-                if backspaceCount == 0:                    #If no more backspace, we find a non backspace character, then break loop.
-                    break
-        return index                                       #Return the current index.
+    def backspaceEffect(self, text, index):                                     #Simulate the effect of backspace. Find the index of first non backspace character after having a series of backspace.                                      
+        backspaceCount = 0
+        while index >= 0 and (text[index] == '#' or backspaceCount > 0):        #While the index is valid and either current character is backspace or backspace count is not 0, start loop.
+            if text[index] == '#':                                              #If current character is backspace, plus one to backspace count.
+                backspaceCount += 1
+            else:                                                               #Otherwise, it offsets a backspace and the current character is deleted, minus one to backspace count.
+                backspaceCount -= 1
+            index -= 1                                                          #Move to previous character.
+        return index                                                            #Return the current index.
     
     def backspaceCompare(self, S, T):
         """
