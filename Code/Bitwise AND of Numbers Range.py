@@ -1,19 +1,11 @@
 class Solution:
-    # @param m, an integer
-    # @param n, an integer
-    # @return an integer
-    def rangeBitwiseAnd(self, m, n):
-        mod="0b1"
-        l=len(bin(m))-2                   #Calculate the length of binary number of m/
-        for i in range(l):                #Calculate the least number which is greater than m and is power of 2.
-            mod=mod+'0'
-        mod=int(mod,2)
-        if n>mod:                         #If n>=mod, the result of AND must be 0.
-            return 0
-        else:
-            result=m
-            for i in range(m+1,n+1):      #If n<mod, calculate the result of AND one by one.
-                result=result&i
-                if result==0:
-                    break
-            return result
+    def rangeBitwiseAnd(self, m: int, n: int) -> int:                           #Suppose S is the bit string of n and T is the bit string of m. Then the answer's bit string is the common_prefix(S, T) padding the rest bits with 0.
+        k = 0                                                                   #Count unmatching bits.
+        while n != m:                                                           #While n != m, right shift m and n, update the count of unmatching bits.
+            n >>= 1
+            m >>= 1
+            k += 1
+        return n << k                                                           #Pad 0.
+    
+    def rangeBitwiseAnd(self, m: int, n: int) -> int:                           #Recursive version.
+        return self.rangeBitwiseAnd(m >> 1, n >> 1) << 1 if m != n else m       
