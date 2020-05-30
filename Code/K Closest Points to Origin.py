@@ -3,8 +3,8 @@ class Solution(object):
         if len(dist) == 1:
             return dist[0][0]
         randomD = dist[0][0]
-        lower = filter(lambda x: x[0] < randomD, dist)
-        upper = filter(lambda x: x[0] > randomD, dist)
+        lower = filter(lambda x: x[0] < randomD, dist[1:])
+        upper = filter(lambda x: x[0] > randomD, dist[1:])
         if len(lower) == K - 1:
             return randomD
         elif len(lower) < K - 1:
