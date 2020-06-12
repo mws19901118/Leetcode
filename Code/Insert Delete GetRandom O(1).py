@@ -34,7 +34,7 @@ class RandomizedSet:
         """
         Get a random element from the set.
         """
-        return self.array[random.randint(0, len(self.array) - 1)] #Return a random element in array.
+        return random.choice(self.array)                          #Return a random element in array.
 
 # Your RandomizedSet object will be instantiated and called as such:
 # obj = RandomizedSet()
