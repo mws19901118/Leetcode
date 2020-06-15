@@ -1,6 +1,6 @@
 from collections import defaultdict
 class Solution:
-    def BFS(self, src, dst, stops, graph, cache, trace):
+    def DFS(self, src, dst, stops, graph, cache, trace):
         if stops < 0:                                                           #If k is smaller than 0, means there is no way to fly from start to destination, return -1.
             return -1
         if src == dst:                                                          #If start and destination are same, return 0 since no fly is needed.
@@ -12,7 +12,7 @@ class Solution:
         else:
             for stop in graph[src]:                                             #Otherwise, for each city can be reached from start and hasn't been reached, do BFS with stop equals to k - 1 to calculate the minPrice from intermediate stop to destination.
                 if stop not in trace:
-                    temp = self.BFS(stop, dst, stops - 1, graph, cache, trace)
+                    temp = self.DFS(stop, dst, stops - 1, graph, cache, trace)
                     if temp != -1:                                              #If can reach destination from intermediate stop, plus the result from last step with the price from start to intermediate stop to calculate the minPrice from start to destination through intermediate stop.
                         minPrice = min(minPrice, temp + graph[src][stop])
             if minPrice == 0x7fffffff:                                          #If minPrice is still max value, it means cannot find a way from start to destination.
@@ -27,4 +27,4 @@ class Solution:
             graph[e[0]][e[1]] = e[2]
         cache = {}                                                              #Cache the result by a tuple of start, destination and stops.
         trace = set()                                                           #Store the trace of BFS.
-        return self.BFS(src, dst, K + 1, graph, cache, trace)                   #BFS.
+        return self.DFS(src, dst, K + 1, graph, cache, trace)                   #BFS.
