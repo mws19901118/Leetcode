@@ -1,7 +1,5 @@
 class Solution:
-    # @param num, a list of integer
-    # @return an integer
-    def findMin(self, num):
+    def findMin(self, nums: List[int]) -> int:
         start, end = 0, len(nums) - 1
         while start < end and nums[start] >= nums[end]:     #Binary search. If nums[start] < nums[end], it's already asending from start to end, stop binary search.
             mid = (end + start) // 2
