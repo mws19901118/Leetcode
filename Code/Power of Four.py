@@ -1,13 +1,4 @@
-class Solution(object):
-    def isPowerOfFour(self, num):
-        """
-        :type num: int
-        :rtype: bool
-        """
-        if num == 0:                #0 is not power of 4.
-            return False
-        while num != 1:             #While num is not 1, if num can not be divided by 4, it's not power of 4.
-            if num % 4 != 0:
-                return False
-            num >>= 2               #Right shift num by 2.
-        return True                 #Return true.
+class Solution:
+    def isPowerOfFour(self, num: int) -> bool:
+        binary = "{0:b}".format(num)                                                                                #Convert to binary.
+        return len(binary) % 2 == 1 and binary[0] == '1' and (binary[1:] == '' or int(binary[1:], 2) == 0)          #Check the length of binary is odd and most signification bit is 1 and the rest of binary is either empty or all 0.
