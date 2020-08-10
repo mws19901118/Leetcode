@@ -1,9 +1,3 @@
 class Solution:
-    # @param s, a string
-    # @return an integer
-    def titleToNumber(self, s):
-        num=0
-        n=len(s)
-        for i in range(n):
-            num+=(ord(s[i])-ord('A')+1)*26**(n-i-1)
-        return num
+    def titleToNumber(self, s: str) -> int:
+        return sum([(ord(s[i]) - ord('A') + 1) * pow(26, len(s) - 1 - i) for i in range(len(s))])     #Convert base 26 string to int.
