@@ -1,13 +1,8 @@
 class Solution:
-    # @return a list of integers
-    def getRow(self, ):
-        def f(n):  
-            if n==0 or n==1:
-                return 1
-            else:
-                return n*f(n-1)
-
-        row=[]
-        for i in range(rowIndex+1):
-            row.append(f(rowIndex)/(f(i)*f(rowIndex-i)))
-        return row
+    def getRow(self, rowIndex: int) -> List[int]:
+        result = [1]                                                            #Initially, the left end is 1.
+        for i in range(rowIndex // 2):
+            result.append(result[-1] * (rowIndex - i) // (i + 1))               #Generate the binomial coefficient from left to middle.
+        for i in range((rowIndex + 1) // 2):
+            result.append(result[rowIndex // 2 - i - (rowIndex + 1) % 2])       #Cope the left half reversely to the right half.
+        return result
