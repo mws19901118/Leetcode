@@ -1,44 +1,17 @@
 class Solution:
-    # @param version1, a string
-    # @param version2, a string
-    # @return an integer
-    def compareVersion(self, version1, version2):
-        def convert(version):                                   #Convert string to a list of integer.
-            n=[]
-            if version.find('.')==-1:                           #If string doesn't contain '.', convert directly.
-                n.append(int(version))
-            else:                                               #If it does, split the string first, then convert.
-                v=version.split('.')
-                for i in v:
-                    n.append(int(i))
-            return n
-        
-        def isZero(n):                                          #Determine if a list if integer only contains 0.
-            for i in n:
-                if i!=0:
-                    return False
-            return True
-        
-        n1=convert(version1)
-        n2=convert(version2)
-        i=0
-        while i<len(n1) and i<len(n2):                          #Compare two lists digit by digit.
-            if n1[i]>n2[i]:
-                return 1
-            elif n1[i]<n2[i]:
+    def compareVersion(self, version1: str, version2: str) -> int:
+        v1 = [int(v) for v in version1.split(".")]                  #Covert version 1 to a list of number.
+        v2 = [int(v) for v in version2.split(".")]                  #Covert version 2 to a list of number.
+        i, j = 0, 0
+        while i < len(v1) and j <len(v2):                           #Compare the version numbers of same index in version1 and version2 respectively.
+            if v1[i] < v2[j]:                                       #If version number in version1 is smaller than that in version2, return -1.
                 return -1
-            else:
-                i+=1
-        if i==len(n1) and i==len(n2):
-            return 0
-        else:
-            if i==len(n1) and i<len(n2):
-                if isZero(n2[i:]):                              #If all the extra digits are 0, return 0.
-                    return 0
-                else:
-                    return -1
-            elif i==len(n2) and i<len(n1):
-                if isZero(n1[i:]):
-                    return 0
-                else:
-                    return 1
+            elif v1[i] > v2[j]:                                     #If version number in version1 is larger than that in version2, return 1.
+                return 1
+            else:                                                   #Otherwise, move to next index.
+                i += 1
+                j += 1
+        if i < len(v1):                                             #If v1 hasn't reached end, if there are version numbers that are not 0, return 1; otherwise return 0.
+            return int(any(x != 0 for x in v1[i:]))
+        else:                                                       #If v2 hasn't reached end, if there are version numbers that are not 0, return -1; otherwise return 0.
+            return -int(any(x != 0 for x in v2[j:]))
