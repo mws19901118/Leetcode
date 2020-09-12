@@ -1,20 +1,9 @@
 class Solution:
-    # @param A, a list of integers
-    # @return an integer
-    def maxProduct(self, A):
-        length=len(A)
-        if length==0:
+    def maxProduct(self, nums: List[int]) -> int:
+        if nums == []:                                                                      #If nums is empty, return 0.
             return 0
-        elif length==1:
-            return A[0]
-        ma=[0]*length                                     //ma[i] stores the max product end with A[i]
-        mi=[0]*length                                     //mi[i] stores the min product end with A[i]
-        ma[0]=A[0]
-        mi[0]=A[0]
-        maxP=A[0]
-        for i in range(1,length):                         //DP in a loop
-            ma[i]=max(A[i],ma[i-1]*A[i],mi[i-1]*A[i])     
-            mi[i]=min(A[i],ma[i-1]*A[i],mi[i-1]*A[i])
-            if ma[i]>maxP:
-                maxP=ma[i]
-        return maxP
+        maxp, minp = [nums[0]], [nums[0]]                                                   #Initialize the max product list and min product list with the 1st number in nums.
+        for i in range(1, len(nums)):                                                       #Iterate through nums from the 2nd number.
+            maxp.append(max(nums[i], maxp[i - 1] * nums[i], minp[i - 1] * nums[i]))         #Find the max product ending at current number.
+            minp.append(min(nums[i] ,maxp[i - 1] * nums[i], minp[i - 1] * nums[i]))         #Find the min product ending at current number.
+        return max(maxp)                                                                    #Return the max value in maxp.
