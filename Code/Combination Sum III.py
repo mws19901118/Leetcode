@@ -1,24 +1,14 @@
 class Solution:
-    def backtrack(self, start, list, sum, target, k, ans):
-        if sum==target:
-            if len(list)==k:
-                temp=[]
-                for i in list:
-                    temp.append(i)                                #If temporary sum equals target and temporary length equals k, copy list to temp.
-                ans.append(temp)
-        elif sum<target:
-            for i in range(start+1,10):                           #Traverse from start+1 to 10.
-                list.append(i)
-                sum+=i
-                self.backtrack(i, list, sum, target,k, ans)       #Because elements in combination should be ascending, use i as the start number in the next step.
-                list.pop()
-                sum-=i
-    # @param {integer} k
-    # @param {integer} n
-    # @return {integer[][]}
-    def combinationSum3(self, k, n):
-        sum=0                                                     #Record temporary sum.
-        list=[]                                                   #Record the possible combination.
-        ans=[]
-        self.backtrack(0, list, sum, n, k, ans)                   #Backtrack.
-        return ans
+    def backtracking(self, k: int, n: int, stack: List[int], s: int, nums: List[int], result: List[List[int]]) -> None:
+        if s >= n or len(stack) >= k:                                                   #If current sum is equal to or larger than n or current stack length is equal to or larger than k, stop backtracking.
+            if s == n and len(stack) == k:                                              #If current sum is n and current stack length is k, we found a valid combination, deep copy stack into result.
+                result.append(copy.deepcopy(stack))
+            return
+        for i, x in enumerate(nums):                                                    #Traverse from remaining nums.
+            stack.append(x)                                                             #Push to stack.
+            self.backtracking(k, n, stack, s + x, nums[i + 1:], result)                 #Backtrack next level.
+            stack.pop()                                                                 #Pop from stack.
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        result = []
+        self.backtracking(k, n, [], 0, [1, 2, 3, 4, 5, 6, 7, 8, 9], result)             #Backtrack.
+        return result
