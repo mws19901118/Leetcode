@@ -1,21 +1,10 @@
 class Solution:
-    # @param gas, a list of integers
-    # @param cost, a list of integers
-    # @return an integer
-    def canCompleteCircuit(self, gas, cost):
-        if gas==[] or cost==[]:
-            return -1
-        sum=0
-        total=0
-        start=0
-        n=len(gas)
-        for i in range(n):
-            sum+=gas[i]-cost[i]
-            total+=gas[i]-cost[i]
-            if sum<0:                                   #if current sum<0, begin with the next station
-                start=(i+1)%n
-                sum=0
-        if total>=0:
-            return start
-        else:
-            return -1
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        currentSum, total, start, n = 0, 0, 0, len(gas)
+        for i in range(n):                      #Iterate through all stations.
+            currentSum += gas[i]-cost[i]        #Calculate the remaining gas from current start station to this station.
+            total += gas[i]-cost[i]             #Calculate the total gas.
+            if currentSum < 0:                  #If the remaining gas from current start station to this station is smaller than 0, it means cannot finish the trip from current start station.
+                start = (i + 1) % n             #Start from next station.
+                currentSum = 0                  #Reset the remaining gass.
+        return start if total >= 0 else -1      #If total gas is not smaller than 0, the trip can be finished, returning start station; otherwise, trip cannot be finished, return -1.
