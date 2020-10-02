@@ -1,4 +1,3 @@
-import copy
 class Solution:
     def backtracking(self, candidates, trace, currentSum, target, result):
         if currentSum == target:                                                        #If current sum equals target, add a deep copy of trace to result.                
