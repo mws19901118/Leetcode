@@ -1,29 +1,12 @@
-from collections import defaultdict
-
 class Solution:
-    def buddyStrings(self, A, B):
-        """
-        :type A: str
-        :type B: str
-        :rtype: bool
-        """
-        if A is None or B is None or len(A) != len(B):                                        #The length of A and B must be equal.
+    def buddyStrings(self, A: str, B: str) -> bool:
+        if len(A) != len(B):                                                                    #The length of A and B must be equal.
             return False
-        if A == B:                                                                            #If A and B are same, the string must contain a character which appears more than once.
-            map = defaultdict(int)
-            for c in A:
-                if map[c] > 0:
-                    return True
-                else:
-                    map[c] += 1
-            return False
-        else:
-            length = len(A)
-            start = 0                                                                         #Find the first index where A differs with B.
-            while start < length and A[start] == B[start]:
-                start += 1
-            end = length - 1                                                                  #Find the last index where A differs with B.
-            while end >= 0 and A[end] == B[end]:
-                end -= 1
-            return start != end and A[end] + A[start + 1:end] + A[start] == B[start:end + 1]  #If the first index and last index are same, there are only one different character, so it does not fit the requirement of Buddy Strings.
-                                                                                              #Swap the first difference and last difference in A, and check if the string after swap equals to B, leaving out the same prefix and suffix.
+        d = []
+        for i in range(len(A)):                                                                 #Find all the different characters paires of A and B in same index.
+            if A[i] != B[i]:
+                d.append((A[i], B[i]))
+        if len(d) == 0:                                                                         #If A and B are same, both strings must contain a character which appears more than once.
+            countA, countB = Counter(A), Counter(B)
+            return any(x in countB and countA[x] >= 2 and countB[x] >= 2 for x in countA)
+        return len(d) == 2 and (d[0][0] == d[1][1] and d[0][1] == d[1][0])                      #If A and B are not same, there must be exactly 2 different characters paires. And they are able to swap.
