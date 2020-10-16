@@ -1,7 +1,14 @@
 class Solution:
-    # @param nums, a list of integer
-    # @param k, num of steps
-    def rotate(self, nums, k):
-        while k:
-            nums.insert(0,nums.pop())           #Pop the end element and insert it at the front.
-            k-=1
+    def reverse(self, nums: list, start: int, end: int) -> None:        #Reverse nums[start:end + 1].
+        while start < end:
+            nums[start], nums[end] = nums[end], nums[start]
+            start, end = start + 1, end - 1
+            
+    def rotate(self, nums: List[int], k: int) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        k %= len(nums)                                                  #Update k to be smaller than length of nums.
+        self.reverse(nums, 0, len(nums) - 1)                            #Reverse entire nums.
+        self.reverse(nums, 0, k - 1)                                    #Reverse the first k numbers.
+        self.reverse(nums, k, len(nums) - 1)                            #Reverse the other numbers.
