@@ -1,30 +1,29 @@
-# Definition for a undirected graph node
-# class UndirectedGraphNode:
-#     def __init__(self, x):
-#         self.label = x
-#         self.neighbors = []
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+"""
 
 class Solution:
-    # @param node, a undirected graph node
-    # @return a undirected graph node
-    def cloneGraph(self, node):
-        if node == None: 
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if node is None:
             return None
-        dictionary={node.label:UndirectedGraphNode(node.label)}                     #dictionary
-        currentQueue=collections.deque()                                            #system deque
-        currentQueue.append(node)
-        newQueue=collections.deque()
-        newQueue.append(dictionary[node.label])
-        visited=set([node])                                                         #record whether node is visited
-        while currentQueue:
-            currentNode=currentQueue.popleft()
-            newNode=newQueue.popleft()
-            for n in currentNode.neighbors:                                         #process every node's neighbors
-                if n.label not in dictionary:
-                    dictionary[n.label]=UndirectedGraphNode(n.label)                #add to dictionary
-                newNode.neighbors.append(dictionary[n.label])                       #add neighbors to new current node
-                if n not in visited:                                                #add unvisited nodes to deque
-                    currentQueue.append(n)
-                    newQueue.append(dictionary[n.label])
-                    visited.add(n)
-        return dictionary[node.label]
+        newNode = Node(node.val)                                                        #Initalize the copy of given node.
+        visited = set()                                                                 #Record visited nodes.
+        valToNodeMap = {node.val: newNode}                                              #Use dict to map node by its value.
+        q = [node]                                                                      #Initialize queue for BFS.
+        while q:                                                                        #BFS.
+            newq = []                                                                   #Initialize new queue.
+            for x in q:                                                                 #Traverse through nodes in queue.
+                if x in visited:                                                        #If current node is visited, skip it.
+                    continue
+                for y in x.neighbors:                                                   #Traverse through nodes in the neighbors of current node.
+                    if y.val not in valToNodeMap:                                       #If this neighbor is not in map, initialize a copy and add to map.
+                        valToNodeMap[y.val] = Node(y.val)
+                    valToNodeMap[x.val].neighbors.append(valToNodeMap[y.val])           #Append the copy of neighbor to the neighbors of copy of current node.
+                    newq.append(y)                                                      #Append neighbor to new queue.
+                visited.add(x)                                                          #Add current node to visited.
+            q = newq                                                                    #Replace queue with new queue for next iteration.
+        return newNode
