@@ -14,7 +14,6 @@ class Solution(object):
                 lastPerson = index                            #Update index of last person.
                 break
             index += 1
-        
         maxDist = 0
         while index < len(seats):
             if seats[index] == 1:
@@ -22,5 +21,5 @@ class Solution(object):
                 lastPerson = index                            #Update index of last person.
             index += 1
         
-        rightEnd = len(seats) - 1 - lastPerson                #Find the distance between first person and right end.
+        rightEnd = len(seats) - 1 - lastPerson                #Find the distance between last person and right end.
         return max(leftEnd, rightEnd, maxDist / 2)            #Return the max of leftEnd, rightEnd and half of maxDist.
