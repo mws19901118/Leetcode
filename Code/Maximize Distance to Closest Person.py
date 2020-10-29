@@ -1,9 +1,5 @@
-class Solution(object):
-    def maxDistToClosest(self, seats):
-        """
-        :type seats: List[int]
-        :rtype: int
-        """
+class Solution:
+    def maxDistToClosest(self, seats: List[int]) -> int:
         lastPerson = 0                                        #Index of last person.
         index = 0                                             #Index pointer.
         
@@ -22,4 +18,4 @@ class Solution(object):
             index += 1
         
         rightEnd = len(seats) - 1 - lastPerson                #Find the distance between last person and right end.
-        return max(leftEnd, rightEnd, maxDist / 2)            #Return the max of leftEnd, rightEnd and half of maxDist.
+        return max(leftEnd, rightEnd, maxDist // 2)           #Return the max of leftEnd, rightEnd and half of maxDist.
