@@ -1,10 +1,3 @@
-class Solution(object):
-    def flipAndInvertImage(self, A):
-        """
-        :type A: List[List[int]]
-        :rtype: List[List[int]]
-        """
-        for row in A:
-            for i in range((len(row) + 1) / 2):
-                row[i], row[~i] = row[~i] ^ 1, row[i] ^ 1 # '~i equals '-i - 1'
-        return A
+class Solution:
+    def flipAndInvertImage(self, A: List[List[int]]) -> List[List[int]]:
+        return [[1 ^ y for y in x[::-1]] for x in A]
