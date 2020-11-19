@@ -13,7 +13,7 @@ class Solution:
                 strStack.append("")                                             #So, append an empty string to string stack as the prefix.
             elif s[i] == ']':                                                   #If current character is ']', generate decoded string in current section.
                 decode = strStack.pop() * numStack.pop()                        #Pop number stack and string stack simultaneously and repeat the string for the number times.
-                strStack.append(strStack.pop() + t)                             #Pop string stack to get prefix, append decoded string after prefix and then append it back to string stack.
+                strStack.append(strStack.pop() + decode)                        #Pop string stack to get prefix, append decoded string after prefix and then append it back to string stack.
                 i += 1                                                          #Move to next character.
             else:                                                               #If current character is letter, keep updating the last string in string stack.
                 strStack.append(strStack.pop() + s[i])
