@@ -1,43 +1,28 @@
 class Solution:
-    # @param A a list of integers
-    # @param target an integer
-    # @return a boolean
-    def search(self, A, target):            #Though it's binary search, I don't think it's much faster than linear search.
-        n=len(A)
-        if n==0:
-            return -1
-        start=0
-        end=n-1
-        while start<=end:
-            mid=(start+end)/2
-            if A[mid]==target:
-                return True
-            elif A[mid]>target:             #Deal with the situation that A[mid]>target.
-                if A[mid]<A[end]:           #If A[mid]<A[end], target is in the left side of mid.
-                    end=mid-1
-                elif A[mid]>A[end]:         #If A[mid]>A[end], the rotate pivot is in the right side of mid.
-                    if A[start]>target:     #If A[start]>target, target is in the right side of mid; otherwise, target is in the left side of mid.
-                        start=mid+1
-                    else:
-                        end=mid-1
+    def search(self, nums: List[int], target: int) -> int:
+        start, end = 0, len(nums) - 1
+        while start <= end:
+            mid = (start + end) // 2
+            if nums[mid] == target:
+                return mid
+            if nums[mid] >= nums[start] and nums[mid] > nums[end]:          #If nums[mid] >= nums[start] and nums[mid] > nums[end], the rotate pivot is the right side of mid.
+                if nums[mid] > target and target >= nums[start]:            #If nums[start] <= target < nums[mid], target is in the left side of mid; otherwise, target is in the right side of mid.
+                    end = mid - 1
                 else:
-                    if A[start]==A[end]:    #If A[start]=A[mid]=A[end], we can not determine which side target belongs to, so increase start by 1 and decrease end by 1.
-                        start=start+1
-                        end=end-1
-                    else:                   #If A[mid]=A[end] but A[start]≠A[mid], target is in the left side of mid.
-                        end=mid-1
-            else:                           #The situation that A[mid]<target is just symmertric with the situation above.
-                if A[mid]>A[start]:
-                    start=mid+1
-                elif A[mid]<A[start]:
-                    if A[end]<target:
-                        end=mid-1
-                    else:
-                        start=mid+1
+                    start = mid + 1
+            elif nums[mid] < nums[start] and nums[mid] <= nums[end]:        #If nums[mid] < nums[start] and nums[mid] <= nums[end], the rotate pivot is the left side of mid.
+                if nums[mid] < target and target <= nums[end]:              #If nums[mid] < target <= nums[end], target is in the right side of mid; otherwise, target is in the left side of mid.
+                    start = mid + 1
                 else:
-                    if A[start]==A[end]:
-                        start=start+1
-                        end=end-1
-                    else:
-                        start=mid+1
-        return False
+                    end = mid - 1
+            elif nums[mid] >= nums[start] and nums[mid] <= nums[end]:       #If nums[start] <= nums[mid] <= nums[end], it's a normal binary search.
+                if nums[mid] < target:
+                    start = mid + 1
+                else:
+                    end = mid - 1
+            else:                                                           #If nums[start] == nums[mid] == nums[end], we cannot determine which half to go.
+                if nums[mid] == nums[start]:                                #If nums[start] == nums[mid], increase start; otherwise, decrease end.
+                    start += 1
+                else:
+                    end -= 1
+        return -1                                                           #If can not find target, return -1.
