@@ -1,23 +1,21 @@
 class Solution:
-    # @param {string} s
-    # @return {integer}
-    def calculate(self, s):
-        s = re.sub(r'\d+', ' \g<0> ', s)                                                        #Use regular expression to add space between operators and numbers.
-        op = {'+': operator.add, '-': operator.sub, '*': operator.mul, '/': operator.floordiv}  #Use dictionary to store each operation and corresponding character.
-        expression = s.split()                                                                  #Split the string to operators and numbers.
-        result = 0
-        number = 0                                                                              #Record current number to be operated.
-        i = 0
-        func = op['+']                                                                          #Record the operator to be processed. To add the first number, the first operator should always be '+'.
-        while i < len(expression):
-            e = expression[i]
-            if e in '+-':                                                                       #Because there is no parentheses, we can directly calculate the result before the '+' or '-' operators.
-                result = func(result, number)
-                func = op[e]                                                                    #Set func to current operator.
-            elif e in '*/':                                                                     #If current operator is '*' or '/', calculate the answer immediately and update number.
-                i += 1
-                number = op[e](number, int(expression[i]))
-            else:                                                                               #If e is a number, convert from string to int to get it.
-                number = int(e)
-            i += 1
-        return func(result, number)                                                             #Process the last operator and return result.
+    def calculate(self, s: str) -> int:
+        numberStack = []                                                    #Use stack to store number.
+        i, lastOperator = 0, '+'                                            #Initial position for traverse and inital operator.
+        while i < len(s):
+            j = i + 1
+            while j < len(s) and s[j] not in {'+', '-', '*', '/'}:          #Find next operator.
+                j += 1
+            x = int(s[i:j].strip())                                         #Convert the string from current position to next operator to int(after strip) x.
+            if lastOperator == '*':                                         #If last operator is '*', pop the stack and multiply x by the number.
+                x = numberStack.pop() * x
+            elif lastOperator == '/':                                       #If last operator is '/', pop the stack and divide it by x(need to handle if it's negative) then replace x with result.
+                y = numberStack.pop()
+                x = abs(y) // x * (1 if y >= 0 else -1)
+            elif lastOperator == '-':                                       #If last operator is '-', replace x with -x.
+                x = -x
+            numberStack.append(x)                                           #Append x to stack.
+            i = j + 1                                                       #Move i to j + 1.
+            if j < len(s):                                                  #Update last operator if j is not out of bound.
+                lastOperator = s[j]
+        return sum(numberStack)                                             #Return sum of stack.
