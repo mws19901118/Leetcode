@@ -1,17 +1,9 @@
-# Definition for a  binary tree node
+# Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-def depth(A):
-    if A==None:
-        return 0
-    else:
-        return max(depth(A.left),depth(A.right))+1
-
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    # @param root, a tree node
-    # @return an integer
-    def maxDepth(self, root):
-        return depth(root)
+    def maxDepth(self, root: TreeNode) -> int:
+        return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1 if root is not None else 0
