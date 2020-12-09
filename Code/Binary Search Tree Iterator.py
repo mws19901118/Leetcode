@@ -1,31 +1,19 @@
-# Definition for a  binary tree node
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class BSTIterator:
 
-class BSTIterator(object):
-    def __init__(self, root):
-        """
-        :type root: TreeNode
-        """
+    def __init__(self, root: TreeNode):
         self.stack = []                                                     #Store the path.
         self.curr = root                                                    #Record current node.
         while self.curr is not None and self.curr.left is not None:         #Find the leftmost node.
             self.stack.append(self.curr)
             self.curr = self.curr.left
-
-    def hasNext(self):
-        """
-        :rtype: bool
-        """
-        return self.curr is not None                                        #When iterator comes to the end, self.curr is none.
-
-    def next(self):
-        """
-        :rtype: int
-        """
+    
+    def next(self) -> int:
         result = self.curr.val                                              #Buffer current value.
         if self.curr.right is None:                                         #If current node doesn't has right child, pop item as current node if self.stack is not empty.
             if self.stack != []:
@@ -39,6 +27,9 @@ class BSTIterator(object):
                 self.curr = self.curr.left
         
         return result                                                       #Return buffer.
+
+    def hasNext(self) -> bool:
+        return self.curr is not None                                        #When iterator comes to the end, self.curr is none.
 
 # Your BSTIterator will be called like this:
 # i, v = BSTIterator(root), []
