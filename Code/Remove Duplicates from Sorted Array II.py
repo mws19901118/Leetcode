@@ -1,19 +1,11 @@
 class Solution:
-    # @param A a list of integers
-    # @return an integer
-    def removeDuplicates(self, A):
-        n=len(A)
-        if n==0:
-            return 0
-        dict={}                                   #Count the number of appearence.
-        size=0
-        for i in range(n):
-            if not dict.has_key(A[i]):
-                dict[A[i]]=1
-                A[size]=A[i]                      #Let first 'size' items be items depulicated at most twice.
-                size=size+1
-            elif dict[A[i]]==1:
-                dict[A[i]]=2
-                A[size]=A[i]
-                size=size+1
-        return size
+    def removeDuplicates(self, nums: List[int]) -> int:
+        if len(nums) < 2:                           #If nums length is smaller than 2, there is no duplicates.
+            return len(nums)
+        slow, fast = 2, 2                           #Start 2 pointers from the third number.
+        while fast < len(nums):                     #Traverse fast pointer through nums.
+            if nums[slow - 2] != nums[fast]:        #If nums[fast] is a number without duplicates more than 2, replace nums[slow] with nums[fast] and move forward slow pointer.
+                nums[slow] = nums[fast]
+                slow += 1
+            fast += 1                               #Move forward fast pointer.
+        return slow                                 #Return where slow pointer stops.
