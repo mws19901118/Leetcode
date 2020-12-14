@@ -7,4 +7,4 @@ class Solution:
             for j in range(0, len(nums) - i):                               #Examine every intevals of current length.
                 for k in range(j + 1, j + i):                               #Check every possible balloon as the last one to burst. That means divide the intevals into to subintevals at the last bolloon to burst and calculate which partition will make the most coins.
                     dp[j][j + i] = max(dp[j][j + i], nums[j] * nums[k] * nums[j + i] + dp[j][k] + dp[k][j + i])
-        return dp[0][-1]                                                    #Return the coins collected from nums[-1] to nums[n].
+        return dp[0][len(nums) - 1]                                                    #Return the coins collected from nums[-1] to nums[n].
