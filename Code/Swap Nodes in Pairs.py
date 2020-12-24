@@ -1,19 +1,16 @@
 # Definition for singly-linked list.
 # class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
-    # @param {ListNode} head
-    # @return {ListNode}
-    def swapPairs(self, head):                #A special case of Reverse Nodes in k-Group for k=2.
-        if  head==None:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        if  head is None:
             return None
-        if head.next==None: 
+        if head.next is None: 
             return head
-        nextpair=head.next.next               #Find the beginning of remaining linked list leaving out the first pair.
-        newhead=head.next                     #Reverse the first pair.
-        newhead.next=head
-        head.next=self.swapPairs(nextpair)    #Reverse the remaining linked list recursively and append the result to the tail of reversed first pair.
-        return newhead
+        head.next.next = self.swapPairs(head.next.next)     #Reverse the linked list after first pair. 
+        tail = head.next
+        head.next = tail.next                               #Set the next of head to be next of tail.
+        tail.next = head                                    #Reverse first pair.
+        return tail                                         #Return the new head.
