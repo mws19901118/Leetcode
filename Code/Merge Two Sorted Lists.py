@@ -1,28 +1,19 @@
 # Definition for singly-linked list.
 # class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
-    # @param {ListNode} l1
-    # @param {ListNode} l2
-    # @return {ListNode}
-    def mergeTwoLists(self, l1, l2):        #The idea is merge sort.
-        newlist=ListNode(-1)                #Use a fake head for convenience.
-        tail=newlist
-        while l1!=None and l2!=None:
-            if l1.val<l2.val:
-                tail.next=l1
-                tail=tail.next
-                l1=l1.next
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        dummyHead = ListNode()                                                  #Create a dummy head.
+        tail = dummyHead
+        while l1 and l2:                                                        #Compare l1 and l2 while there are both not none, then append the smaller one to tail and move l1 or l2.
+            if l1.val <= l2.val:
+                tail.next = l1
+                l1 = l1.next
             else:
-                tail.next=l2
-                tail=tail.next
-                l2=l2.next
-        if l1==None:
-            tail.next=l2
-        else:
-            tail.next=l1
-        newlist=newlist.next
-        return newlist
+                tail.next = l2
+                l2 = l2.next
+            tail = tail.next
+        tail.next = l1 if l1 else l2                                            #Append the remaining(either l1 or l2) to tail.
+        return dummyHead.next                                                   #Return the next of dummy head.
