@@ -1,26 +1,13 @@
 class Solution:
-    # @param {string} s
-    # @return {integer}
-    def lengthOfLongestSubstring(self, s):
-        n=len(s)
-        if n<=1:                        #If the length of s is smaller than or equal to 1, there is no repeating characters.
-            return n
-        dict={}                         #Record the index of last appearance of a character. Initially, it's -1.
-        for i in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ ":
-            dict[i]=-1
-        i=0                             #The begin index of a substring.
-        j=0                             #Traverse througn the string.
-        l=1                             #Record the length of current longest substring without repeating characters.
-        while j<n:
-            if dict[s[j]]==-1:          #If it's the first appearance of a character, record the index.
-                dict[s[j]]=j
-            else:                       #If we encounter a repeating character, update l and dict[s[j]].
-                if j-i>l:
-                    l=j-i
-                if dict[s[j]]+1>i:      #Begin the next substring at the character behind the last appearance of s[j] if it's greater than i.
-                    i=dict[s[j]]+1
-                dict[s[j]]=j
-            j+=1
-        if j-i>l:                       #Deal with the substring in the end of s.
-            l=j-i
-        return l
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        leftBound, maxLength = -1, 0                                #Initialize the left bound(not included) of substring to be -1 and max length to be 0.
+        lastSeenIndex = {}                                          #Store the index of each character seen last time in current substring sliding window.
+        for i, x in enumerate(s):                                   #Traverse s.
+            if x in lastSeenIndex:                                  #if x is already seen, the index of last seen x becomes new left bound.
+                newLeftBound = lastSeenIndex[x]
+                for k in range(leftBound + 1, newLeftBound + 1):    #Remove all characters from left bound to new left bound.
+                    del lastSeenIndex[s[k]]
+                leftBound = newLeftBound                            #Update left bound.
+            lastSeenIndex[x] = i                                    #Add current index of x to the dictionary.
+            maxLength = max(maxLength, i - leftBound)               #Update max length if necessary using current substring sliding window length, which is i - leftbound.
+        return maxLength
