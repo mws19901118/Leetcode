@@ -1,26 +1,20 @@
 class Solution:
-    # @param start, a string
-    # @param end, a string
-    # @param dict, a set of string
-    # @return an integer
-    def ladderLength(self, start, end, dict):             #This is a BFS problem
-        alphabet=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-        dict.add(end)                                     #add end string to dict
-        length=len(start)
-        queue=collections.deque([(start,1)])
-        while queue:
-            current=queue.popleft()
-            currentWord=current[0]
-            currentLength=current[1]
-            if currentWord==end:
-               return currentLength
-            for i in range(0,length):
-                formerPart=currentWord[:i]
-                latterPart=currentWord[i+1:]
-                for j in alphabet:                        #traverse the alphabet, thus the time complexity is O(length*26)
-                    if j!=currentWord[i]:
-                        nextWord=formerPart+j+latterPart
-                        if nextWord in dict:
-                            queue.append((nextWord,currentLength+1))
-                            dict.remove(nextWord)
-        return 0
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        wordSet = set(wordList)                                                         #Put all words in wordList in a set.
+        q = set([beginWord])
+        currentLength = 1
+        while q:                                                                        #BFS.
+            newq = set()
+            for currentWord in q:
+                if currentWord == endWord:                                              #If reaches the end, return current length.
+                    return currentLength
+                for i in range(len(currentWord)):                                       #Enumerate each position of current word.
+                    for c in "abcdefghijklmnopqrstuvwxyz":                              #Also, enumerate each letter.
+                        if c != currentWord[i]:
+                            nextWord = currentWord[:i] + c + currentWord[i + 1:]        #Generate new word.
+                            if nextWord in wordSet:                                     #If it's in the word set, add it to new q and remove it from word set.
+                                newq.add(nextWord)
+                                wordSet.remove(nextWord)
+            currentLength += 1                                                          #Increase current length.
+            q = newq                                                                    #Replace q with new q.
+        return 0                                                                        #If cannot reach end word, return 0.
