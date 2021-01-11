@@ -1,17 +1,19 @@
 class Solution:
-    # @param A  a list of integers
-    # @param m  an integer, length of A
-    # @param B  a list of integers
-    # @param n  an integer, length of B
-    # @return nothing
-    def merge(self, A, m, B, n):
-        i=0
-        j=0
-        while i<len(A) and j<n:                 #Ensure no index out of bound.
-            if A[i]>=B[j]:
-                A.insert(i,B[j])                #Insert B[j] at proper position.
-                j+=1
-            i+=1
-        while j<n:
-            A.insert(m+j,B[j])                  #Insert the rest of B.
-            j+=1
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        i, j = m - 1, n - 1
+        while i >= 0 and j >= 0:                    #Traverse nums1 and nums2 from back to front until reaches the start of either list.
+            if nums1[i] <= nums2[j]:                #if nums1[i] <= nums2[j], put nums2[j] to nums1[i + j + 1] and decrease j by 1.
+                nums1[i + j + 1] = nums2[j]
+                j -= 1
+            else:                                   #Otherwise put nums1[i] to nums1[i + j + 1] and decrease i by 1.
+                nums1[i + j + 1] = nums1[i]
+                i -= 1
+        while i >= 0:                               #Put remaining of nums1 in proper positions.
+            nums1[i + j + 1] = nums1[i]
+            i -= 1
+        while j >= 0:                               #Put remaining of nums2 in proper positions.
+            nums1[i + j + 1] = nums2[j]
+            j -= 1
