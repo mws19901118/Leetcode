@@ -1,35 +1,28 @@
 # Definition for singly-linked list.
 # class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
-    # @param {ListNode} l1
-    # @param {ListNode} l2
-    # @return {ListNode}
-    def addTwoNumbers(self, l1, l2):
-        carry=0
-        head=l1                                     #Use l1 to store the result.
-        junction=None
-        while l1!=None and l2!=None:
-            newval=(l1.val+l2.val+carry)%10         #Calculate the sum while neither of l1 nor l2 ends.
-            carry=(l1.val+l2.val+carry)/10
-            l1.val=newval
-            if l1.next==None or l2.next==None:      #Use juction to record current l1 if the next node of l1 is none or the next node of l2 is none.
-                junction=l1
-            l1=l1.next
-            l2=l2.next
-        if l1==None:                                #To keep the value of sum, append the remain part to l2 to junction, if l1 is none.
-            junction.next=l2
-        l1=junction.next                            #Set l1 to be the next node of junction.
-        while l1!=None and carry==1:                #While l1 doesn't end and carry is 1, continue calculating the sum.
-            newval=(l1.val+carry)%10
-            carry=(l1.val+carry)/10
-            l1.val=newval
-            if l1.next==None:                       #Use juction to record current l1 if the next node of l1 is none.
-                junction=l1
-            l1=l1.next
-        if carry==1:                                #If carry is still 1, append a listnode with 1 to junction.
-            junction.next=ListNode(1)
-        return head
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        dummyHead = ListNode()                      #Create a dummy head for result.
+        tail = dummyHead
+        carry = 0                                   #Initialize carry to be 0.
+        while l1 and l2:                            #While both l1 and l2 is not none, calculate sum and append to tail.
+            x = l1.val + l2.val + carry
+            carry = x // 10                         #Update carry.
+            tail.next = ListNode(x % 10)
+            tail = tail.next
+            l1 = l1.next
+            l2 = l2.next
+        remain = l1 if l1 else l2                   #Check if there is l1 or l2 remaining.
+        while remain:                               #While remain is not none, calculate sum and append to tail.
+            x = remain.val + carry
+            carry = x // 10                         #Update carry.
+            tail.next = ListNode(x % 10)
+            tail = tail.next
+            remain = remain.next
+        if carry:                                   #If carry is 1, append it to tail.
+            tail.next = ListNode(carry)
+        return dummyHead.next                       #Return the next of dummy head.
+        
