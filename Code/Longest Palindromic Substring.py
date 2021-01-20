@@ -3,7 +3,7 @@ class Solution:
         start = 0                                                                   #Record the starting index of current longest palindromic substring.
         l = 1                                                                       #Record the length of current longest palindromic substring.
         i = 0                                                                       #Traverse every "core" of palindromic substring. "Core" means a sequence of same characters which could be in the exact middle of a palindromic substring. 
-        while i < len(s) - l // 2:                                                  #The starting index of the last possible "core" is n - l // 2.
+        while i < len(s) - l // 2:                                                  #The starting index of the last possible "core" is len(s) - l // 2.
             left, right = i, i                                                      #Record the left and right boundry of palindromic substring.
             while right < len(s) - 1 and s[right] == s[right + 1]:                  #Determine the right boundry of "core".
                 right += 1
