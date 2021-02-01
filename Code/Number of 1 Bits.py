@@ -1,10 +1,7 @@
 class Solution:
-    # @param n, an integer
-    # @return an integer
-    def hammingWeight(self, n):
-        b=bin(n)                      #Transform decimal number to binary number.
-        count=0
-        for i in range(len(b)):
-            if b[i]=='1':             #Count the '1' bit.
-                count+=1
+    def hammingWeight(self, n: int) -> int:
+        count = 0
+        while n:
+            count += n & 1          #Count n & 1.
+            n >>= 1                 #Shift n one bit right.
         return count
