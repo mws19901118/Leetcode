@@ -5,16 +5,13 @@
 #         self.next = None
 
 class Solution:
-    # @param head, a ListNode
-    # @return a boolean
-    def hasCycle(self, head):
-        if head==None:
+    def hasCycle(self, head: ListNode) -> bool:
+        if not head:                                    #If head is none, return none.
             return False
-        fast=head
-        slow=head
-        while fast.next!=None and fast.next.next!=None:           #fast pointer and slow pointer
-            fast=fast.next.next
-            slow=slow.next
-            if slow==fast:
+        fast, slow = head, head
+        while fast.next and fast.next.next:             #Fast and slow pointers.
+            fast = fast.next.next
+            slow = slow.next
+            if fast == slow:                            #If fast meets slow, return true.
                 return True
-        return False
+        return False                                    #Return false.
