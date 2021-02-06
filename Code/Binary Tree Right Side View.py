@@ -1,25 +1,22 @@
-# Definition for a  binary tree node
+# Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    # @param root, a tree node
-    # @return a list of integers
-    def rightSideView(self, root):                          #Do the binary tree level order traverse using BFS.
-        q = []
-        if root is not None:
-            q.append(root)
+    def rightSideView(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        q = [root]
         result = []
-        while q:
-            nextq = []
+        while q:                                #Do the binary tree level order traverse using BFS.
+            newq = []
+            result.append(q[-1].val)            #Append value of the last node of each level to result.
             for x in q:
-                if x.left is not None:
-                    nextq.append(x.left)
-                if x.right is not None:
-                    nextq.append(x.right)
-            result.append(q[-1].val)                        #Append value of the last node of each level to result.
-            q = nextq
+                if x.left:
+                    newq.append(x.left)
+                if x.right:
+                    newq.append(x.right)
+            q = newq
         return result
