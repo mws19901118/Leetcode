@@ -1,26 +1,17 @@
-class Solution(object):
-    def shortestToChar(self, S, C):
-        """
-        :type S: str
-        :type C: str
-        :rtype: List[int]
-        """
-        distances = [len(S)] * len(S)                   #Use a list to save distances.
-        indexes = []                                    #Store the indexes of C.
-        for i, s in enumerate(S):                       #Find all the C in S, set distances of C to 0 and save the indexes of C.
-            if s == C:
+class Solution:
+    def shortestToChar(self, s: str, c: str) -> List[int]:
+        distances = [-1] * len(s)                                               #Use a list to save distances.
+        indexes = [i for i, x in enumerate(s) if x == c]                        #Get the indexes of c.
+        j = 0                                                                   #Store the index of first c in front of current charracter in indexes.
+        for i, x in enumerate(s):                                               #Traverse s.
+            if x == c:                                                          #If x is c, set its distance to 0 and move j to next and continue.
                 distances[i] = 0
-                indexes.append(i)
-        for i in range(indexes[0]):                     #Handle the distances before first C.
-            distances[i] = indexes[0] - i
-        
-        for i in range(len(indexes) - 1):               #Handle the distances between each C.
-            mid = (indexes[i + 1] - indexes[i]) / 2
-            for j in range(1, mid + 1):
-                distances[indexes[i] + j] = j
-                distances[indexes[i + 1] - j] = j
-                
-        for i in range(1, len(S) - indexes[-1]):        #Handle the distances after last C.
-            distances[indexes[-1] + i] = i
-            
+                j += 1
+                continue
+            if j == 0:                                                          #Handle the distances before first c.
+                distances[i] = indexes[j] - i
+            elif j >= len(indexes):                                             #Handle the distances after last c.
+                distances[i] = i - indexes[j - 1]
+            else:                                                               #Handle other distances, which is the smaller of the distances to the c in front of it and the c behind it.
+                distances[i] = min(indexes[j] - i, i - indexes[j - 1])
         return distances
