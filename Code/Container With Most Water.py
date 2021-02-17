@@ -1,18 +1,11 @@
 class Solution:
-    # @param {integer[]} height
-    # @return {integer}
-    def maxArea(self, height):
-        l=len(height)
-        area=0
-        if l<1:
-            return 0
-        left=0
-        right=l-1
-        while left<right:                                         #We can check the left and right alternatively. When left bar pass right bar, we've already check all the boundaries.
-            if min(height[left],height[right])*(right-left)>area:
-                area=min(height[left],height[right])*(right-left)
-            if height[left]>height[right]:                        #If left bar is higher than the right bar, we don't need to move left bar until right bar is higher than the left bar, vise versa.
-                right-=1
+    def maxArea(self, height: List[int]) -> int:
+        left, right = 0, len(height) - 1
+        result = 0
+        while left < right:                                                                 #Use 2 bars from both ends traversing towards middle.
+            result = max(result, min(height[left], height[right]) * (right - left))         #Update result if current area is greater.
+            if height[left] < height[right]:                                                #If right bar is higher than the left bar, we don't need to move right bar until left bar is higher than the right bar and vise versa.
+                left += 1
             else:
-                left+=1
-        return area
+                right -= 1
+        return result
