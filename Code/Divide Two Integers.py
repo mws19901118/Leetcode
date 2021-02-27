@@ -1,23 +1,15 @@
 class Solution:
-    # @param {integer} dividend
-    # @param {integer} divisor
-    # @return {integer}
-    def divide(self, dividend, divisor):
-        if dividend==-2147483648 and divisor==-1:         #Deal with the overflow case.              
-            return 2147483647
-        flag=(dividend>0)^(divisor>0)                     #Get the sign of quotient.
-        de=abs(dividend)                                  #Get the absolute value of dividend.
-        ds=abs(divisor)                                   #Get the absolute value of divisor.
-        quotient=0
-        while de>=ds:
-            a=ds
-            i=1
-            while a<=de:                                  #Calculate the integer i such that ds*2^(i-2)<=de<ds*2^(i-1).
-                a<<=1
-                i+=1
-            quotient+=(1<<(i-2))                          #The quotient gain 2^(i-2)
-            de-=(ds<<(i-2))                               #de minus ds*2^(i-2)
-        if flag:
-            return -quotient
-        else:
-            return quotient
+    def divide(self, dividend: int, divisor: int) -> int:
+        flag = (dividend < 0) ^ (divisor < 0)                               #Get the sign of quotient.
+        dividend, divisor = abs(dividend), abs(divisor)                     #Get the absolute value of dividend and divisor.
+        if dividend < divisor:                                              #If dividend < divisor, return 0.
+            return 0
+        quotient = 1                                                        #Initalize quotient to be 1.
+        x = divisor                                                         #Set x to divisor.
+        while dividend >= x << 1:                                           #While dividend is larger than or equal to 2 * x, double x and double quotient.
+            x <<= 1
+            quotient <<= 1
+        quotient += self.divide(dividend - x, divisor)                      #Till now, we have find the max k such that dividend = 2 ** k * divisor + remain. Calculate the quotient of remain / divisor and add it to current quotient, i.e 2 ** k.
+        quotient = -quotient if flag else quotient                          #Restore the sign.
+        quotient = 2 ** 31 - 1 if quotient > 2 ** 31 - 1 else quotient      #Handle overflow.
+        return quotient
