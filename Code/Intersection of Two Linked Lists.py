@@ -5,35 +5,10 @@
 #         self.next = None
 
 class Solution:
-    # @param two ListNodes
-    # @return the intersected ListNode
-    def getIntersectionNode(self, headA, headB):
-        if headA==None:
-            return None
-        if headB==None:
-            return None
-        lengthA=1
-        lengthB=1
-        tempA=headA
-        tempB=headB
-        while tempA.next!=None:
-            tempA=tempA.next
-            lengthA+=1
-        while tempB.next!=None:
-            tempB=tempB.next
-            lengthB+=1
-        if tempA!=tempB:                                      //Judge if the 2 linked list intersect.
-            return None
-        else:
-            tempA=headA
-            tempB=headB
-            if lengthA>lengthB:
-                for i in range(0,lengthA-lengthB):
-                    tempA=tempA.next
-            else:
-                for i in range(0,lengthB-lengthA):
-                    tempB=tempB.next
-            while tempA!=tempB:
-                tempA=tempA.next
-                tempB=tempB.next
-            return tempA
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        pointerA, pointerB = headA, headB                                   #Have a pointer starting at headA and a pointer starting at headB.
+                                                                            #Suppose linked list A can be divided to a + c while linked list B can be divided to b + c and a is the exclusive part of A, b is the exclusive part of B and c is the common tail after intersection.
+        while pointerA != pointerB:                                         #While they are not equal, keep traversing. Pointer A will traverse a, c, b in order while pointer B will traverse b, c, a in order. Finally they will meet at the start of c.
+            pointerA = headB if pointerA is None else pointerA.next         #If pointer A is none, pointer A has traversed a + c, reset it to headB to traverse b; otherwise, move to its next.
+            pointerB = headA if pointerB is None else pointerB.next         #If pointer B is none, pointer B has traversed b + c, reset it to headA to traverse a; otherwise, move to its next.
+        return pointerA                                                     #Return pointer A: if there is intersection, pointer A is the intersection; if not, pointer A is none.
