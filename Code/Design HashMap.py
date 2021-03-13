@@ -4,7 +4,7 @@ class MyHashMap:
         """
         Initialize your data structure here.
         """
-        self.modulo = 1000                                                                                                      #Use a modulo to hash keys in to 1000 lists.
+        self.division = 1000                                                                                                    #Use a division to hash keys in to 1000 lists.
         self.lists = [[] for _ in range(1000)]                                                                                  #Initialize the 1000 lists.
 
     def put(self, key: int, value: int) -> None:
