@@ -1,6 +1,6 @@
 class Solution:
     def findDuplicate(self, S: str, length: int) -> int:        #Rabin-Karp algorithm, find duplicate substrings with given length.
-        bigPrime = 2305843009213693951                          #Use a big prime(2^61 - 1) as modulo.
+        bigPrime = 2305843009213693951                          #Use a big prime(2^61 - 1) as division.
         A = [ord(c) - ord('a') for c in S]                      #Calculate the distance between each character in S to 'a'(only lowercase characters in S).
         h = 0                                                   #Store the hash value of each substring.
         p = pow(26, length, bigPrime)                           #Calculate 26 ^ length % bigPrime.
