@@ -1,40 +1,20 @@
 # Definition for singly-linked list.
 # class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
-    # @param head, a ListNode
-    # @param x, an integer
-    # @return a ListNode
-    def partition(self, head, x):
-        if head==None:
-            return None
-        pre=ListNode(-1)                                      #Record the node before where we insert node.
-        cursor=head
-        if head.val>=x:                                       #If we have to insert before the head node, add a fake head.
-            fakehead=ListNode(-1)
-            fakehead.next=head
-            pre=fakehead
-        else:
-            while cursor.next!=None and cursor.next.val<x
-                cursor=cursor.next
-            pre=cursor
-        split=pre.next                                        #This is the first node whose value is larger than or equal to x. Whenever we insert a node before it, the next of inserted node should point to it.
-        while cursor.next!=None:
-            if cursor.next.val<x:                             #Find the value to insert before split.
-                pre.next=cursor.next
-                if cursor.next.next!=None:
-                    temp=cursor.next.next
-                else:                                         #If it is the tail of the linked list, the next of cursor is none.
-                    temp=None
-                pre=pre.next
-                pre.next=split
-                cursor.next=temp
-            else:
-                cursor=cursor.next
-        if head.val>=x:                                       #If the split node is head, return the next of fake head; otherwise, return head.
-            return fakehead.next
-        else:
-            return head
+    def partition(self, head: ListNode, x: int) -> ListNode:
+        firstHalfHead, secondHalfHead = ListNode(), ListNode()              #Initialize the dummy head of first half and second half.
+        firstHalfTail, secondHalfTail = firstHalfHead, secondHalfHead       #Initialize the tail of first half and second half.
+        while head:                                                         #Traverse list.
+            if head.val < x:                                                #Append to first half if current node value is smaller than x.
+                firstHalfTail.next = head
+                firstHalfTail = firstHalfTail.next
+            else:                                                           #Otherwise append to second half.
+                secondHalfTail.next = head
+                secondHalfTail = secondHalfTail.next
+            head = head.next                                                #Move to next.
+            firstHalfTail.next, secondHalfTail.next = None, None            #Reset the next of both tail.
+        firstHalfTail.next = secondHalfHead.next                            #Point first half tail to the next of second half head.
+        return firstHalfHead.next                                           #Return the next of first half head.
