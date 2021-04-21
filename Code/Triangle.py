@@ -1,15 +1,10 @@
 class Solution:
-    # @param triangle, a list of lists of integers
-    # @return an integer
-    def minimumTotal(self, triangle):
-        n=len(triangle)
-        minimum=[triangle[0][0]]                                      #list which stores the minimum path sums from top to every bottom element(update every row)
-        for i in range(1,n):
-            start=minimum[0]+triangle[i][0]                           #the leftmost sum
-            end=minimum[i-1]+triangle[i][i]                           #the rightmost sum
-            for j in range(1,i):
-                temp=min(minimum[j-1],minimum[j])+triangle[i][j]      #use the sum of current number and the minimum of the two adjacent numbers in the last raw to update the list
-                minimum[j-1]=temp
-            minimum.insert(0, start)                                  #insert the leftmost sum to the list
-            minimum[i]=end                                            #change the last element of list to the rightmost sum
-        return min(minimum)                                           #return the minimum element of the list
+    def minimumTotal(self, triangle: List[List[int]]) -> int:
+        level = triangle[0]                                                         #Record the minimum path sum at current row, initially it's the first row of triangle.
+        for i in range(1, len(triangle)):                                           #Traverse triangle by level.
+            newLevel = [level[0] + triangle[i][0]]                                  #Initialize the minimum path sum at this level with leftmost path sum.
+            for j in range(1, len(triangle[i]) - 1):                                #Calculate the minimim path sum at this level for number not at either side and append.
+                newLevel.append(triangle[i][j] + min(level[j - 1], level[j]))
+            newLevel.append(level[-1] + triangle[i][-1])                            #Append the rightmost minimum path sum.
+            level = newLevel                                                        #Replace level with newLevel.
+        return min(level)                                                           #Return minumum number in level.
