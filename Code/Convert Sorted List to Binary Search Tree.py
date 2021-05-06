@@ -1,37 +1,24 @@
-# Definition for a  binary tree node
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-#
 # Definition for singly-linked list.
 # class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-def transform(num,start,end,node):
-    mid=(start+end)/2
-    node.val=num[mid]
-    if start<mid:
-        node.left=TreeNode(-1)
-        transform(num, start, mid-1, node.left)
-    if end>mid:
-        node.right=TreeNode(-1)
-        transform(num, mid+1, end, node.right)
-        
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    # @param head, a list node
-    # @return a tree node
-    def sortedListToBST(self, head):
-        if head==None:
+    def convert(self, values: List[int], start: int, end: int) -> TreeNode:
+        if start > end:                                                                                             #If start > end, return none.
             return None
-        num=[]
-        while head!=None:                               #Covert the linked list to an array, then deal with the array in the same way as Convert Sorted Array to Binary Search Tree.
-            num.append(head.val)
-            head=head.next
-        length=len(num)
-        root=TreeNode(-1)
-        transform(num, 0, length-1, root)
-        return root
+        mid = (start + end) // 2                                                                                    #Get the mid point between start and end.
+        return TreeNode(values[mid], self.convert(values, start, mid - 1), self.convert(values, mid + 1, end))      #Construct BST node recursively.
+    
+    def sortedListToBST(self, head: ListNode) -> TreeNode:
+        values = []
+        while head:                                                                                                 #Store values of sorted list in an array.
+            values.append(head.val)
+            head = head.next
+        return self.convert(values, 0, len(values) - 1)                                                             #Convert sorted array to BST.
