@@ -63,7 +63,7 @@ class Solution(object):
         sum = 0
         for i in range(len(low), len(high)):                                                      #Find the sum of strobogrammatic number from length of low to length of high minus 1.
             sum += self.strobogrammaticOfLength(i)
-        sum -= self.findSmaller(low)                                                              #Substract the count of strobogrammatic numbers which have the same length with low but are smaller than low.
+        sum -= self.findSmaller(low)                                                              #Subtract the count of strobogrammatic numbers which have the same length with low but are smaller than low.
         sum += self.findSmaller(high)                                                             #Plus the count of strobogrammatic numbers which have the same length with high but are smaller than high.
         if self.strobogrammaticCheck(high) is True:                                               #If high is strobogrammatic, include it into sum.
             sum += 1
