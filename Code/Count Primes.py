@@ -1,23 +1,8 @@
 class Solution:
-    # @param {integer} n
-    # @return {integer}
-    def countPrimes(self, n):                   #Sieve of Eratosthenes
-        if n<=2:
-            return 0
-        primes=[True for i in range(n)]
-        primes[0]=False
-        primes[1]=False
-        i=2
-        while i*i<n:
-            if primes[i]:
-                j=i*2
-                while j<n:
-                    primes[j]=False
-                    j+=i
-            i+=1
-        count=0
-        for i in range(n):
-            if primes[i]:
-                count+=1
-        
-        return count
+    def countPrimes(self, n: int) -> int:
+        nonprimes = set()                       #Store all non primes from 2 to sqrt(n).
+        for p in range(2, int(sqrt(n)) + 1):    #Traverse from 2 to sqrt(n).
+            if p not in nonprimes:              #If p is prime, add all numbers which are smaller than n and are multiplier of p to non primes.
+                for x in range(p * p, n, p):
+                    nonprimes.add(x)
+        return max(0, n - len(nonprimes) - 2)   #Return the max of 0 and count of primes, n minus count of non primes minus 2(n itself and 1). 
