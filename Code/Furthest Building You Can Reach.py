@@ -5,7 +5,7 @@ class Solution:
             if heights[i] >= heights[i + 1]:                      #If current building is higher than or equal to next building, continue.
                 continue
             heapq.heappush(heap, heights[i + 1] - heights[i])     #Push the gap to heap.
-            if len(heap) > ladders:                               #If the length of heap is larger than ladders, pop heap and substract it from bricks.
+            if len(heap) > ladders:                               #If the length of heap is larger than ladders, pop heap and subtract it from bricks.
                 bricks -= heapq.heappop(heap)
             if bricks < 0:                                        #If bricks is smaller than 0, we cannot go further, so return i.
                 return i
