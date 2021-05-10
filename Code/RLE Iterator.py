@@ -10,7 +10,7 @@ class RLEIterator:
             self.index += 2
         if self.index >= len(self.encode):                                        #If reaches the end, return -1.
             return -1
-        self.encode[self.index] -= n                                              #Substract current number count by n.
+        self.encode[self.index] -= n                                              #Subtract current number count by n.
         return self.encode[self.index + 1]                                        #Return current number, the next element after index.
 
 # Your RLEIterator object will be instantiated and called as such:
