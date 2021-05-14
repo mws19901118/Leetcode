@@ -1,33 +1,25 @@
-# Definition for a  binary tree node
+# Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    # @param root, a tree node
-    # @return nothing, do it in place
-    def flatten(self,root):
-        def transform(root):
-            if root==None:
-                return
-            if root.left==None and root.right==None:                    #If current node is leaf, return current node.
-                return root
-            elif root.left!=None and root.right==None:                  #If current node only has left child, recursively process its left child, point its right pointer to left child, point its left pointer to None and return the last node below the left child.
-                temp= transform(root.left)
-                root.right=root.left
-                root.left=None
-                return temp
-            elif root.left==None and root.right!=None:                  #If current node only has right child, recursively process its right child and return the last node below the right child.
-                temp=transform(root.right)
-                return temp
-            else:                                                       #If current node has both child, recursively process both child, connect the last node below the left child and the right child, point its right pointer to left child, point its left pointer to None and return the last node below the right child.
-                templ= transform(root.left)
-                tempr=transform(root.right)
-                templ.right=root.right
-                root.right=root.left
-                root.left=None
-                return tempr
-
-        temp=transform(root)                                            #call the function
+    def flattenAndReturnTail(self, root: TreeNode) -> TreeNode:
+        if not root:                                                        #If root is none, return none.
+            return None
+        if not root.left and not root.right:                                #If root is leaf node, return root.
+            return root
+        rightTail = self.flattenAndReturnTail(root.right)                   #Flattern right subtree and get tail.
+        leftTail = self.flattenAndReturnTail(root.left)                     #Flattern left subtree and get tail.
+        if leftTail:                                                        #If root has left child, point right of left tail to right subtree of root, then move right left child to right child.
+            leftTail.right = root.right
+            root.right = root.left
+            root.left = None
+        return rightTail if rightTail else leftTail                         #Id right tail is not none, return right tail; otherwise, return left tail.
+            
+    def flatten(self, root: TreeNode) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        self.flattenAndReturnTail(root)                                     #Flattern.
