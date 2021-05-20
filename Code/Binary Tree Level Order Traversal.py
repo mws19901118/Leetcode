@@ -1,28 +1,24 @@
-# Definition for a  binary tree node
+# Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    # @param root, a tree node
-    # @return a list of lists of integers
-    def levelOrder(self, root):
-        result=[]
-        if root==None:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        result = []
+        if not root:
             return result
-        current=[root]                                  #Store current level of nodes.
-        thenext=[]                                      #Store next level of nodes.
-        while current!=[]:                              #If current is empty, break.
-            temp=[]                                     #Store the value of nodes.
-            for i in current:
-                temp.append(i.val)                      #Add value to temp.
-                if i.left!=None:                        #If node has left child, add it to the next.
-                    thenext.append(i.left)
-                if i.right!=None:                       #If node has right child, add it to the next.
-                    thenext.append(i.right)
-            current=thenext                             #Use next level to replace current level.
-            thenext=[]                                  #Clear the next.
-            result.append(temp)                         #Add temp to result.
+        q = [root]                                  #Store nodes in current level.
+        while q:                                    #BFS while q is not empty.
+            level = []                              #Store the values in current level.
+            newq = []                               #Store nodes in current level.
+            for x in q:
+                level.append(x.val)                 #Add value to level.
+                if x.left:                          #If node has left child, add it to newq.
+                    newq.append(x.left)
+                if x.right:                         #If node has right child, add it to newq.
+                    newq.append(x.right)
+            q = newq                                #Repalce q with newq.
+            result.append(level)                    #Add level to result.
         return result
