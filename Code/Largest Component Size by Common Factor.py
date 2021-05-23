@@ -13,15 +13,11 @@ class UnionFind:                                                                
         return self.parent
     
 class Solution:
-    def primeSet(self, n, cache):                                                           #Find all prime factors of n with cache.
-        if n in cache:
-            return cache[n]
+    def primeSet(self, n) -> set:                                                           #Find all prime factors of n with cache.
         for i in range(2, int(sqrt(n)) + 1):
             if n % i == 0:
-                cache[n] = self.primeSet(n // i, cache) | set([i])
-                return cache[n]
-        cache[n] = set([n])
-        return cache[n]
+                return self.primeSet(n // i) | set([i])
+        return set([n])
     
     def largestComponentSize(self, A: List[int]) -> int:
         unionFinds = {x: UnionFind(x) for x in A}                                           #Initialize union find for each number.
