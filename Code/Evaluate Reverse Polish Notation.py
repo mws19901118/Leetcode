@@ -1,22 +1,19 @@
 class Solution:
-    # @param tokens, a list of string
-    # @return an integer
-    def evalRPN(self, tokens):
-        if len(tokens)==1:
-            return int(tokens[0])
-        stack=[tokens[0],tokens[1]]             #stack of tokens            
-        i=2
-        while i<len(tokens):
-            if tokens[i]=='+' or tokens[i]=='-' or tokens[i]=='*' or tokens[i]=='/':
-                a=stack.pop()                   #pop number a
-                b=stack.pop()                   #pop number b
-                if tokens[i]=='/':              #divide
-                    stack.append(str(int(float(b)/int(a))))
-                else:                           #other operators
-                    b=b+tokens[i]
-                    b=b+a
-                    stack.append(str(int(eval(b))))     #calculate the value of an expression and push it back to the stack
-            else:
-                stack.append(tokens[i])         #push token
-            i=i+1
-        return int(stack.pop())
+    def evalRPN(self, tokens: List[str]) -> int:
+        stack = []                                                      #Store numbers using stack,
+        for token in tokens:                                            #Traverse tokens.
+            if token not in ["+", "-", "*", "/"]:                       #If token is number, append it to stack.
+                stack.append(int(token))
+            else:                                                       #Otherwise, pop stack twice to get 2 numbers for operation.
+                x = stack.pop()
+                y = stack.pop()
+                if token == "+":                                        #Handle "+".
+                    stack.append(x + y)
+                elif token == "-":                                      #Handle "-".
+                    stack.append(y - x)
+                elif token == "*":                                      #Handle "*".
+                    stack.append(x * y)
+                else:                                                   #Handle "/".
+                    sign = 1 if x * y > 0 else -1 
+                    stack.append(abs(y) // abs(x) * sign)
+        return stack[0]                                                 #Return the only number in stack.
