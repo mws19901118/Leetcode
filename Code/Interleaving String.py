@@ -1,25 +1,16 @@
 class Solution:
-    # @return a boolean
-    def isInterleave(self, s1, s2, s3):
-        l1=len(s1)
-        l2=len(s2)
-        l3=len(s3)
-        if l3!=l1+l2:                                             #If the sum of length of s1 and length of s2 is not equal to that of s3, return false.
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        if len(s1) + len(s2) != len(s3):                                                                                #If the sun of s1 length and s2 length does not equal s3 length, directly return false.
             return False
-        i=0
-        current=[(-1,-1)]                                         #Record current valid tuple of indexes of s1 and s2, initially (-1,-1).
-        while i<=l3:
-            if current==[]:                                       #If current is empty, it means s3 can not be formed by the interleaving of s1 and s2, then return false.
-                return False
-            else:
-                next=[]                                           #Record next iteration of list.
-                for t in current:
-                    if t[0]+1<l1 and s1[t[0]+1]==s3[i]:           #If s3[i] equals s1[t[0]+1] and next doesn't contain (t[0]+1,t[1]), append it to next.
-                        if (t[0]+1,t[1]) not in next:
-                            next.append((t[0]+1,t[1]))
-                    if t[1]+1<l2 and s2[t[1]+1]==s3[i]:           #If s3[i] equals s2[t[1]+1] and next doesn't contain (t[0],t[1]+1), append it to next.
-                        if (t[0],t[1]+1) not in next:
-                            next.append((t[0],t[1]+1))
-                current=next                                      #Replace current with next.
-                i=i+1
-        return True
+        dp = [False for i in range(len(s2) + 1)]                                                                        #Initialize dp array.
+        dp[0] = True                                                                                                    #dp[0] = 0, means "" is the interleaving string of "" and "".
+        i = 0  
+        while i < len(s2) and s2[i] == s3[i]:                                                                           #Compute if s3[:i] is the interleaving string of "" and s2[:i].
+            dp[i + 1] = True
+            i += 1
+
+        for i in range(len(s1)):                                                                                        #Traverse s1.
+            dp[0] = dp[0] and s1[i] == s3[i]                                                                            #Check if s3[:i] is the interleaving string of s1[:i] and "".
+            for j in range(len(s2)):                                                                                    #Traverse s2.
+                dp[j + 1] = (dp[j + 1] and s3[i + j + 1] == s1[i]) or (dp[j] and s3[i + j + 1] == s2[j])                #To make s3[:i + j + 1] the interleaving string of s1[:i] and s2[:j], it has to be either s3[i + j] is the interleaving string of s1[:i - 1] and s2[j] then s1[i] == s3[i + j + 1] or s3[i + j] is the interleaving string of s1[:i] and s2[j - 1] then s2[j] == s3[i + j + 1].
+        return dp[-1]                                                                                                   #Return dp[-1]
