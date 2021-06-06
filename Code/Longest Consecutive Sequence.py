@@ -1,16 +1,12 @@
 class Solution:
-    # @param num, a list of integer
-    # @return an integer
-    def longestConsecutive(self, num):
-        if num==[]:
-            return 0
-        dict={}                                           #store the mapping between low and high boundary
-        for i in num:
-            if i in dict:                                 #do not process duplicates
+    def longestConsecutive(self, nums: List[int]) -> int:
+        length = 0                                                              #Record the max length.
+        boundary = {}                                                           #Store the mapping between lower and upper boundary
+        for x in nums:                                                          #Traverse nums.
+            if x in boundary:                                                   #Skip duplicates.
                 continue
-            low=dict[i-1] if i-1 in dict else i
-            high=dict[i+1] if i+1 in dict else i
-            dict[i]=i
-            dict[low]=high
-            dict[high]=low
-        return max(abs(key - value) + 1 for key, value in dict.iteritems())       #numbers within a consecutive sequence won't point out of the boundary
+            lower = boundary[x - 1] if x - 1 in boundary else x                 #Get the lower boundary.
+            upper = boundary[x + 1] if x + 1 in boundary else x                 #Get the upper boundary.
+            boundary[x], boundary[lower], boundary[upper] = x, upper, lower     #Update lower and upper boundary. 
+            length = max(length, upper - lower + 1)                             #Update max length.
+        return length
