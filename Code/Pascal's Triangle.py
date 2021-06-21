@@ -1,12 +1,9 @@
 class Solution:
-    # @return a list of lists of integers
-    def generate(self, numRows):
-        triangle=[]
-        for i in range(numRows):
-            temp=[1]
-            if i>0:
-                for j in range(len(triangle[i-1])-1):
-                    temp.append(triangle[i-1][j]+triangle[i-1][j+1])
-                temp.append(1)
-            triangle.append(temp)
-        return triangle
+    def generate(self, numRows: int) -> List[List[int]]:
+        p = [[1]]                                               #Initialize first row.
+        for i in range(1, numRows):                             #Generate remaining row.
+            p.append([1])                                       #Append the leftmost 1.
+            for j in range(1, i):                               #Generate numbers in the middle.
+                p[-1].append(p[i - 1][j - 1] + p[i - 1][j])
+            p[-1].append(1)                                     #Append the rightmost 1.
+        return p
