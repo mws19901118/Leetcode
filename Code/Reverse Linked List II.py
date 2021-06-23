@@ -1,33 +1,20 @@
 # Definition for singly-linked list.
 # class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
-    # @param head, a ListNode
-    # @param m, an integer
-    # @param n, an integer
-    # @return a ListNode
-    def reverseBetween(self, head, m, n):
-        pre=head                                            #Record the node before the start node.
-        if m==1:                                            #If the start node is head, add a fake head before head.
-            fakehead=ListNode(-1)
-            fakehead.next=head
-            pre=fakehead
-        else:
-            for i in range(1,m-1):
-                pre=pre.next
-        cursor=pre.next                                     #Record the start node. Use it to pass through the linked list.
-        for i in range(n-m):
-            temp=cursor.next                                #Record the next node of cursor. Its next node should be linked by cursor.
-            if temp.next!=None:                             
-                cursor.next=temp.next
-            else:                                           #If it is the tail of the linked list, the next of cursor is none.
-                cursor.next=None
-            temp.next=pre.next                              #After that, link temp to the next node of pre.
-            pre.next=temp                                   #Then, link pre to temp.
-        if m==1:                                            #If the start node is head, return the next of fake head; otherwise, return head.
-            return fakehead.next
-        else:
-            return head
+    def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
+        dummyHead = ListNode(0, head)                                                       #Create a dummy head for current linked list.
+        curr = dummyHead
+        for i in range(left - 1):                                                           #Traverse linked list to find the node before the position left.
+            curr = curr.next
+        dummyHeadForReverse = ListNode()                                                    #Create a dummy head for reversed linked list.
+        tail = curr.next                                                                    #Point the tail of reversed linked list to the node on position left.
+        for i in range(right - left + 1):                                                   #Reverse from position left to position right.
+            temp = curr.next                                                                #Temporarily store current node.
+            curr.next = curr.next.next                                                      #Remove it from linked list.
+            temp.next, dummyHeadForReverse.next = dummyHeadForReverse.next, temp            #Insert it after the dummy head of reversed linked list.
+        tail.next = curr.next                                                               #Point next of tail to the node after position right.
+        curr.next = dummyHeadForReverse.next                                                #Point the next of node before position left to the next of dummy node of reversed linked list.
+        return dummyHead.next                                                               #Return the next of dummy head.
