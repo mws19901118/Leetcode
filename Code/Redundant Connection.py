@@ -1,19 +1,22 @@
-class UnionFind:                                                              #UnionFind.
-    def __init__(self):
+class UnionFind:
+    def __init__(self):                                                 #Initalize union find.
         self.parent = self
-    
-    def find(self):                                                           #Find.
-        while self.parent is not self.parent.parent:
-            self.parent = self.parent.parent
-        return self.parent
-    
-    def union(self, uf):                                                      #Union.
-        uf.find().parent = self.find()
-
+        
+    def find(self):                                                     #Find.
+        if self.parent == self:
+            return self
+        root = self.parent.find()
+        self.parent = root
+        return root
+        
 class Solution:
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        uf = [UnionFind() for i in range(len(edges))]                         #Create union find list.
-        for x in edges:
-            if uf[x[0] - 1].find() == uf[x[1] - 1].find():                    #If the 2 nodes of an edge have same parent, the edge is redundant, return the edge.
-                return x
-            uf[x[0] - 1].union(uf[x[1] - 1])                                  #Union the 2 nodes of an edge.
+        uf = [UnionFind() for i in range(len(edges))]                   #Create a union find for each node.
+        result = None
+        for e in edges:                                                 #Traverse edges.
+            x, y = uf[e[0] - 1].find(), uf[e[1] - 1].find()             #Find the root of each corresponding union find.
+            if x == y:                                                  #If they have same root, then this edge is redundant.
+                result = e
+            else:                                                       #Otherwise union these 2 roots.
+                x.parent = y
+        return result                                                   #Return redundant edge.
