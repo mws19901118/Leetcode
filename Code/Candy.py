@@ -1,25 +1,10 @@
 class Solution:
-    # @param ratings, a list of integer
-    # @return an integer
-    def candy(self, ratings):
-        n=len(ratings)
-        if n==0:
-            return 0
-        elif n==1:
-            return 1
-        else:
-            candy=[1]*n
-            i=1
-            while i<n:                                    #forward traverse
-                if ratings[i]>ratings[i-1]:
-                    candy[i]=candy[i-1]+1
-                i+=1
-            i=n-2
-            while i>=0:                                   #reverse traverse
-                if ratings[i]>ratings[i+1] and candy[i]<=candy[i+1]:
-                    candy[i]=candy[i+1]+1
-                i-=1
-            sum=0
-            for i in range(len(candy)):
-                sum+=candy[i]
-            return sum
+    def candy(self, ratings: List[int]) -> int:
+        candy = [1] * len(ratings)                                                  #Initially, give one candy to each child.
+        for i in range(1, len(ratings)):                                            #Traverse forward.
+            if ratings[i] > ratings[i - 1]:                                         #If current child has a higher rating than previous child, give current child one more candy than previous child.
+                candy[i] = candy[i - 1] + 1
+        for i in range(len(ratings) - 2, -1, -1):                                   #Traverse backward.
+            if ratings[i] > ratings[i + 1] and candy[i] <= candy[i + 1]:            #If current child has a higher rating than next child but does not have more candies, give current child one more candy than next child.
+                candy[i] = candy[i + 1] + 1
+        return sum(candy)                                                           #Return sum of candy.
