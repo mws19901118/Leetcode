@@ -1,7 +1,7 @@
 class Solution:
     def stoneGameVII(self, stones: List[int]) -> int:
         dp = [0] * len(stones)                                                                    #Initialize the DP array, dp[j] is the score difference for stones[i:j + 1] for the iteration starting at stones[i]. 
-        for i in range(len(stones) - 1, -1, -1):                                                  #Iterate backwards from end of stones.
+        for i in reversed(range(len(stones))):                                                    #Iterate backwards from end of stones.
             total = stones[i]                                                                     #Initalize the sum of stones[i:j + 1].
             lastdp, dp = dp, [0] * len(stones)                                                    #Store the dp result of iteration starting at stones[i + 1] in lastdp and refresh dp.
             for j in range(i + 1, len(stones)):                                                   #Traverse from i + 1 to the end of stones.
