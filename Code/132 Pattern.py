@@ -50,7 +50,7 @@ class Solution:
         stack, minValue = [], [nums[0]]
         for i in range(1, len(nums)):
             minValue.append(min(minValue[-1], nums[i]))
-        for j in range(len(nums) - 1, -1, -1):
+        for j in reversed(range(len(nums))):
             if nums[j] > minValue[j]:
                 while stack and stack[-1] <= minValue[j]:
                     stack.pop()
