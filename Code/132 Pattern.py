@@ -1,4 +1,4 @@
-#In Approach 2, we found out nums[i] corresponding to a particular nums[j] directly without having to consider every pair possible in numsnums to find this nums[i],nums[j] pair.
+#In Approach 2, we found out nums[i] corresponding to a particular nums[j] directly without having to consider every pair possible in numsnums to find this nums[i], nums[j] pair.
 #If we do some preprocessing, we can make the process of finding a nums[k] corresponding to this nums[i],nums[j] pair also easy.
 #
 #The preprocessing required is to just find the best nums[i] value corresponding to every nums[j] value.
