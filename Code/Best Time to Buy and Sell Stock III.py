@@ -9,7 +9,7 @@ class Solution:
             
         maxprofit, maxprice = 0, -1                                     #Calculate the maxprofit for 1 transition from prices[i] to end.
         p2 = [0] * len(prices)
-        for i in range(len(prices) - 1, -1, -1):
+        for i in reversed(range(len(prices))):
             maxprice = max(maxprice, prices[i])      
             maxprofit = max(maxprice - prices[i], maxprofit)                 
             p2[i] = maxprofit
