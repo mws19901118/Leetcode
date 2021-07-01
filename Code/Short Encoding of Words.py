@@ -7,7 +7,7 @@ class Solution:
             word = words[wordIndex]
             level = trie                                                                        #Start from the root of trie.
             shouldAddToEncode = False                                                           #Indicate if current word should be add to encode referencing string explicitly.
-            for i in range(wordLength - 1, -1, -1):                                             #Traverse word from behind.
+            for i in reversed(range(wordLength)):                                               #Traverse word from behind.
                 if word[i] not in level:                                                        #If current character not in current level of trie, current word is not included in any other word, so current word should be added to encode referencing string explicitly.
                     level[word[i]] = {}                                                         #Update trie.
                     shouldAddToEncode = True
