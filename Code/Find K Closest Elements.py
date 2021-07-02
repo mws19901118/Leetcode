@@ -1,19 +1,7 @@
 class Solution:
     def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
-        start, end = 0, len(arr) - 1
-        while start <= end:                                                                                 #Binary search x in arr.
-            mid = (start + end) >> 1
-            if arr[mid] == x:                                                                               #If find x, set start to be the idnex of x and end to be the index of x plus 1.
-                start = mid
-                end = mid + 1
-                break
-            elif arr[mid] < x:
-                start = mid + 1
-            else:
-                end = mid - 1
-        
-        if start > end:                                                                                     #If start is larger than end, x is not in arr, reverse start and end.
-            start, end = end, start
+        index = bisect_right(arr, x)                                                                        #Binary search for the index of x in arr.
+        start, end = index - 1, index                                                                       #Initialize the start and end pointer of K closest elements.
         less, more = [], []                                                                                 #Create 2 lists, "less" for the closest elements smaller than x and "more" for the closest elements larger than x.
         while len(less) + len(more) < k:                                                                    #While the sum of length of less and more is smaller than k, we haven't find enough closest elements.
             if (start >= 0 and end < len(arr) and x - arr[start] <= arr[end] - x) or end == len(arr):       #"start" and "end" works as 2 pointers.
