@@ -1,36 +1,17 @@
 class Solution:
-    # @param {integer[]} nums
-    # @param {integer} target
-    # @return {integer[][]}
-    def fourSum(self, nums, target):                            #The main idea is to divide 4 integers into 2 group which has 2 integers and to use hash map to store the sum of every group.
-        nums.sort()                                             #Sort the list.
-        vdict={}                                                #Keys are the sum of each 2 elements and values are the index tuples of them.
-        result=[]
-        for i in range(len(nums)-1):                            #Put the indexes of 2 elements in a list as a tuple according to their sum.
-            for j in range(i+1,len(nums)):
-                if nums[i]+nums[j] not in vdict:
-                    vdict[nums[i]+nums[j]]=[(i,j)]
-                else:
-                    vdict[nums[i]+nums[j]].append((i,j))
-        value=vdict.keys()                                      #Get the total possible values of sum of 2 elements.
-        for v in value:                                         #Traverse the values of sum.
-            if v==target-v and len(vdict[v])>1:                 #If v equals target/2 and there are more than 1 tuples in vdict[v], there might be possible solutions.
-                l=vdict[v]
-                for t1 in range(len(l)-1):                      #Enumerate every combination of 2 tuples in vdict[v] which makes a group of 4 index of integers.
-                    for t2 in range(t1+1,len(l)):
-                        if l[t1][0]!=l[t2][0] and l[t1][0]!=l[t2][1] and l[t1][1]!=l[t2][0] and l[t1][1]!=l[t2][1]:         #Check if there are duplicate indexes.
-                            temp=[nums[l[t1][0]], nums[l[t1][1]], nums[l[t2][0]], nums[l[t2][1]]]
-                            temp.sort()                         #Sort the 4 integers corresponding to 4 indexes.
-                            if temp not in result:              #If there are no duplicates in result, append the current list of 4 integers into result.
-                                result.append(temp)
-            elif v!=target-v and target-v in vdict:             #If v does not equal target/2 and target-v is in vdict, there might be possible solutions.
-                l1=vdict[v]
-                l2=vdict[target-v]
-                for t1 in range(len(l1)):                       #Enumerate every combination of 2 tuples, one belongs to vdict[v] and one belongs to vdict[target-v], which makes a group of 4 index of integers.
-                    for t2 in range(len(l2)):
-                        if l1[t1][0]!=l2[t2][0] and l1[t1][0]!=l2[t2][1] and l1[t1][1]!=l2[t2][0] and l1[t1][1]!=l2[t2][1]: #Check if there are duplicate indexes.
-                            temp=[nums[l1[t1][0]], nums[l1[t1][1]], nums[l2[t2][0]], nums[l2[t2][1]]]
-                            temp.sort()                         #Sort the 4 integers corresponding to 4 indexes.
-                            if temp not in result:              #If there are no duplicates in result, append the current list of 4 integers into result.
-                                result.append(temp)
-        return result
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        sum2 = {}                                                                                   #Store the list of index tuple of each pair whose sum is the key.                
+        result = set()                                                                              #Intitalize a result set.
+        for i in range(len(nums)):                                                                  #Traverse nums.
+            for j in range(i + 1, len(nums)):                                                       #Traverse nums[i + 1:].
+                if nums[i] + nums[j] not in sum2:                                                   #If nums[i] + nums[j] not already in sum2, initialize the list in sum2.
+                    sum2[nums[i] + nums[j]] = []
+                sum2[nums[i] + nums[j]].append((i, j))                                              #Append (i, j) to sum2[nums[i] + nums[j]].
+        for x in sum2:                                                                              #Traverse the key in sum2.
+            if target - x not in sum2:                                                              #If target - x is not in sum2, continue.
+                continue
+            for a, b in sum2[target - x]:                                                           #Traverse each pair in sum2[target - x].
+                for c, d in sum2[x]:                                                                #Traverse each pair in sum2[x].
+                    if a not in [c, d] and b not in [c, d]:                                         #If no duplicates exist in a, b, c, d, we found a quadruplet.
+                        result.add(tuple(sorted([nums[a], nums[b], nums[c], nums[d]])))             #Sort the quadruplet and comvert it to tuple then add it to result.
+        return [list(q) for q in result]                                                            #Covert result to a list of quadruplet list and return.
