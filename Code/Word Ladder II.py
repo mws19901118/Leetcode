@@ -1,54 +1,44 @@
 class Solution:
-    def buildpath(self, stack, path, start, result):                            #Use backtracking to construct all the pathes.
-        if len(stack) == 0:
+    def DFS(self, stack: List[int], wordList: List[str], target: int, wordIndex: defaultdict, prev: defaultdict(list), result: List[List[str]]):
+        if stack[-1] == target:                                                                                 #If the top of stack is target, convert each index to its word and append the converted stack to result, then return.
+            result.append([wordList[i] for i in stack])
             return
-        if stack[-1] == start:                                                  #If reaches start, append the reverse of stack to result.
-            t = list(stack)                                                     #Watch out! Never ever shallow copy!!!
-            t.reverse()
-            result.append(t)
-        else:
-            for x in path[stack[-1]]:                                           #For every word that points to current word, append it to stack.
-                stack.append(x)
-                self.buildpath(stack, path, start, result)
-                stack.pop()
-    # @param start, a string
-    # @param end, a string
-    # @param dict, a set of string
-    # @return a list of lists of string
-    def findLadders(self, start, end, dict):
-        if start == end:                                                        #If start equals end, just return it only.
-            return [[start]]
-        l = len(start)                                                          #Record the length of word.
-        result = []
-        path = {}                                                               #Use a dict to store all the words from that we can go to current key word.
-        q = [start]                                                             #A queue to store all the words in current step.
-        flag = False                                                            #Indicate if we have reach the end.
-        while q != []:                                                          #BFS
-            newq = []                                                           #Store all the words could be reached in next step.
-            for x in q:
-                for i in range(l):                                              #Traverse through every index of current word.
-                    for j in range(26):                                         #Traverse the alphabet.
-                        t = x[:i] + chr(ord('a') + j) + x[i + 1:]               #Form the new word.
-                        if t != x:                                              #The new word has to be different from current word.
-                            if t == end:                                        #If we reach the end, update path and flag.
-                                flag = True
-                                if end not in path:
-                                    path[end] = [x]
-                                else:
-                                    path[end].append(x)
-                            elif t in dict:                                     #If the new word is in dict, update path.
-                                if t not in path:
-                                    path[t] = [x]
-                                    newq.append(t)                              #Append it to newq on its first appearance.
-                                else:
-                                    path[t].append(x)
-            if flag is True:                                                    #If we reach the end, break.
-                break
-            for x in newq:                                                      #Remove existed word from dict.
-                dict.remove(x)
-            q = newq                                                            #Update the queue.
-        if q == []:                                                             #If q is empty, i.e. can not find a path from start to end, return an empty list.
+        for x in prev[stack[-1]]:                                                                               #Traverse each index in prev[stack[-1]].
+            stack.append(x)                                                                                     #Append x to stack.
+            self.DFS(stack, wordList, target, wordIndex, prev, result)                                          #Keep DFS.
+            stack.pop()                                                                                         #Pop stack.
+        
+    def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
+        if endWord not in wordList:                                                                             #If endWord not in wordList, return [] directly.
             return []
-        stack = [end]                                                           #Use stack to store the path from end to start.
-        self.buildpath(stack, path, start, result)                              #Use backtracking to construct all the pathes.
-        return result
+        wordList.append(beginWord)                                                                              #Append beginWord to wordList.
+        wordIndex = {w: i for i, w in enumerate(wordList)}                                                      #Get the word to index mapping.
+        adjacentList = defaultdict(list)                                                                        #Intialize adjacent list.
+        for i, w in enumerate(wordList):                                                                        #Traverse wordList.
+            for j in range(len(w)):                                                                             #Try replace each letter in w with other letters.
+                for c in 'abcdefghijklmnopqrstuvwxyz':
+                    if c == w[j]:
+                        continue
+                    newWord =w[:j] + c + w[j + 1:]                                                              #Get the word after replacing one letter.
+                    if newWord in wordIndex:                                                                    #If it's in wordIndex, build an edge from i to wordIndex[newWord].
+                        adjacentList[i].append(wordIndex[newWord])
+        
+        q, visited = set([wordIndex[endWord]]), t([wordIndex[endWord]])                                         #Initalize queue set and visited set for BFS, starting with endWord.
+        prev = defaultdict(list)                                                                                #Initalize the previous words in BFS for each word.
+        while q:                                                                                                #BFS.
+            newq = set()                                                                                        #Initalize new queue.
+            for w in q:                                                                                         #Traverse each index in q.
+                if w == wordIndex[beginWord]:                                                                   #If current index is the index of beginWord, break.
+                    break
+                for x in adjacentList[w]:                                                                       #Traverse the indexes in adjacent list of w.
+                    if x not in visited:                                                                        #If x is not visited, add it to newq and append w to prev[x].
+                        newq.add(x)
+                        prev[x].append(w)
+            q = newq                                                                                            #Replace q with newq.
+            visited |= newq                                                                                     #Update visited so all indexes in newq are visited.
+        
+        if not prev[wordIndex[beginWord]]:                                                                      #If beginWord index has no previous word index, we can not reach from beginWord to endWord, return []. 
+            return []
+        result = []                                                                                             #Initialize result.
+        self.DFS([wordIndex[beginWord]], wordList, wordIndex[endWord], wordIndex, prev, result)                 #DFS to build all sequences.
+        return result                                                                                           #Return result.
