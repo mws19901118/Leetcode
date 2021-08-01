@@ -11,3 +11,17 @@ class Solution:
                 count += rightMax - height[right]                                   #Add rightMax - height[right] to count.
                 right -= 1                                                          #Decrease right pointer.
         return count                                                                #Return count.
+
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        stack, count = [], 0                                                        #Initialize the index stack in which the height at each index is in descending order; also initialize count.
+        for i, h in enumerate(height):                                              #Traverse height.
+            prevHeight = 0                                                          #Intialize previouse height that is in stack and is smaller than current height.
+            while stack and height[stack[-1]] <= h:                                 #While stack is not empty and the height of stack top is no larger than current height, handle the water trapped by current height and the height on top of stack, where current height is higher.
+                x = stack.pop()                                                     #Pop stack. All the water trapped below height[x] is already added to count.
+                count += (height[x] - prevHeight) * (i - x - 1)                     #Add the water trapped in the rectangle(height is height[x] - prevHeight and width is from x to i - 1) to count.
+                prevHeight = height[x]                                              #Update prevHeight.
+            if stack:                                                               #If stack is not empty, handle water trapped by current height and the height on top of stack, where current height is shorter.
+                count += (h - prevHeight) * (i - stack[-1] - 1)                     #Add the water trapped in the rectangle(height is h - prevHeight and width is from top of stack to i - 1) to count.
+            stack.append(i)                                                         #Append current index to stack.
+        return count                                                                #Return count.
