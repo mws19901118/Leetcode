@@ -1,19 +1,11 @@
 class Solution:
-    # @return a tuple, (index1, index2)
-    def twoSum(self, num, target):
-        dict={}
-        for i in range(0,len(num)):                                         #construct dictionary
-            if not dict.has_key(num[i]):
-                dict[num[i]]=[i]
-            else:
-                dict[num[i]].append(i)
-        for i in range(0,len(num)):
-            if dict.has_key(target-num[i]):
-                temp=dict[target-num[i]][0]                                 #temp is the index
-                if temp==i:                                                 #in case of two equal items
-                    if(len(dict[target-num[i]])>1):
-                        return (i+1,dict[target-num[i]][1]+1)
-                elif i<temp:
-                    return (i+1,temp+1)
-                else:
-                    return (temp+1,i+1)
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        indexes = defaultdict(list)
+        for i, x in enumerate(nums):                                    #Store indexes of each number in a dictionary.
+            indexes[x].append(i)
+        for i, x in enumerate(nums):                                    #Traverse nums.
+            if target - x in indexes:                                   #If target - x is in indexes, we have a potential 2 sum pair.
+                if target - x == x and len(indexes[x]) > 1:             #If target - x == x, then it requires at least 2 occurence of x to make a valid pair.
+                    return [indexes[x][0], indexes[x][1]]
+                elif target - x != x:                                   #If target - x != x, return [i, indexes[target - x][0]] as a valid pair.
+                    return [i, indexes[target - x][0]]
