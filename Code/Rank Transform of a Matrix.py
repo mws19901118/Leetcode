@@ -29,7 +29,7 @@ class Solution:
         rank = [0] * (m + n)                                                            #Initialize largest rank of the row or column so far.
         for x in sorted(cells):                                                         #Traverse the sorted keys of cells.
             uf = UnionFind()                                                            #Initalize Union-Finds manager for all cells with value x.
-            for r, c in cells[a]:                                                       #Traverse all cells with value x.
+            for r, c in cells[x]:                                                       #Traverse all cells with value x.
                 uf.union(r, c + m)                                                      #Union row r with column c (c + m to separate with r).
             for group in uf.getGroups().values():                                       #Traverse all groups of cells with value x.
                 maxRank = max(rank[i] for i in group)                                   #Get max rank of all rows and columns which has cell from current group.
