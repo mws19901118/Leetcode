@@ -1,16 +1,6 @@
-class Solution(object):
-    def groupAnagrams(self, strs):
-        """
-        :type strs: List[str]
-        :rtype: List[List[str]]
-        """
-        dict = {}
-        for s in strs:
-            t = ''.join(sorted(s))          #"Sort" the string. Group anagrams have the same sorted string.
-            if t in dict:
-                dict[t].append(s)
-            else:
-                dict[t] = [s]
-        for x in dict.keys():               #Sort each inner list.
-            dict[x].sort()
-        return dict.values()
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        anagramsDict = defaultdict(list)                                #Group anagrams in defaultdict.
+        for word in strs:                                               #Traverse strs.
+            anagramsDict["".join(sorted(list(word)))].append(word)      #Split word to letters, then join the sorted letters to get the unique identifier of a group of anagram; append word to corrsponding list by unique identifier.
+        return anagramsDict.values()                                    #Return values of anagramsDict.
