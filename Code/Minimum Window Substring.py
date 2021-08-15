@@ -1,9 +1,7 @@
-from collections import Counter
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
         countT, countS = Counter(t), Counter()                                  #countT counts the characters in t, and countS counts the characters in sliding window, initially empty.
         start, end = 0, 0                                                       #The start and end of sliding window.
-        minLength = len(s) + 1                                                  #Record the minimum length of sliding window.
         result = ""                                                             #Store result/
         match = 0                                                               #Store how many distinct characters have been satisfied in sliding window.
         while end < len(s):                                                     #While the sliding window haven't reached the end of s, find the rightmost end for current start.
@@ -22,7 +20,6 @@ class Solution:
                     match -= 1
                 start += 1                                                      #Move start to next character.
                 
-            if end - start + 1 < minLength:                                     #If the length of sliding window(from start - 1 to end - 1) is smaller than current minimum length, update minimum length.
-                minLength = end - start + 1
-                result = s[start - 1:end]                                       #Also update result.
+            if not result or len(result) > len(s[start - 1:end]):               #Update result if needed.
+                result = s[start - 1:end]
         return result
