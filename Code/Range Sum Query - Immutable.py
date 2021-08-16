@@ -1,24 +1,13 @@
-class NumArray(object):
-    def __init__(self, nums):
-        """
-        initialize your data structure here.
-        :type nums: List[int]
-        """
-        self.sumfromstart = [0]                                       #Store the sum from the start to current index.
-        for i in nums:
-            self.sumfromstart.append(i + self.sumfromstart[-1])
+class NumArray:
 
-    def sumRange(self, i, j):
-        """
-        sum of elements nums[i..j], inclusive.
-        :type i: int
-        :type j: int
-        :rtype: int
-        """
-        return self.sumfromstart[j + 1] - self.sumfromstart[i]
+    def __init__(self, nums: List[int]):
+        self.accumulateSum = [0]                                                #Initialize accumulate sum with 0.
+        self.accumulateSum.extend(list(accumulate(nums)))                       #Compute accumulate sum.
+
+    def sumRange(self, left: int, right: int) -> int:
+        return self.accumulateSum[right + 1] - self.accumulateSum[left]
 
 
 # Your NumArray object will be instantiated and called as such:
-# numArray = NumArray(nums)
-# numArray.sumRange(0, 1)
-# numArray.sumRange(1, 2)
+# obj = NumArray(nums)
+# param_1 = obj.sumRange(left,right)
