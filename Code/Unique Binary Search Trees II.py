@@ -1,26 +1,20 @@
-# Definition for a  binary tree node
+# Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    # @return a list of tree node
-    def generateTrees(self, n):
-        def constructTrees(a,b):                                  #Construct a BST values a...b.
-            if a>b:
-                return [None]
-            else:
-                total=[]                                          #Record current list of tree nodes.
-                for i in range(a,b+1):
-                    leftT=constructTrees(a,i-1)                   #Construct the left child of current root.
-                    rightT=constructTrees(i+1,b)                  #Construct the right child of current root.
-                    for t1 in leftT:
-                        for t2 in rightT:
-                            root=TreeNode(i)                      #New current root.
-                            root.left=t1                          #Link current root with its left child.
-                            root.right=t2                         #Link current root with its right child.
-                            total.append(root)                    #Append current root to the list.
-                return total
-        return constructTrees(1, n)
+    def backtracking(self, nums: List[int]) -> List[Optional[TreeNode]]:    #Generate a list of unique BST for nums array.
+        if not nums:                                                        #If nums is empty, return [None].
+            return [None]
+        result = []                                                         #Initialize result.
+        for i, x in enumerate(nums):                                        #Traverse nums.
+            left = self.backtracking(nums[:i])                              #Generate all possible left subtrees for root x.
+            right = self.backtracking(nums[i + 1:])                         #Generate all possible right subtrees for root x.
+            for l, r in product(left, right):                               #Append BST with root x and each left subtree and each right subtree to result. 
+                result.append(TreeNode(x, l, r))
+        return result                                                       #Return result.
+    
+    def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
+        return self.backtracking([i for i in range(1, n + 1)])              #Generate unique BST for [1, 2, ..., n].
