@@ -6,7 +6,7 @@ class Solution:
             if arr[i] == arr[i + 1]:                                                #If arr[i] == arr[i + 1], arr[i] cannot be the start of turbulent subarray longer than 1, so move to next element.
                 i += 1
             else:
-                sign = (arr[i + 1] > arr[i]) - (arr[i + 1] < arr[i])                #Get the sign of arr[i + 1] - arr[i]
+                sign = (arr[i + 1] > arr[i]) - (arr[i + 1] < arr[i])                #Get the sign of arr[i + 1] - arr[i].
                 j = i
                 while j < len(arr) - 1 and (arr[j + 1] - arr[j]) * sign > 0:        #Check it's in the same turbulent subarray until the subarray ends. To be in the same turbulent subarray, (arr[j + 1] - arr[j]) * sign > 0.
                     j += 1
