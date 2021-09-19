@@ -1,28 +1,23 @@
-class Solution(object):
-    def addOperators(self, num, target):
-        def isLeadingZeros(num):
-            return num.startswith('00') or (int(num) == 0 and num.startswith('0'))  #Deal with the string with leading zeros.
-        def solve(num, target, mulExpr = '', mulVal = 1):
-            ans = []
-            if isLeadingZeros(num):                                                 #remove leading zeros  
-                pass
-            elif int(num) * mulVal == target:
-                ans.append(num + mulExpr)
-            for x in range(len(num) - 1):                                           #Traverse from right to left.
-                lnum = num[:x+1] 
-                rnum = num[x+1:]
-                if isLeadingZeros(rnum):                                            #remove leading zeros
-                    continue
-                right = rnum + mulExpr                                              #The whole right part expresstion.
-                rightVal = int(rnum) * mulVal                                       #The whole right part value.
-                for left in solve(lnum, target - rightVal):                         #op = '+'
-                    ans.append(left + '+' + right)
-                for left in solve(lnum, target + rightVal):                         #op = '-'
-                    ans.append(left + '-' + right)
-                for left in solve(lnum, target, '*' + right, rightVal):             #op = '*'
-                    ans.append(left)
-            return ans
-        if not num:
-            return []
-        return solve(num, target)
+class Solution:
+    def isLeadingZeros(self, num: str) -> bool:                                                 #Determine if num is a string of number with leading zeros.
+        return num.startswith('00') or (int(num) > 0 and num.startswith('0'))
+    
+    def dfs(self, num: str, target: int, mulExpr: str = '', mulVal: int = 1) -> List[str]:      #Find all expressions in num whose evaluation equals target with mulExpr and mulVal as the multiplication expression and value on the right side.
+        result = []                                                                             #Initialize result list.
+        if not self.isLeadingZeros(num) and int(num) * mulVal == target:                        #If num does not have leading 0 and num * mulVal == target, append (result + mulExpr) to result.
+            result.append(num + mulExpr)
+        for x in range(len(num) - 1):                                                           #Traverse from left to right.
+            lnum, rnum = num[:x + 1], num[x + 1:]                                               #Split num to lnum and rnum.
+            if self.isLeadingZeros(rnum):                                                       #If rnum has leading zeros, skip this split.
+                continue
+            rightExpr, rightVal = rnum + mulExpr, int(rnum) * mulVal                            #Get the expresstion and value of entire right part.
+            for left in self.dfs(lnum, target - rightVal):                                      #Find all expressions in lnum whose evaluation equals to target - rightVal.
+                result.append(left + '+' + rightExpr)                                           #Append '+' + rightExpr to each of them and append final result to result.
+            for left in self.dfs(lnum, target + rightVal):                                      #Find all expressions in lnum whose evaluation equals to target + rightVal.
+                result.append(left + '-' + rightExpr)                                           #Append '-' + rightExpr to each of them and append final result to result.
+            for left in self.dfs(lnum, target, '*' + rightExpr, rightVal):                      #Find all expressions in lnum whose evaluation equals to target, with rightExpr and rightVal as the multiplication expression and value on the right side.
+                result.append(left)                                                             #Append all of them to result.
+        return result                                                                           #Return result.
         
+    def addOperators(self, num: str, target: int) -> List[str]:
+        return self.dfs(num, target)                                                            #Begin dfs.
