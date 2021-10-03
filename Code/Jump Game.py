@@ -1,14 +1,9 @@
 class Solution:
-    # @param A, a list of integers
-    # @return a boolean
-    def canJump(self, A):
-        l=len(A)
-        if l==1:                              #If A only contains 1 element, return true.
-            return True
-        end=0                                 #Use 'end' to indicate the max reachable index.
-        for i in range(l-1):
-            end=max(end,i+A[i])               #Traverse forward through each element and update 'end'.
-            if end>=l-1:                      #If the last index is reachable, return true.
+    def canJump(self, nums: List[int]) -> bool:
+        i, reach = 0, 0                         #Initialize a pointer at 0 and the farthest reachable index.
+        while i <= reach:                       #Traverse nums while can reach index i.
+            reach = max(reach, i + nums[i])     #Update reach if we can reach farther from current index.
+            if reach >= len(nums) - 1:          #If we can reach the end, return true.
                 return True
-            if end==i:                        #If no further index is reachable at certain element, the jump game stucks, so return false.
-                return False
+            i += 1                              #Move i to next.
+        return False                            #Return false cause we cannot reach the end.
