@@ -1,51 +1,37 @@
-class Trie:                                                                               #Implement prefix tree class.
-    list=[]
-    hasValue=False
-    def __init__(self):
-        self.list=[None]*26
-        self.hasValue=False
+class Trie:
+    def __init__(self):                                                                                                 #Initialize a trie node.
+        self.words = {}
+        self.hasValue = False
     
-    # @param {string} word
-    # @return {void}
-    # Inserts a word into the trie.
-    def insert(self,word,index):
-        c=ord(word[index])-97
-        if self.list[c]==None:
-            self.list[c]=Trie()
-        if index==len(word)-1:
-            self.list[c].hasValue=True
-        else:
-            self.list[c].insert(word, index+1)
+    def insert(self, word: str) -> None:                                                                                #Insert word to trie.
+        if not word:
+            self.hasValue = True
+            return
+        if word[0] not in self.words:
+            self.words[word[0]] = Trie()
+        self.words[word[0]].insert(word[1:])
             
 class Solution:
-    def dfs(self,ans,trie,board,i,j,word):                                                  #Depth-first search
-        if trie.hasValue:                                                                   #If current node of trie has a word, append it to the answer list and set the hasValue flag to false.
-            ans.append(word)
-            trie.hasValue=False
-        if i>=0 and i<len(board) and j>=0 and j<len(board[0]) and board[i][j]!='#':         #Check if the coordinate of current position is out of bound and if current position has already been visited.
-            char=board[i][j]                                                                #Record the character in current position.
-            c=ord(char)-97                                                                  #Get its sequence number in alphabet.
-            next=trie.list[c]                                                               #Get the object for current character in trie node.
-            w=word+char                                                                     #Append current character to word.
-            if next!=None:                                                                  #If the object is not none, trie node has at least a word begin with current word.
-                board[i][j]='#'                                                             #Set current position as visited.
-                self.dfs(ans,next,board,i+1,j,w)                                            #DFS in four directions.
-                self.dfs(ans,next,board,i-1,j,w)
-                self.dfs(ans,next,board,i,j+1,w)
-                self.dfs(ans,next,board,i,j-1,w)
-                board[i][j]=char                                                            #Restore the character in current position after DFS.
-                
-    # @param {character[][]} board
-    # @param {string[]} words
-    # @return {string[]}
-    def findWords(self, board, words):
-        t=Trie()
-        for i in words:
-            t.insert(i,0)                                                                     #Insert word into trie.
-        ans=[]
-        m=len(board)
-        n=len(board[0])
-        for i in range(m):
-            for j in range(n):
-                self.dfs(ans,t,board,i,j,'')                                                  #Do dfs at each position of the board.
-        return ans
+    def dfs(self, result: List[str], trie: Trie, board: List[List[str]], x: int, y: int, word: str) -> None:            #DFS.
+        c = board[x][y]                                                                                                 #Get current letter.
+        if c not in trie.words:                                                                                         #If c is not in trie, return.
+            return
+        if trie.words[c].hasValue:                                                                                      #If c is in trie and there is word in trie ending at c, we found a word in board.
+            result.append(word + c)                                                                                     #Append word + c to result.
+            trie.words[c].hasValue = False                                                                              #Set trie.words[c].hasValue to false so we won't append duplicate words to result.
+        m, n = len(board), len(board[0])                                                                                #Get dimensions.
+        board[x][y] = '#'                                                                                               #Set board[x][y] to '#' meaning it's visited.
+        for nx, ny in [(x - 1, y), (x, y + 1), (x + 1, y), (x, y - 1)]:                                                 #Traverse neighbors.
+            if nx >= 0 and nx < m and ny >= 0 and ny < n and board[nx][ny] != '#':                                      #If neighbor is valid and unvisited, keep dfs with trie.words[c] and word + c.
+                self.dfs(result, trie.words[c], board, nx, ny, word + c)
+        board[x][y] = c                                                                                                 #Restore board[x][y] to c.
+
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        t = Trie()                                                                                                      #Create a trie.
+        for w in words:                                                                                                 #Insert each word in words to trie.
+            t.insert(w)
+        m, n = len(board), len(board[0])                                                                                #Get dimensions.
+        result = []                                                                                                     #Initialize result.
+        for i, j in product(range(m), range(n)):                                                                        #Traverse board.
+            self.dfs(result, t, board, i, j, '')                                                                        #Search for word starting from current position.
+        return result                                                                                                   #Return result.
