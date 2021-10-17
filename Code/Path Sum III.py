@@ -12,7 +12,7 @@ class Solution:
         result = count[cumsum - target]                                 #Add count[cumsum - target] to result, because if there is a node whose cumulative sum is cumsum - target, the path sum from that node(not inclusive) to current node equals target.  
         count[cumsum] += 1                                              #Add the count of cumulative sum to dictionary.
         result += self.dfs(node.left, target, cumsum, count)            #DFS in left child.
-        result += self.dfs(node.right, target, cumsum, count)           #DFS in left child.
+        result += self.dfs(node.right, target, cumsum, count)           #DFS in right child.
         count[cumsum] -= 1                                              #Reduce the count of cumulative sum.
         return result
 
