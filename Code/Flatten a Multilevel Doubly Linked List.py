@@ -21,9 +21,8 @@ class Solution:
                 tail.next = tail.child            #Replace next with child, and remove child.
                 tail.next.prev = tail
                 tail.child = None
-            else:                                 #Otherwise, if stack is not empty, set next to the node popped from stack.
-                if stack:
-                    tail.next = stack.pop()
-                    tail.next.prev = tail
+            elif stack:                           #Otherwise, if stack is not empty, set next to the node popped from stack.
+                tail.next = stack.pop()
+                tail.next.prev = tail
             tail = tail.next                      #Move tail to next.
         return head                               #Return head.
