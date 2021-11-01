@@ -1,39 +1,24 @@
 class Solution:
-    # @param board, a 2D array
-    # Capture all regions by modifying the input board in-place.
-    # Do not return any value.
-    def solve(self, board):
-        def fill(x,y):
-            if x<0 or x>m-1 or y<0 or y>n-1 or board[x][y]!='O':
-                return
-            queue.append((x,y))                                     #add to queue
-            board[x][y]='B'                                         #change unsurrounded 'O' to 'B' to distinguish it from surrounded 'O'
-        def bfs(x,y):
-            if board[x][y]=='O':
-                queue.append((x,y))                                 #add to queue
-                fill(x,y)
-            while queue:
-                temp=queue.pop(0)                                   #pop a tuple
-                i=temp[0]
-                j=temp[1]
-                fill(i-1,j)
-                fill(i+1,j)
-                fill(i,j-1)
-                fill(i,j+1)
-        if board==[]:
-            return
-        m=len(board)                                                #get the length of colomn
-        n=len(board[0])                                             #get the length of row
-        queue=[]                                                    #queeu to record the consequence of tuple
-        for i in range(n):                                          #bfs along edges
-            bfs(0,i)
-            bfs(m-1,i)
-        for i in range(m):
-            bfs(i,0)
-            bfs(i,n-1)
-        for i in range(m):                                          #change 'B' to 'O', 'O' to 'X'
-            for j in range(n):
-                if board[i][j]=='B':
-                    board[i][j]='O'
-                elif board[i][j]=='O':
-                    board[i][j]='X'
+    def BFS(self, board: List[List[str]], coordinate: tuple) -> None:
+        m, n = len(board), len(board[0])                                                        #Get dimensions of board.
+        q = [coordinate]                                                                        #Initialize queue.
+        board[coordinate[0]][coordinate[1]] = 'V'                                               #Set current cell to 'V'.
+        while q:                                                                                #BFS.
+            newq = []                                                                           #Initialize new queue.
+            for x, y in q:                                                                      #Traverse coordinates in q.
+                for nx, ny in [(x - 1, y), (x, y + 1), (x + 1, y), (x, y - 1)]:                 #Traverse neighbors of current cell.
+                    if nx >= 0 and nx < m and ny >= 0 and ny < n and board[nx][ny] == 'O':      #If neithbor is valid and is 'O', set neighbor to 'V' and append the corrdinate to newq.
+                        board[nx][ny] = 'V'
+                        newq.append((nx, ny))
+            q = newq                                                                            #Replace q with newq.
+
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        m, n = len(board), len(board[0])                                                        #Get the dimensions of board.
+        for i, j in product(range(m), range(n)):                                                #Traverse board.
+            if (i == 0 or i == m - 1 or j == 0 or j == n - 1) and board[i][j] == 'O':           #If current cell is on the border and is 'O', start BFS at current cell and set all connected 'O' to 'V'.
+                self.BFS(board, (i, j))
+        for i, j in product(range(m), range(n)):                                                #Traverse board.
+            board[i][j] = 'O' if board[i][j] == 'V' else 'X'                                    #If current cell is 'V', set it to 'O'; otherwise, set it to 'X'.
