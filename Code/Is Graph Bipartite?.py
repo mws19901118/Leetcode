@@ -9,7 +9,7 @@ class Solution:
                 newq = []                                       #Initialize new queue.
                 for x in q:                                     #Traverse q.
                     unvisited.remove(x)                         #Remove x from unvisited.
-                    for y in graph[x]:                          #Traverse the neightbors of x.
+                    for y in graph[x]:                          #Traverse the neighbors of x.
                         if labels[y] == labels[x]:              #If x and y have same label, the partition is invalid, so return false.
                             return False
                         if labels[y] is None:                   #If y's label is none, assign the opposite label of x to it and append it to newq.
