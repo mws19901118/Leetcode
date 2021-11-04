@@ -6,12 +6,7 @@
 #         self.right = right
 class Solution:
     def sumOfLeftLeaves(self, root: TreeNode) -> int:
-        if not root:                                            #If root is none, return 0.
+        if not root:                                                                                                                    #If root is none, return 0.
             return 0
-        result = self.sumOfLeftLeaves(root.right)               #Get the sum of left leaves in right subtree.
-        if root.left:
-            if root.left.left or root.left.right:               #If has left child and left child is not leave, get the sum of left leaves in left subtree.
-                result += self.sumOfLeftLeaves(root.left)
-            else:                                               #If has left child and left child is leave, add the value of left child to result.
-                result += root.left.val
-        return result
+        result = root.left.val if root.left and not root.left.left and not root.left.right else self.sumOfLeftLeaves(root.left)         #If the left child of root is left leave, initialize result to be the value of left child; otherwise, initialize result to be the recursion result of left child.
+        return result + self.sumOfLeftLeaves(root.right)                                                                                #Return result plus the recursion result of right child.
