@@ -1,14 +1,3 @@
 class Solution:
-    # @param prices, a list of integer
-    # @return an integer
-        sum=0
-        i=0
-        while i<length-1:
-            while i<length-1 and prices[i]>=prices[i+1]:              #search for the nadir
-                i+=1
-            low=prices[i]
-            while i<length-1 and prices[i]<prices[i+1]:               #search for the peak
-                i+=1
-            high=prices[i]
-            sum+=high-low
-        return sum
+    def maxProfit(self, prices: List[int]) -> int:
+        return sum(max(0, prices[i + 1] - prices[i]) for i in range(len(prices) - 1))   #On each day(except the first day), the max profit is current price minus previous price, so return the sum of max profit each day.
