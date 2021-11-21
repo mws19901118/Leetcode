@@ -5,11 +5,15 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
-        if not inorder or not postorder:
+    def build(self, inorder: List[int], start: int, end: int, postorder: List[int], indexes) -> TreeNode:
+        if start > end or not postorder:                                                #If start > end or postorder is empty, we cannot construct node, return None.
             return None
-        root = TreeNode(postorder[-1])                                                  #Root is always the last element of postorder.
-        index = inorder.index(postorder[-1])                                            #Find the index of root in inorder.
-        root.left = self.buildTree(inorder[:index], postorder[:index])                  #The left child of root is from the start to index in both postorder and inorder.
-        root.right = self.buildTree(inorder[index + 1:], postorder[index:-1])           #The right child of root is from index to length-1 in postorder while from index + 1 to length in inorder.
-        return root
+        node = TreeNode(postorder.pop())                                                #Initialize node with the last element in postorder; directly pop postorder because we always construct right child first so it's strictly traversing postorder backward.
+        index = indexes[node.val]                                                       #Find the index of node.val in inorder.
+        node.right = self.build(inorder, index + 1, end, postorder, indexes)            #Construct the right child of node with inorder[index + 1:end + 1] and postorder.
+        node.left = self.build(inorder, start, index - 1, postorder, indexes)           #Construct the right child of node with inorder[start:index] and postorder.
+        return node                                                                     #Return node.
+    
+    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
+        indexes = {x: i for i, x in enumerate(inorder)}                                 #Cache integer indexes in inorder.
+        return self.build(inorder, 0, len(inorder) - 1, postorder, indexes)             #Build binary tree.
