@@ -13,6 +13,7 @@ class UnionFind:                                                                
         return self.parent
     
 class Solution:
+    @cache
     def primeSet(self, n) -> set:                                                           #Find all prime factors of n with cache.
         for i in range(2, int(sqrt(n)) + 1):
             if n % i == 0:
@@ -21,10 +22,9 @@ class Solution:
     
     def largestComponentSize(self, A: List[int]) -> int:
         unionFinds = {x: UnionFind(x) for x in A}                                           #Initialize union find for each number.
-        cache = {}
         numbersThatThisPrimeIsAFactor = defaultdict(list)                                   #Store all numbers that can be divided by each prime in dict. Key is prime, value is number list.
         for x in A:
-            primes = self.primeSet(x, cache)                                                #Find the prime factors of number x.
+            primes = self.primeSet(x)                                                       #Find the prime factors of number x.
             for p in primes:                                                                #Append x to the list of each prime factor.
                 numbersThatThisPrimeIsAFactor[p].append(x)
         
