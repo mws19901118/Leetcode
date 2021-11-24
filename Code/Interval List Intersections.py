@@ -1,23 +1,14 @@
-# Definition for an interval.
-# class Interval:
-#     def __init__(self, s=0, e=0):
-#         self.start = s
-#         self.end = e
-
 class Solution:
-    def intervalIntersection(self, A: 'List[Interval]', B: 'List[Interval]') -> 'List[Interval]':
-        result = []
-        i = 0
-        j = 0
-        while i < len(A) and j < len(B):                                        #Two pointers.
-            if A[i].end < B[j].start:                                           #If A[i]'s end is smaller than B[j]'s start, go to next A[i].
-                i += 1
-            elif A[i].start > B[j].end:                                         #If A[i]'s start is larger than B[j]'s end, go to next B[j].
-                j += 1
-            elif A[i].end < B[j].end:                                           #If A[i]'s end is smaller than B[j]'s end, calculate intersection and go to next A[i].
-                result.append(Interval(max(A[i].start, B[j].start), A[i].end))
-                i += 1
-            else:                                                               #If A[i]'s end is equal to or larger than B[j]'s end, calculate intersection and go to next B[j].
-                result.append(Interval(max(A[i].start, B[j].start), B[j].end))
-                j += 1
-        return result
+    def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:
+        i, j = 0, 0                                                                                         #Initialzie 2 pointers.
+        intersections = []                                                                                  #Intiialzie intersections.
+        while i < len(firstList) and j < len(secondList):                                                   #Traverse while both 2 pointers not reaching the end.
+            if firstList[i][1] < secondList[j][1]:                                                          #Handle the case firstList[i][1] < secondList[j][1].
+                if firstList[i][1] >= secondList[j][0]:                                                     #If firstList[i][1] >= secondList[j][0], append [max(firstList[i][0], secondList[j][0]), firstList[i][1]] to intersections.
+                    intersections.append([max(firstList[i][0], secondList[j][0]), firstList[i][1]])
+                i += 1                                                                                      #Move i to next.
+            else:                                                                                           #Handle the case firstList[i][1] >= secondList[j][1].
+                if secondList[j][1] >= firstList[i][0]:                                                     #If secondList[j][1] >= firstList[i][0], append [max(firstList[i][0], secondList[j][0]), secondList[j][1]] to intersections.
+                    intersections.append([max(firstList[i][0], secondList[j][0]), secondList[j][1]])
+                j += 1                                                                                      #Move j to next.
+        return intersections                                                                                #Return intersections.
