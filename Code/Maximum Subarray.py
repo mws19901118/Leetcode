@@ -1,7 +1,7 @@
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        csum, maxsum = -0x7fffffff, -0x7fffffff         #Record the max sum of subarray ending at each element. 
-        for i in range(len(nums)):
-            csum = max(csum + nums[i], nums[i])         #The max sum of subarray ending at current element equals the greater value of nums[i] and the max sum of subarray ending at previous element plus nums[i].
-            maxsum = max(maxsum, csum)                  #If max sum of subarray ending at current element is greater than maxsum, update maxsum.
-        return maxsum
+        result, currentMax = float('-inf'), 0           #Initialize result and the max sum of subarray ending at current number. 
+        for x in nums:                                  #Traverse nums.
+            currentMax = max(x, currentMax + x)         #The max sum of subarray ending at current number equals the greater value of x and the max sum of subarray ending at previous element plus x.
+            result = max(result, currentMax)            #If max sum of subarray ending at current number is greater than result, update result.
+        return result
