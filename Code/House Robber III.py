@@ -1,28 +1,16 @@
 # Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    def rob0(self, root, dict0, dict1):                                                 #Calculate the max value not robbing current house.
-        if root is None:
-            return 0
-        if root in dict0:
-            return dict0[root]
-        ans = max(self.rob0(root.left, dict0, dict1), self.rob1(root.left, dict0, dict1)) + max(self.rob0(root.right, dict0, dict1), self.rob1(root.right, dict0, dict1))
-        dict0[root] = ans
-        return ans
-    def rob1(self, root, dict0, dict1):                                                 #Calculate the max value robbing current house.
-        if root is None:
-            return 0
-        if root in dict1:
-            return dict1[root]
-        ans = root.val + self.rob0(root.left, dict0, dict1) + self.rob0(root.right, dict0, dict1)
-        dict1[root] = ans
-        return ans
+    @cache
+    def dp(self, root: TreeNode):                                                                   #Return the tuple of max money robbing current node and not robbing current node.
+        if not root:                                                                                #If root is none, return (0, 0).
+            return (0, 0)
+        leftResult, rightResult = self.dp(root.left), self.dp(root.right)                           #Get the DP result from left child and right child.
+        return (leftResult[1] + rightResult[1] + root.val, max(leftResult) + max(rightResult))      #If rob current node, the max money is the sum of not robbing both child plus current value; if not rob currentnode, the max money is the sum of max money of both child.
+    
     def rob(self, root: TreeNode) -> int:
-        dict0 = {}                                                                      #Use dict0 to store intermedia results for rob0.
-        dict1 = {}                                                                      #Use dict1 to store intermedia results for rob1.
-        return max(self.rob0(root, dict0, dict1), self.rob1(root, dict0, dict1))        #Return the max of rob0(root) and rob1(root).
+        return max(self.dp(root))                                                                   #Return the DP result from root.
