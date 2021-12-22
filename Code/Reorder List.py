@@ -1,35 +1,30 @@
 # Definition for singly-linked list.
 # class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
-    # @param head, a ListNode
-    # @return nothing
-    def reorderList(self, head):
-        if head!=None and head.next!=None and head.next.next!=None:
-            mid=head
-            tail=head
-            while tail.next!=None and tail.next.next!=None:
-                tail=tail.next.next
-                mid=mid.next
-            if tail.next!=None:
-                tail=tail.next
-            newhead=mid.next                                #cut off the list
-            mid.next=None
-            count=1
-            while newhead!=tail:                            #delete nodes of the second half of list successively, and insert them after tail to reverse the sequence
-                temp=newhead
-                newhead=newhead.next
-                temp.next=tail.next
-                tail.next=temp
-                count+=1                                    #count the number of nodes of the second half of list
-            cursor=head
-            while count!=0:                                 #merge
-                temp=newhead
-                newhead=newhead.next
-                temp.next=cursor.next
-                cursor.next=temp
-                cursor=cursor.next.next
-                count-=1
+    def reorderList(self, head: ListNode) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+        fast, slow = head, head                     #Initialize fast and slow pointers.
+        while fast.next and fast.next.next:         #Move fast 2 times and slow 1 time simultaneously towards end.
+            fast = fast.next.next
+            slow = slow.next
+        dummyHead = ListNode(None)                  #Initialize a dummy head for second half.
+        curr = slow.next                            #Next of slow is the start of second half.
+        slow.next = None                            #Cut off between first half and second half.
+        while curr:                                 #Reverse second half.
+            temp = curr.next
+            curr.next = dummyHead.next
+            dummyHead.next = curr
+            curr = temp
+        shalf = dummyHead.next
+        curr = head
+        while shalf:                                #Insert reversed second half into first half.
+            temp = shalf.next
+            shalf.next = curr.next
+            curr.next = shalf
+            curr = curr.next.next
+            shalf = temp
