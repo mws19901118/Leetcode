@@ -1,6 +1,6 @@
 class Solution:
     def findComplement(self, num: int) -> int:
-        b = bin(num)[2:]                  #Convert num to binary.
+        b = format(num, "b")              #Convert num to binary.
         complement = 0
         for x in b:
             complement <<= 1              #Shift left complement.
