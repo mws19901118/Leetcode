@@ -5,28 +5,21 @@
 #         self.next = next
 class Solution:
 
-    def __init__(self, head: ListNode):
-        """
-        @param head The linked list's head.
-        Note that the head is guaranteed to be not null, so it contains at least one node.
-        """
-        self.head = head                                                    #Initialize head node.
-        
+    def __init__(self, head: Optional[ListNode]):
+        self.head = head                                #Store linked list.
+        self.length = 0                                 #Count length.
+        curr = head
+        while curr:
+            self.length += 1
+            curr = curr.next
 
     def getRandom(self) -> int:
-        """
-        Returns a random node's value.
-        """
-        n, result = 1, 0                                                  #n stands for how many nodes have been traversed.
-        curr = self.head
-
-        while curr:                                                       #Traverse the linked list.
-            if random.random() < 1 / n:                                   #Decide whether to include the element in reservoir
-                result = curr.val
-            curr = curr.next                                              #Move on to the next node
-            n += 1
-        return result
-
+        n, curr = self.length, self.head                #Sampling without replacement.
+        while curr:
+            if random.random() < 1 / n:
+                return curr.val
+            curr = curr.next
+            n -= 1
 
 # Your Solution object will be instantiated and called as such:
 # obj = Solution(head)
