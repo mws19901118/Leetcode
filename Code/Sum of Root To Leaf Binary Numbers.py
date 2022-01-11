@@ -6,10 +6,10 @@
 #         self.right = right
 class Solution:
     def traverse(self, root: TreeNode, path: int, numbers: List[int]) -> None:      #Traverse the tree.
-        if root is None:
+        if not root:
             return
         path = path << 1 | root.val                                                 #Update the sum in path.
-        if root.left is None and root.right is None:                                #If current node is leaf, add sum to numbers list.
+        if not root.left and not root.right:                                        #If current node is leaf, add sum to numbers list.
             numbers.append(path)
         else:                                                                       #Otherwise keep traversing through left subtree and right subtree.
             self.traverse(root.left, path, numbers)
