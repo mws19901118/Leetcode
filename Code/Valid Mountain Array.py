@@ -1,9 +1,10 @@
 class Solution:
     def validMountainArray(self, arr: List[int]) -> bool:
-        front = 0
-        while front + 1 < len(arr) and arr[front + 1] > arr[front]:     #Find the index of peak element from the front.
-            front += 1
-        back = len(arr) - 1
-        while back - 1 >= 0 and arr[back - 1] > arr[back]:              #Find the index of peak element from the back.
-            back -= 1
-        return front == back and front != len(arr) - 1 and back != 0    #Front and back should be equal and also can't be on the boundary of either side of arr.
+        i = 0
+        while i + 1 < len(arr) and arr[i + 1] > arr[i]:     #Traverse to the first number that are greater than its next if exist.
+            i += 1
+        if i == 0 or i == len(arr) - 1:                     #If peak is at either end of array, return false.
+            return False
+        while i + 1 < len(arr) and arr[i + 1] < arr[i]:     #Keep traversing until reaches the end or the next number is greater than current number.
+            i += 1
+        return i == len(arr) - 1                            #Return whether the traverse reaches the end.
