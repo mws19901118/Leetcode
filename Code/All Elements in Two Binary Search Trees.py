@@ -5,28 +5,21 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def traverse(self, root: TreeNode, s: List[int]):                                 #BST inorder traversal.
-        if not root:
-            return
-        self.traverse(root.left, s)
-        s.append(root.val)
-        self.traverse(root.right, s)
-        
     def getAllElements(self, root1: TreeNode, root2: TreeNode) -> List[int]:
-        s1, s2 = [], []
-        self.traverse(root1, s1)                                                      #Traverse tree1.
-        self.traverse(root2, s2)                                                      #Traverse tree2.
-        result = []
-        i, j = 0, 0
-        while i < len(s1) and j < len(s2):                                            #Merge result.
-            if s1[i] <= s2[j]:
-                result.append(s1[i])
-                i += 1
-            else:
-                result.append(s2[j])
-                j += 1
-        if i < len(s1):
-            result.extend(s1[i:])
-        else:
-            result.extend(s2[j:])
-        return result
+        stack1, stack2, output = [], [], []                                         #Initialize stack1 for traversing root1 and stack2 for traversing root2; also initialize output list.
+        while root1 or root2 or stack1 or stack2:                                   #Traverse root1 and root2 simultaneously until finishing traversing in both trees.
+            while root1:                                                            #Go to the left most node in root1 and append all nodes on the path to stack1.
+                stack1.append(root1)
+                root1 = root1.left
+            while root2:                                                            #Go to the left most node in root2 and append all nodes on the path to stack2.
+                stack2.append(root2)
+                root2 = root2.left
+                
+            if not stack2 or stack1 and stack1[-1].val <= stack2[-1].val:           #If finished traversing root2 or the current value in root1 is smaller than current value in root2, append current value in root1 to output then pop stack1 and go to its right child.
+                output.append(stack1[-1].val)
+                root1 = stack1.pop().right
+            else:                                                                   #Otherwise, append current value in root2 to output then pop stack2 and go to its right child.
+                output.append(stack2[-1].val)
+                root2 = stack2.pop().right
+
+        return output
