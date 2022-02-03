@@ -1,11 +1,6 @@
 class Solution:
-    def fourSumCount(self, A: List[int], B: List[int], C: List[int], D: List[int]) -> int:
-        countAB = defaultdict(int)
-        result = 0
-        for a in A:                                 #Count the sum of a + b for a in A and b in B.
-            for b in B:
-                countAB[a + b] += 1
-        for c in C:                                 #For each c in C and d in D, add countAB[
-            for d in D:
-                result += countAB[-(c + d)]         #Add the count of -(c + d) in countAB to result.
-        return result
+    def fourSumCount(self, nums1: List[int], nums2: List[int], nums3: List[int], nums4: List[int]) -> int:
+        count = defaultdict(int)
+        for a, b in product(nums1, nums2):                                          #Count the sum of a + b for each a in nums1 and b in nums2.
+            count[a + b] += 1
+        return sum(countAB[-(c + d)] for c, d in product(nums3, nums4))             #Return the sum of -(c + d) in count for each c in nums3 and d in nums4.
