@@ -1,16 +1,14 @@
 class Solution:
-    # @param S, a list of integer
-    # @return a list of lists of integer
-    def subsets(self, S):
-        n=len(S)
-        S.sort()                                #Sort the list first.
-        result=[]
-        for i in range(2**n):                   #A length n set has 2^n subsets in total. So use bit manipulation.
-            ans=[]
-            temp=i
-            for j in range(n):
-                if temp&1==1:                   #If the least significant bit is 1, append S[j] to ans.
-                    ans.append(S[j])
-                temp=temp>>1                    #Shift right.
-            result.append(ans)                  #Append ans to result.
+    def backtracking(self, nums: List[int], stack: List[int], result:List[List[int]]):
+        if not nums:                                                                        #If no more nums, append the deep copy of stack to result.
+            result.append(deepcopy(stack))
+            return
+        stack.append(nums[0])                                                               #Append nums[0] to stack.
+        self.backtracking(nums[1:], stack, result)                                          #Keep backtracking.
+        stack.pop()                                                                         #Pop stack.
+        self.backtracking(nums[1:], stack, result)                                          #Keep backtracking.
+        
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        result = []
+        self.backtracking(nums, [], result)                                                 #Find all subsets using backtracking.
         return result
