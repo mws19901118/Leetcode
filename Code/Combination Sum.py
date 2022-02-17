@@ -1,13 +1,13 @@
 class Solution:
-    def backtracking(self, candidates, trace, currentSum, target, result):
-        if currentSum == target:                                                        #If current sum equals target, add a deep copy of trace to result.                
-            result.append(copy.deepcopy(trace))
+    def backtracking(self, candidates: List[int], stack: List[int], currentSum: int, target: int, result: List[List[int]]):
+        if currentSum == target:                                                        #If current sum equals target, add a deep copy of stack to result.                
+            result.append(copy.deepcopy(stack))
         for i, x in enumerate(candidates):                                              #Traverse candidates.
             if currentSum + x > target:                                                 #If current sum plus current number will exceed target, break.
                 break
-            trace.append(x)                                                             #Append current number to trace.
-            self.backtracking(candidates[i:], trace, currentSum + x, target, result)    #Keep backtracting.
-            trace.pop()                                                                 #Pop trace.
+            stack.append(x)                                                             #Append current number to stack.
+            self.backtracking(candidates[i:], stack, currentSum + x, target, result)    #Keep backtracting.
+            stack.pop()                                                                 #Pop stack.
             
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         candidates.sort()                                                               #Sort the candidates.
