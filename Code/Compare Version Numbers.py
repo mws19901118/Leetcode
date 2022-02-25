@@ -1,17 +1,11 @@
 class Solution:
     def compareVersion(self, version1: str, version2: str) -> int:
-        v1 = [int(v) for v in version1.split(".")]                  #Covert version 1 to a list of number.
-        v2 = [int(v) for v in version2.split(".")]                  #Covert version 2 to a list of number.
-        i, j = 0, 0
-        while i < len(v1) and j <len(v2):                           #Compare the version numbers of same index in version1 and version2 respectively.
-            if v1[i] < v2[j]:                                       #If version number in version1 is smaller than that in version2, return -1.
+        r1, r2 = version1.split('.'), version2.split('.')       #Split version1 and version2 by '.' to get r1 and r2 list.
+        for i in range(max(len(r1), len(r2))):                  #Traverse r1 and r2 simutanously.
+            x = int(r1[i]) if i < len(r1) else 0                #Get the current revision in version1; if i is out of bound of r1, set revision to 0.
+            y = int(r2[i]) if i < len(r2) else 0                #Get the current revision in version2; if i is out of bound of r2, set revision to 0.
+            if x < y:                                           #If x < y, version1 is smaller than version2.
                 return -1
-            elif v1[i] > v2[j]:                                     #If version number in version1 is larger than that in version2, return 1.
+            elif x > y:                                         #If x > y, version1 is greater than version2.
                 return 1
-            else:                                                   #Otherwise, move to next index.
-                i += 1
-                j += 1
-        if i < len(v1):                                             #If v1 hasn't reached end, if there are version numbers that are not 0, return 1; otherwise return 0.
-            return int(any(x != 0 for x in v1[i:]))
-        else:                                                       #If v2 hasn't reached end, if there are version numbers that are not 0, return -1; otherwise return 0.
-            return -int(any(x != 0 for x in v2[j:]))
+        return 0                                                #If all revisions are equal after traverse, version1 and version2 are equal.
