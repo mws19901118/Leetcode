@@ -5,7 +5,7 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def widthOfBinaryTree(self, root: TreeNode) -> int:
+    def widthOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         if not root:                                                            #If root is none, return 0.
             return 0
         level = [(root, 0)]                                                     #Put root and its index(starting from 0) in a queue.
