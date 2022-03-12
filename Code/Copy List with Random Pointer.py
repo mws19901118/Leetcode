@@ -8,15 +8,14 @@ class Node:
 """
 
 class Solution:
-    def copyRandomList(self, head: 'Node') -> 'Node':
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         curr = head
         while curr:                                                                 #Duplicate every node and insert them after the old ones.
             curr.next = Node(curr.val, curr.next, None)
             curr = curr.next.next
         curr = head
         while curr:                                                                 #Set the new node's random pointer to the next node of old node's random pointer if old node's random pointer is not none.
-            if curr.random:
-                curr.next.random = curr.random.next
+            curr.next.random = None if not curr.random else curr.random.next
             curr = curr.next.next
         dummyHead = Node(0, head, None)
         curr = dummyHead
