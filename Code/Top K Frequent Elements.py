@@ -1,4 +1,3 @@
-from collections import Counter
 class Solution:
     def findK(self, nums: List[int], count: dict, k: int) -> int:           #Find the k-th frequent element.
         smaller, larger = [], []
@@ -13,6 +12,7 @@ class Solution:
             return self.findK(larger, count, k)
         else:
             return self.findK(smaller, count, k - 1 - len(larger))
+        
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         count = Counter(nums)                                               #Count each element.
         kth = self.findK(list(count.keys()), count, k)
