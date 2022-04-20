@@ -6,25 +6,24 @@
 #         self.right = right
 class BSTIterator:
 
-    def __init__(self, root: TreeNode):
+    def __init__(self, root: Optional[TreeNode]):
         self.stack = []                                                     #Store the path.
         self.curr = root                                                    #Record current node.
-        while self.curr is not None and self.curr.left is not None:         #Find the leftmost node.
+        while self.curr.left:                                               #Find the leftmost node.
             self.stack.append(self.curr)
             self.curr = self.curr.left
     
     def next(self) -> int:
         result = self.curr.val                                              #Buffer current value.
-        if self.curr.right is None:                                         #If current node doesn't has right child, pop item as current node if self.stack is not empty.
-            if self.stack != []:
-                self.curr = self.stack.pop()
-            else:                                                           #Otherwise, set self.curr to be none.
-                self.curr = None
-        else:
-            self.curr = self.curr.right                                     #Set self.curr to be the leftmost node in its right subtree, and push the path to self.stack.
+        if self.curr.right:                                                 #If self.curr has right child, set self.curr to be the leftmost node in its right subtree, and push the path to self.stack.
+            self.curr = self.curr.right
             while self.curr.left is not None:
                 self.stack.append(self.curr)
                 self.curr = self.curr.left
+        elif self.stack:                                                    #If current node does not have right child and self.stack is not empty, pop item as current node if self.stack is not empty.
+            self.curr = self.stack.pop()
+        else:                                                               #Otherwise, set self.curr = None.
+            self.curr = None
         
         return result                                                       #Return buffer.
 
