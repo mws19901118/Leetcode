@@ -12,4 +12,4 @@ class Solution:
         if cloned.val == target.val:                                                                    #If value of cloned equals value of target, return cloned.
             return cloned
         left = self.getTargetCopy(original.left, cloned.left, target)                                   #Find target in the left subtree of cloned.
-        return self.getTargetCopy(original.right, cloned.right, target) if left is None else left       #If found, return result; otherwise return the result of finding target in the right subtree of cloned.
+        return self.getTargetCopy(original.right, cloned.right, target) if not left else left           #If found, return result; otherwise return the result of finding target in the right subtree of cloned.
