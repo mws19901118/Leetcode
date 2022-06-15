@@ -1,22 +1,16 @@
 class Solution:
-    def dfs(self, index: int, edges: defaultdict(list), length: List[int]) -> int:
-        if length[index]:                                                               #If current index is visited, directly return its longest string chain length.
-            return length[index]
-        length[index] = 1                                                               #Set length[index] to 1 as if the string chain only has itself.
-        for x in edges[index]:                                                          #Traverse all adjacent indexes, and keep updating length[index]
-            length[index] = max(length[index], self.dfs(x, edges, length) + 1)
-        return length[index]                                                            #Return length[index]/
-    
     def longestStrChain(self, words: List[str]) -> int:
-        indexes = {w: i for i, w in enumerate(words)}                                   #Create a index by word map.
-        edges = defaultdict(list)                                                       #Initialize edges adjacent list.
-        for i, w in enumerate(words):                                                   #Traverse words.
-            for j in range(len(w)):                                                     #Try remove each character in w.
-                x = w[:j] + w[j + 1:]                                                   #Construct the new word after removing character.
-                if x in indexes:                                                        #If the new word is in indexes, there is an edge from indexes[x] to i.
-                    edges[indexes[x]].append(i)
-        length = [0] * len(words)                                                       #Initialize the longest string chain length starting at each index.
-        result = 0
-        for i in range(len(words)):                                                     #DFS at each index and keep updating max length.
-            result = max(result, self.dfs(i, edges, length))
-        return result
+        wordByLength = defaultdict(list)                                                                            #Group words by length.
+        indexes = {}                                                                                                #Store the index of each word.
+        for i, w in enumerate(words):                                                                               #Traverse words to populate wordByLength and indexes.
+            wordByLength[len(w)].append(w)
+            indexes[w] = i
+        
+        chainLength = [1] * len(words)                                                                              #Initialize the max length of chain starting at each index.
+        for i in reversed(sorted(wordByLength.keys())):                                                             #Traverse words by length in descending order.
+            for x in wordByLength[i]:
+                for j in range(i):                                                                                  #Try remove each letter in x to get a new word y.
+                    y = x[:j] + x[j + 1:]
+                    if y in indexes:                                                                                #If y is a known word, there is a chain from y to x, so update chainLength[indexes[y]].
+                        chainLength[indexes[y]] = max(chainLength[indexes[y]], chainLength[indexes[x]] + 1)
+        return max(chainLength)                                                                                     #Return max length in chainLength.
