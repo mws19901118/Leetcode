@@ -1,17 +1,16 @@
 class Solution:
     def minimumLengthEncoding(self, words: List[str]) -> int:
-        wordLengths = sorted([(len(w), i) for i, w in enumerate(words)], reverse = True)        #Sort index of each word according to word length in desending order.
-        length = 0
+        sortedWords = sorted(words, key = lambda w: len(w), reverse = True)                     #Sort words by word length in descending order.
         trie = {}                                                                               #Implement a trie using dictionary.
-        for wordLength, wordIndex in wordLengths:                                               #Traverse words from the longest to shortest.
-            word = words[wordIndex]
-            level = trie                                                                        #Start from the root of trie.
-            shouldAddToEncode = False                                                           #Indicate if current word should be add to encode referencing string explicitly.
-            for i in reversed(range(wordLength)):                                               #Traverse word from behind.
-                if word[i] not in level:                                                        #If current character not in current level of trie, current word is not included in any other word, so current word should be added to encode referencing string explicitly.
-                    level[word[i]] = {}                                                         #Update trie.
-                    shouldAddToEncode = True
-                level = level[word[i]]                                                          #Move to next level of trie.
-            if shouldAddToEncode:                                                               #Update encode referencing string length after adding current word, including the '#' after the word.
-                length += wordLength + 1
-        return length                                                                           #Return length.
+        count = 0
+        for w in sortedWords:                                                                   #Traverse sorted word.
+            shouldAdd = False                                                                   #Indicate if current word should be add to encode referencing string explicitly.
+            node = trie                                                                         #Start from the root of trie.
+            for x in reversed(w):                                                               #Traverse word from behind.
+                if x not in node:                                                               #If current character not in current level of trie, current word is not included in any other word, so current word should be added to encode referencing string explicitly.
+                    node[x] = {}                                                                #Update trie.
+                    shouldAdd = True
+                node = node[x]                                                                  #Move to next node of trie.
+            if shouldAdd:                                                                       #Update encode referencing string length after adding current word, including the '#' after the word.
+                count += len(w) + 1
+        return count                                                                            #Return count.
