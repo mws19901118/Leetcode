@@ -4,11 +4,8 @@ class Solution:
             return False
         dp = [False for i in range(len(s2) + 1)]                                                                        #Initialize dp array.
         dp[0] = True                                                                                                    #dp[0] = 0, means "" is the interleaving string of "" and "".
-        i = 0  
-        while i < len(s2) and s2[i] == s3[i]:                                                                           #Compute if s3[:i] is the interleaving string of "" and s2[:i].
-            dp[i + 1] = True
-            i += 1
-
+        for i in range(len(s2)):                                                                                        #Compute if s3[:i] is the interleaving string of "" and s2[:i].
+            dp[i + 1] = dp[i] and s2[i] == s3[i]
         for i in range(len(s1)):                                                                                        #Traverse s1.
             dp[0] = dp[0] and s1[i] == s3[i]                                                                            #Check if s3[:i] is the interleaving string of s1[:i] and "".
             for j in range(len(s2)):                                                                                    #Traverse s2.
