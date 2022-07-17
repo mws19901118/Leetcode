@@ -6,10 +6,9 @@
 class Solution:
     def kInversePairs(self, n: int, k: int) -> int:
         division = 10 ** 9 + 7                                                                        #Initialize division.
-        dp = [0 for _ in range(k + 1)]                                                                #Initialize dp array for n = 0, if n == 0, there is no inverse pairs array for any k.
+        dp = [0] * (k + 1)                                                                            #Initialize dp array for n = 0, if n == 0, there is no inverse pairs array for any k.
         for i in range(1, n + 1):                                                                     #Traverse from 1 to n.
-            nextdp = [0 for _ in range(k + 1)]                                                        #Initialize dp array for current n.
-            nextdp[0] = 1                                                                             #If k is 0, there can only be 1 array with 0 inverse pair, which is the sorted in ascending order array.
+            nextdp = [1] + [0] * k                                                                    #Initialize dp array for current n; if k is 0, there can only be 1 array with 0 inverse pair, which is the sorted in ascending order array.
             for j in range(1, min(k, i * (i - 1) // 2) + 1):                                          #Traverse from 1 to min(k, i * (i + 1) // 2), because an array with size i can have at most i * (i + 1) // 2 inverse pairs, which is the sorted in desending order array.
                 nextdp[j] = (nextdp[j - 1] + dp[j] - (dp[j - i] if j >= i else 0)) % division         #Update nextdp[j] according to the state transition equation, dp(n, k) = dp(n, k - 1) + dp(n - 1, k) - (dp(n - 1, k - n) if k >= n).
             dp = nextdp                                                                               #Replace dp with nextdp.
