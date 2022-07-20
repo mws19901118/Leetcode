@@ -6,7 +6,7 @@ class Solution:
             currentCharacters[w[0]].append((i, 0))
         for x in s:                                                     #Traverse s.
             c = len(currentCharacters[x])                               #Get length of the queue of current character.
-          for i in range(c):                                            #Traverse the first c items in queue.
+            for _ in range(c):                                          #Traverse the first c items in queue.
                 i, j = currentCharacters[x].popleft()                   #Popleft item to get pointer.
                 j += 1                                                  #Move pointer to next charcter in word.
                 if j == len(words[i]):                                  #If reaches the end of the word, then that word is a subsequences, so increase count.
