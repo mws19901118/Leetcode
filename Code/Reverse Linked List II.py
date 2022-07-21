@@ -4,12 +4,11 @@
 #         self.val = val
 #         self.next = next
 class Solution:
-    def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
-        dummyHead = ListNode(0, head)                                                       #Create a dummy head for current linked list.
+    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> ListNode:
+        dummyHead, dummyHeadForReverse = ListNode(0, head), ListNode()                      #Create a dummy head for current linked list and a dummy head for reversed linked list.
         curr = dummyHead
         for i in range(left - 1):                                                           #Traverse linked list to find the node before the position left.
             curr = curr.next
-        dummyHeadForReverse = ListNode()                                                    #Create a dummy head for reversed linked list.
         tail = curr.next                                                                    #Point the tail of reversed linked list to the node on position left.
         for i in range(right - left + 1):                                                   #Reverse from position left to position right.
             temp = curr.next                                                                #Temporarily store current node.
