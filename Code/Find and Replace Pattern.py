@@ -9,4 +9,4 @@ class Solution:
         return True                                                                 #Return true.
     
     def findAndReplacePattern(self, words: List[str], pattern: str) -> List[str]:
-        return [w for w in words if self.matchPattern(w, pattern)]                  #Return all the words that can match pattern.
+        return filter(lambda x: self.matchPattern(x, pattern), words)               #Return all the words that can match pattern.
