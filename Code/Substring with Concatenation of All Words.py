@@ -1,32 +1,22 @@
 class Solution:
-    # @param {string} s
-    # @param {string[]} words
-    # @return {integer[]}
-    def findSubstring(self, s, words):
-        n=len(words)                                  #Record the number of words.
-        m=len(words[0])                               #Record the length of each word.
-        l=len(s)                                      #Record the length of string s.
-        result=[]
-        dict={}                                       #Count the appeareance of each word in words.
-        for w in words:
-            if dict.has_key(w):
-                dict[w]+=1
-            else:
-                dict[w]=1
-        for i in range(l-n*m+1):                      #Traverse every character from s[0] to s[l-m*n](the last possible beginning) as the beginning of concatenation of words.
-            currentdict={}                            #Count current appeareance of each word in the window beginning with current i.
-            j=0                                       #Record the number of matched words.
-            while j<n:
-                w=s[i+j*m:i+(j+1)*m]                  #Get the current word.
-                if w not in words:
-                    break
-                if currentdict.has_key(w):
-                    currentdict[w]+=1
-                else:
-                    currentdict[w]=1
-                if currentdict[w]>dict[w]:            #If w appears more than the times appearing in words, break.
-                    break
-                j+=1
-            if j==n:                                  #If find a exact concatenation, append i to result.
-                result.append(i)
-        return result
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        wordCounter, result = Counter(words), []                                                            #Count each word in words and initialize result.
+        wordLength = len(words[0])                                                                          #Get the word length.
+        for i in range(wordLength):                                                                         #Use a sliding window that moves forward word length characters each time, so we have to traverse all starting positions from 0 to wordLength - 1.
+            left, right, visited = i, i, Counter()                                                          #Set the left and right(not inclusive in slinding window) pointers of sliding window and the counter of visited words.
+            while right <= len(s):                                                                          #Iterate while right is not larger than length of s.
+                currentWord = s[right:right + wordLength]                                                   #Get the new word just outside the sliding window.
+                if currentWord not in wordCounter:                                                          #If current word is not in words, current slinding window won't have all words.
+                    right += wordLength                                                                     #Move right to next word.
+                    left, visited  = right, Counter()                                                       #Move left to right, also reset visited counter.
+                    continue                                                                                #Continue iteration.
+                while visited[currentWord] == wordCounter[currentWord]:                                     #While current word already visited max times in sliding window, move forward left until current word can be inserted in sliding wondow.
+                    visited[s[left:left + wordLength]] -= 1                                                 #Update visited counter.
+                    left += wordLength
+                visited[currentWord] += 1                                                                   #Update visited counter.
+                right += wordLength                                                                         #Move forward right.
+                if right - left == len(words) * wordLength:                                                 #If the distance between left and right is exactly the concatenation of all words, then we found a legit starting index.
+                    result.append(left)                                                                     #Append left to result.
+                    visited[s[left:left + wordLength]] -= 1                                                 #Move forward left and update the visited counter.
+                    left += wordLength
+        return result                                                                                       #Return result.
