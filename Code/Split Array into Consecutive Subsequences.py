@@ -1,4 +1,3 @@
-from collections import Counter
 class Solution:
     def isPossible(self, nums: List[int]) -> bool:
         count = Counter(nums)                                 #Count each number.
@@ -16,5 +15,5 @@ class Solution:
             else:                                             #Otherwise, distribute x to the subsequence ending at x - 1.
                 count[x] -= 1                                 #Decrease for the count of x.
                 endMap[x - 1] -= 1                            #Decrease the count of subsequence ending at x - 1.
-                endMap[x] += 1                                #MIncrease the count of subsequence ending at x.
+                endMap[x] += 1                                #Increase the count of subsequence ending at x.
         return True                                           #After the traverse, return true as we found a way to split the list.
