@@ -1,8 +1,6 @@
 class Solution:
     def shouldStamp(self, x: str, stamp: str) -> bool:                                              #Determine if x can be formed by stamping.
-        if x == '?' * len(x):                                                                       #If x is already all '?', we don't need to stamp.
-            return False
-        return all(a in (b, '?') for a, b in zip(x, stamp))                                         #If any character is neither the corrsponding character in stamp nor '?', return false; otherwise return true.
+        return x != '?' * len(x) and all(a in (b, '?') for a, b in zip(x, stamp))                   #If x is already all '?', we don't need to stamp. If any character is neither the corrsponding character in stamp nor '?', return false; otherwise return true.
         
     def movesToStamp(self, stamp: str, target: str) -> List[int]:
         result = []                                                                                 #Think reversely, replacing available substring back to '?'. So, store the index to stamp in reverse order.
