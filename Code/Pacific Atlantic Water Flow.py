@@ -11,9 +11,8 @@ class Solution:
                         newq.add((nx, ny))
             q = newq
         return visited
+    
     def pacificAtlantic(self, matrix: List[List[int]]) -> List[List[int]]:
-        if not matrix or not matrix[0]:                                                                                 #If matrix is not valid, return empty list.
-            return []
         m, n = len(matrix), len(matrix[0])                                                                              #Get dimensions.
         pacific = self.BFS(matrix, set([(i, 0) for i in range(m)]) | set([(0, i) for i in range(n)]))                   #Get all coordinates where water can flow to Pacific.
         atlantic = self.BFS(matrix, set([(i, n - 1) for i in range(m)]) | set([(m - 1, i) for i in range(n)]))          #Get all coordinates where water can flow to Atlantic.
