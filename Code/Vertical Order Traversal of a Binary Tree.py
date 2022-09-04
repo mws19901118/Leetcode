@@ -1,16 +1,14 @@
 # Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-from collections import defaultdict
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    def verticalTraversal(self, root: 'TreeNode') -> 'List[List[int]]':
+    def verticalTraversal(self, root: TreeNode) -> List[List[int]]:
         d = defaultdict(list)                                               #Use dict to store the values of each x.
-        result = []                                               
         level = [(root, 0)]                                                 #Current level of pairs of node and x.
-        while len(level) != 0:                                              #BFS each level.
+        while level:                                                        #BFS each level.
             nextLevel = []                                                  #Next level of pairs of node and x.
             dLevel = defaultdict(list)                                      #Current level's dict to store values of each x.
             for p in level:                                                 #Travese current level.
@@ -22,4 +20,4 @@ class Solution:
             level = nextLevel                                               #Go to next level.
             for x in dLevel:                                                #Update main dict according to this level's dict.
                 d[x].extend(sorted(dLevel[x]))                              #Sort to resolve conflict(values with same x and y).
-        return [d[i] for i in range(min(d.keys()), max(d.keys()) + 1)]      #For each x in main dict, append values to result.
+        return [d[x] for x in range(min(d.keys()), max(d.keys()) + 1)]      #For each x in main dict, append values to result.
