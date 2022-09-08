@@ -1,30 +1,23 @@
-# Definition for a  binary tree node
+# Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    # @param root, a tree node
-    # @return a list of integers
-    def inorderTraversal(self, root):                               #Morris Inorder Traversal, the same as Recover Binary Search Tree
-        cur=root
-        precursor=None
-        result=[]
-        while cur!=None:
-            if cur.left==None:
-                result.append(cur.val)
-                cur=cur.right
-            else:
-                precursor=cur.left
-                while precursor.right!=None and precursor.right!=cur:
-                    precursor=precursor.right
-                if precursor.right==None:
-                    precursor.right=cur
-                    cur=cur.left
-                else:
-                    precursor.right=None
-                    result.append(cur.val)
-                    cur=cur.right
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        result = []
+        stack = []
+        curr = root
+        while curr:                                         #Find the left most leaf and append the path to stack.
+            stack.append(curr)
+            curr = curr.left
+        while stack:                                        #Inorder traverse.
+            curr = stack.pop()                              #Pop stack and append value to result.
+            result.append(curr.val)
+            if curr.right:                                  #If the right child is not none, move to right child.
+                curr = curr.right
+                while curr:                                 #While curr is not none, append curr to stack and move to left child.
+                    stack.append(curr)
+                    curr = curr.left
         return result
