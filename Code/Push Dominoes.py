@@ -12,7 +12,6 @@ class Solution:
             elif d[i] == 'R' and d[j] == 'L':         #If d[i] is 'R' and d[j] is 'L', the pushes will meet at middle.
                 span = (j - i - 1) // 2               #Calculate the span from either i or j to the middle.
                 for k in range(1, span + 1):          #Set the left span to 'R' and right span to 'L'.
-                    d[i + k] = 'R'
-                    d[j - k] = 'L'
+                    d[i + k], d[j - k] = 'R', 'L'
             i = j                                     #Move i to j.
         return "".join(d[1:-1])                       #Join d[1:-1] and return(Ignore default pushes at both end).
