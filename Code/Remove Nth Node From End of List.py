@@ -5,13 +5,11 @@
 #         self.next = next
 class Solution:
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
-        fast, slow = head, head
-        for _ in range(n):              #Let fast pointer be exactly n nodes after slow pointer.
+        dummyHead = ListNode(-1, head)              #Create a dummy head.
+        fast, slow = dummyHead, dummyHead           #Initialize fast and slow pointers.
+        for _ in range(n):                          #Move fast n nodes ahead of slow.
             fast = fast.next
-        if not fast:                    #If fast is none, i.e. we have to remove the first node, return the next node of head.
-            return head.next
-        while fast.next:                #Move fast pointer and slow pointer afterward synchronously, until fast is the tail of the linked list.
-            fast = fast.next
-            slow = slow.next
-        slow.next = slow.next.next      #Then the next node of slow is the n-th node form end, so remove it.
-        return head                     #Return head.
+        while fast.next:                            #Move fast and slow forward until fast reaches the end of linked list.
+            fast, slow = fast.next, slow.next
+        slow.next = slow.next.next                  #Remove the next node of slow.
+        return dummyHead.next                       #Return the next node of dummy head.
