@@ -1,53 +1,13 @@
-# Definition for a  binary tree node
+# Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    # @param root, a tree node
-    # @param sum, an integer
-    # @return a boolean
-    def hasPathSum(self, root, sum):
-        if root==None:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        if not root:                                                                                                        #If root is none, return false.
             return False
-        end=TreeNode(-1)
-        stack=[]                                      #The same as Binary Tree Preorder Traversal, as long as come to a leaf node, calculate the root number and add it to sum
-        stack.append(end)
-        
-        flag=[]
-        isleaf={}                                     #dictionary to indicate whether a treenode is a leaf node
-        write=False
-        flag.append(True)
-        while root!=end:
-            if write==False:
-                write=True
-            if root.left!=None:
-                isleaf[root]=False                    #have left child, not leaf, add to dictionary
-                temp=root.left
-                root.left=None
-                stack.append(root)
-                flag.append(write)
-                root=temp
-                write=False
-            else:
-                if root.right!=None:
-                    isleaf[root]=False                #have right child, not leaf, add to dictionary
-                    temp=root.right
-                    root.right=None
-                    stack.append(root)
-                    flag.append(write)
-                    root=temp
-                    write=False
-                else:
-                    if root not in isleaf:            #not exist in dictionary, must be leaf
-                        length=len(stack)
-                        temp=root.val
-                        for i in range(0,length-1):   #calculate path sum
-                            temp+=stack[length-1-i].val
-                        if temp==sum:
-                            return True
-                    root=stack.pop()
-                    write=flag.pop()
-        return False
+        if not root.left and not root.right:                                                                                #If root is leaf node, return wether its value equals targetSum.
+            return targetSum == root.val
+        return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)        #Traverse in both sub tree; if either is true, then return true.
