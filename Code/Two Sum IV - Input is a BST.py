@@ -5,21 +5,44 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def bstToSet(self, root: Optional[TreeNode], s: set) -> None:                   #Put all numbers in a BST into a set.
-        if not root:
-            return
-        s.add(root.val)
-        self.bstToSet(root.left, s)
-        self.bstToSet(root.right, s)
-        
-    def search(self, root: Optional[TreeNode], s: set, k: int) -> bool:             #Search for 2 sum pair.
-        if not root:                                                                #If root is none, return false.
-            return False
-        if root.val * 2 != k and k - root.val in s:                                 #If root.val * 2 != k and k - root.val in s, we found a 2 sum pair, return true.
-            return True
-        return self.search(root.left, s, k) or self.search(root.right, s, k)        #Keep searching in left subtree and right subtree.
+    def nextLarger(self, root: Optional[TreeNode], stack: List[TreeNode]) -> TreeNode:              #Move to next larger node.
+        curr = None
+        if root.right:
+            curr = root.right
+            while curr.left:
+                stack.append(curr)
+                curr = curr.left
+        else:
+            curr = stack.pop()
+        return curr
     
+    def nextSmaller(self, root: Optional[TreeNode], stack: List[TreeNode]) -> TreeNode:             #Move to next smaller node.
+        curr = None
+        if root.left:
+            curr = root.left
+            while curr.right:
+                stack.append(curr)
+                curr = curr.right
+        else:
+            curr = stack.pop()
+        return curr
+
     def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
-        s = set()
-        self.bstToSet(root, s)
-        return self.search(root, s, k)
+        smallestStack, largestStack = [], []                                                        #Initialize stacks for smallest node and largest node.
+        smallest, largest = root, root                                                              #Find the current smallest node and largest node.
+        while smallest.left:
+            smallestStack.append(smallest)
+            smallest = smallest.left
+        while largest.right:
+            largestStack.append(largest)
+            largest = largest.right
+
+        while smallest.val < largest.val:                                                           #Traverse while smallest node is smaller than largest node.
+            s = smallest.val + largest.val                                                          #Get the sum of smallest node and largest node.
+            if s > k:                                                                               #If sum is larger than k, move largest node to its next smaller node.
+                largest = self.nextSmaller(largest, largestStack)
+            elif s < k:                                                                             #If sum is smaller than k, move smallest node to its next larger node.
+                smallest = self.nextLarger(smallest, smallestStack)
+            else:                                                                                   #If sum equals k, return true.
+                return True
+        return False                                                                                #Return false.
