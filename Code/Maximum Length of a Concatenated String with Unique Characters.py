@@ -9,7 +9,7 @@ class Solution:
         return result                                                                                           #Return result
         
     def maxLength(self, arr: List[str]) -> int:
-        noDup = [w for w in arr if all(v == 1 for k, v in Counter(w).items())]                                  #Remove all string containing duplicate letters.
+        noDup = [w for w in arr if len(w) == len(set([x for x in w]))]                                          #Remove all string containing duplicate letters.
         masks = {chr(ord('a') + x): (1 << x) for x in range(26)}                                                #Computer the binary mask for each letter.
         binaryAndLength = []                                                                                    #Use a list to store the binary int form of each string and string length.
         for w in noDup:                                                                                         #Traverse noDup.
