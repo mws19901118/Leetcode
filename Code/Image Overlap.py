@@ -1,17 +1,18 @@
 class Solution:
-    def calculateOverlap(self, A: List[List[int]], B: List[List[int]], x: int, y: int) -> int:          #Calculate the number of overlapping positions for a given move. x is the distance of A moving down(if x is negative, A is moving up) and y is the distance of A moving right(if y is negative, A is moving left).
-        count = 0
-        for i in range(len(A) - abs(x)):                                                                #After move, there are only N - |x| rows that are overlapping.
-            rowA = A[i + max(0, -x)][max(0, -y):len(A) - max(0, y)]                                     #Find the a overlapping row in A with overlapping columns.
-            rowB = B[i + max(0, x)][max(0, y):len(A) - max(0, -y)]                                      #Find the a overlapping row in B with overlapping columns.
-            for j in range(len(rowA)):                                                                  #Count overlap positions.
-                if rowA[j] & rowB[j]:
-                    count += 1
-        return count
-    def largestOverlap(self, A: List[List[int]], B: List[List[int]]) -> int:
-        n = len(A)
-        result = 0
-        for i in range(-n + 1, n):                                                                      #Check all possible vertical move of A(N - 1 for moving up, N - 1 for moving down, 1 for not moving).
-            for j in range(-n + 1, n):                                                                  #Check all possible horizontal move of A(N - 1 for moving left, N - 1 for moving right, 1 for not moving).
-                result = max(result, self.calculateOverlap(A, B, i, j))
-        return result
+    def check(self, img1Int: List[int], img2Int: List[int]) -> int:                                                                     #Given 2 n * n image(in the form of list of integer), calculate the overlap.
+        return sum((x & y).bit_count() for x, y in zip(img1Int, img2Int))                                                               #Traverse 2 lists simultaneously, count the bit of 1 in x & y.
+
+    def largestOverlap(self, img1: List[List[int]], img2: List[List[int]]) -> int:
+        img1Int = [reduce(lambda a, b: a << 1 | b, x) for x in img1]                                                                    #Treat each row in img1 as binary and convert it to an integer.
+        img2Int = [reduce(lambda a, b: a << 1 | b, x) for x in img2]                                                                    #Treat each row in img2 as binary and convert it to an integer.
+        mask = (1 << len(img1Int)) - 1                                                                                                  #Calculate the bit mask so the integer remain m bit after shifting left.
+        overlap = 0                                                                                                                     #Intialize overlap.
+        for i in range(len(img1Int)):                                                                                                   #Try not shfiting and shifting left and right m - 1 times respectively.
+            shiftRight = [x >> i for x in img1Int]                                                                                      #Shift right each integer.
+            for j in range(1, len(img1Int) + 1):                                                                                        #Try not moving and moving up and down m - 1 times respectively.
+                overlap = max(overlap, self.check(shiftRight[:j], img2Int[-j:]), self.check(shiftRight[-j:], img2Int[:j]))              #Calculate current overlap and update final result if necessary.
+
+            shiftLeft = [(x << i) & mask for x in img1Int]                                                                              #Shift left each integer.
+            for j in range(1, len(img1Int) + 1):                                                                                        #Try not moving and moving up and down m - 1 times respectively.
+                overlap = max(overlap, self.check(shiftLeft[:j], img2Int[-j:]), self.check(shiftLeft[-j:], img2Int[:j]))                #Calculate current overlap and update final result if necessary.
+        return overlap                                                                                                                  #Return final result.
