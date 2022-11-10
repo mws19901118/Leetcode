@@ -1,37 +1,38 @@
-class Trie:
-    def __init__(self):                                                                                                 #Initialize a trie node.
-        self.words = {}
-        self.hasValue = False
-    
-    def insert(self, word: str) -> None:                                                                                #Insert word to trie.
-        if not word:
-            self.hasValue = True
-            return
-        if word[0] not in self.words:
-            self.words[word[0]] = Trie()
-        self.words[word[0]].insert(word[1:])
-            
 class Solution:
-    def dfs(self, result: List[str], trie: Trie, board: List[List[str]], x: int, y: int, word: str) -> None:            #DFS.
-        c = board[x][y]                                                                                                 #Get current letter.
-        if c not in trie.words:                                                                                         #If c is not in trie, return.
-            return
-        if trie.words[c].hasValue:                                                                                      #If c is in trie and there is word in trie ending at c, we found a word in board.
-            result.append(word + c)                                                                                     #Append word + c to result.
-            trie.words[c].hasValue = False                                                                              #Set trie.words[c].hasValue to false so we won't append duplicate words to result.
-        m, n = len(board), len(board[0])                                                                                #Get dimensions.
-        board[x][y] = '#'                                                                                               #Set board[x][y] to '#' meaning it's visited.
-        for nx, ny in [(x - 1, y), (x, y + 1), (x + 1, y), (x, y - 1)]:                                                 #Traverse neighbors.
-            if nx >= 0 and nx < m and ny >= 0 and ny < n and board[nx][ny] != '#':                                      #If neighbor is valid and unvisited, keep dfs with trie.words[c] and word + c.
-                self.dfs(result, trie.words[c], board, nx, ny, word + c)
-        board[x][y] = c                                                                                                 #Restore board[x][y] to c.
-
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        t = Trie()                                                                                                      #Create a trie.
-        for w in words:                                                                                                 #Insert each word in words to trie.
-            t.insert(w)
-        m, n = len(board), len(board[0])                                                                                #Get dimensions.
-        result = []                                                                                                     #Initialize result.
-        for i, j in product(range(m), range(n)):                                                                        #Traverse board.
-            self.dfs(result, t, board, i, j, '')                                                                        #Search for word starting from current position.
-        return result                                                                                                   #Return result.
+        prefix = defaultdict(int)                                                           #Store the count of prefixes in words.
+        wordPrefixes = defaultdict(list)                                                    #Store the prefixes of each word.
+        for w in words:                                                                     #Traverse words.
+            for i in range(len(w)):                                                         #Enumerate each prefix of w.
+                p = w[0:i + 1]
+                prefix[p] += 1                                                              #Increase count of p.
+                wordPrefixes[w].append(p)                                                   #Append p to wordPrefixes[w].
+
+        words = set(words)                                                                  #Store all words in set.
+        found = []                                                                          #Store found words.
+        visited = set()                                                                     #Store visited cells.
+        m, n = len(board), len(board[0])                                                    #Get the dimensions of board.
+
+        def dfs(x: int, y:int, w: str):                                                     #DFS.
+            visited.add((x, y))                                                             #Add cell to visited.
+
+            if w in words:                                                                  #If current word in words, add it to found and remove it from words.
+                found.append(w)
+                words.remove(w)
+                for p in wordPrefixes[w]:                                                   #Decrease count of each its prefixes.
+                    prefix[p] -= 1
+
+            for nx, ny in [(x + 1, y), (x, y + 1), (x - 1, y), (x, y - 1)]:                 #Traverse neighbor cells.
+                if (nx, ny) in visited or not (0 <= nx < m and 0 <= ny < n):                #If neighbor is already visited or not valid, skip.
+                    continue
+                new_w = w + board[nx][ny]                                                   #Apeend character on neighbor to current word to get new word.
+                if prefix[new_w] > 0:                                                       #If it is prefix of any word, keep dfs.
+                    dfs(nx, ny, new_w)
+
+            visited.remove((x, y))                                                          #Mark cell as unvisited.
+
+        for i, j in product(range(m), range(n)):                                            #Starting DFS at each cell on board if it is prefix of any word.
+            if board[i][j] in prefix:
+                dfs(i, j, board[i][j])
+
+        return found                                                                        #Return found.
