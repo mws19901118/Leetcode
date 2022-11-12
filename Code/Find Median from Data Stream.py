@@ -1,16 +1,10 @@
 class MedianFinder:
     def __init__(self):
-        """
-        Initialize your data structure here.
-        """
         self.left = []                                                                                          #Maintain a max heap of the left half.
         self.right = []                                                                                         #Maintain a min heap of the right half.
-        
 
     def addNum(self, num: int) -> None:
-        if len(self.right) == 0:                                                                                #If the right half is empty, push it to the right half.
-            heapq.heappush(self.right, num)
-        elif num >= self.right[0]:                                                                              #If it's not smaller than the min value of right half, push it to the right half.
+        if len(self.right) == 0 or num >= self.right[0]:                                                        #If the right half is empty or it's not smaller than the min value of right half, push it to the right half.
             heapq.heappush(self.right, num)
         else:                                                                                                   #Otherwise push its opposite number to the left half.
             heapq.heappush(self.left, -num)
