@@ -5,7 +5,7 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def countNodes(self, root: TreeNode) -> int:
+    def countNodes(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
         lh, rh = 0, 0                                                                                               #Record the height of left tree and height of right tree.
