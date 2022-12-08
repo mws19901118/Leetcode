@@ -1,28 +1,21 @@
 # Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-def preOrderTraverse(root, leafValues):           #Store leaf values in sequence in an array by pre-order traversal recursively.
-    if root is None:
-        return
-    if root.left is None and root.right is None:
-        leafValues.append(root.val)
-        return
-    preOrderTraverse(root.left, leafValues)
-    preOrderTraverse(root.right, leafValues)
-
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    def leafSimilar(self, root1, root2):
-        """
-        :type root1: TreeNode
-        :type root2: TreeNode
-        :rtype: bool
-        """
-        leafValues1 = []
-        leafValues2 = []
-        preOrderTraverse(root1, leafValues1)      #Find the leaf values of root1.
-        preOrderTraverse(root2, leafValues2)      #Find the leaf values of root2.
-        return leafValues1 == leafValues2         #Compare.
+    def traverse(self, root: Optional[TreeNode], leaves: List[int]) -> None:                        #Store leaf values in sequence in an array by pre-order traversal recursively.
+        if not root:
+            return
+        if not root.left and not root.right:
+            leaves.append(root.val)
+            return
+        self.traverse(root.left, leaves)
+        self.traverse(root.right, leaves)                                                           
+
+    def leafSimilar(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> bool:
+        leaves1, leaves2 = [], []
+        self.traverse(root1, leaves1)                                                               #Find the leaf values of root1.
+        self.traverse(root2, leaves2)                                                               #Find the leaf values of root2.
+        return leaves1 == leaves2                                                                   #Compare.
