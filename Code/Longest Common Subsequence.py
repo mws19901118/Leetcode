@@ -5,4 +5,4 @@ class Solution:
             prev = dp[0]                                                                    #Initialize prev to dp[0].
             for j, y in enumerate(text2):                                                   #Traverse text2.
                 prev, dp[j + 1] = dp[j + 1], prev + 1 if x == y else max(dp[j], dp[j + 1])  #Update prev to be dp[j + 1]. If x == y, dp[j + 1] = prev + 1; otherwise, dp[j + 1] = max(dp[j + 1], dp[j]).
-        return dp[-1]                                                                     #Return dp[-1]
+        return dp[-1]                                                                       #Return dp[-1]
