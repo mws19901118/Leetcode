@@ -1,31 +1,29 @@
-class Queue:
-    # initialize your data structure here.
+class MyQueue:
+
     def __init__(self):
-        self.s1=[]                                    #Use stack s1 to store elements.
-        self.s2=[]                                    #Use stack s2 as a backup when poping queue.
+        self.forward = []                                                       #Store elements in original order of pushing to queue.
+        self.backward = []                                                      #Store elements in riversed order of pushing to queue.
 
-    # @param x, an integer
-    # @return nothing
-    def push(self, x):
-        self.s1.append(x)
+    def push(self, x: int) -> None:
+        self.forward.append(x)                                                  #Push x to the forward stack.
 
-    # @return nothing
-    def pop(self):
-        while len(self.s1)>1:                         #Push the elements popped from s1 into s2, so the order of s2 is the reverse order of s1. 
-            self.s2.append(self.s1[-1])
-            self.s1.remove(self.s1[-1])
-        self.s1.remove(self.s1[-1])                   #Delete the first element of s1, i.e. the first element of the queue.
-        while len(self.s2)>0:                         #Push the elements popped from s2 into s1, recovering the normal order.
-            self.s1.append(self.s2[-1])               
-            self.s2.remove(self.s2[-1])
+    def pop(self) -> int:
+        self.peek()                                                             #Peek the queue.
+        return self.backward.pop()                                              #Pop the last element in backward stack and return.
 
-    # @return an integer
-    def peek(self):
-        if self.s1==[]:
-            return None
-        else:
-            return self.s1[0]
+    def peek(self) -> int:
+        if not self.backward:                                                   #If the backward stack is empty, pop each element from the forward stack and push them to the backward stack.
+            while self.forward:
+                self.backward.append(self.forward.pop())
+        return self.backward[-1]                                                #Return the top of backward stack.
 
-    # @return an boolean
-    def empty(self):
-        return self.s1==[]
+    def empty(self) -> bool:
+        return not self.forward and not self.backward                           #Return true if both forward stach and backward are empty.
+
+
+# Your MyQueue object will be instantiated and called as such:
+# obj = MyQueue()
+# obj.push(x)
+# param_2 = obj.pop()
+# param_3 = obj.peek()
+# param_4 = obj.empty()
