@@ -8,14 +8,13 @@
 
 class Solution:
     def leftMostColumnWithOne(self, binaryMatrix: 'BinaryMatrix') -> int:
-        d = binaryMatrix.dimensions()                   #Get dimensions.
-        m, n = d[0], d[1]
+        rows, cols = binaryMatrix.dimensions()          #Get dimensions.
         result = -1
-        p = [0, n - 1]                                  #Start traversing from top right corner.
-        while p[0] < m and p[1] >= 0:
-            if binaryMatrix.get(p[0], p[1]) == 1:       #If current position is 1, update result and then move left.
-                result = p[1]
-                p[1] -= 1
+        x, y = 0, cols - 1                              #Start traversing from top right corner.
+        while x < rows and y >= 0:
+            if binaryMatrix.get(x, y):                  #If current position is 1, update result and then move left.
+                result = y
+                y -= 1
             else:                                       #Otherwise move down.
-                p[0] += 1
+                x += 1
         return result                                   #Return result.
