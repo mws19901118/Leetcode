@@ -1,15 +1,4 @@
 class Solution:
-    def minDeletionSize(self, A):
-        """
-        :type A: List[str]
-        :rtype: int
-        """
-        count = 0
-        row = len(A)
-        col = len(A[0])
-        for i in range(col):
-            for j in range(1, row):
-                if A[j][i] < A[j - 1][i]:   #For each row, if there is a character smaller than previous one, add 1 to count.
-                    count += 1
-                    break
-        return count
+    def minDeletionSize(self, strs: List[str]) -> int:
+        m, n = len(strs), len(strs[0])                                                                      #Get dimensions.
+        return sum(any(strs[j][i] > strs[j + 1][i] for j in range(m - 1)) for i in range(n))                #Return the count of columns that are not sorted.
