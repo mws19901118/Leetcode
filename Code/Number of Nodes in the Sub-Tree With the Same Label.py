@@ -6,7 +6,7 @@ class Solution:
             adjacentList[y].append(x)
         result = [0] * n                                                                #Initialze the result to be 0 for all nodes.
 
-        def DFS(curr: int, prev: int) -> collections.Counter:
+        def DFS(curr: int, prev: int) -> collections.Counter:                           #DFS.
             count = collections.Counter()                                               #Initialize a counter.
             count[labels[curr]] = 1                                                     #The node count of current label is 1.
             for x in adjacentList[curr]:                                                #Traverse neighbors.
