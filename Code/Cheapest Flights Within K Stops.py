@@ -1,30 +1,18 @@
-from collections import defaultdict
 class Solution:
-    def DFS(self, src, dst, stops, graph, cache, trace):
-        if stops < 0:                                                           #If k is smaller than 0, means there is no way to fly from start to destination, return -1.
-            return -1
-        if src == dst:                                                          #If start and destination are same, return 0 since no fly is needed.
-            return 0
-        minPrice = 0x7fffffff                                                   #Initialize minPrice with max value.
-        trace.add(src)                                                          #Add start to trace.
-        if (src, dst, stops) in cache:                                          #If the tuple of start, destination and stops is in cache, set minPrice to be cached value.
-            minPrice = cache[(src, dst, stops)]
-        else:
-            for stop in graph[src]:                                             #Otherwise, for each city can be reached from start and hasn't been reached, do BFS with stop equals to k - 1 to calculate the minPrice from intermediate stop to destination.
-                if stop not in trace:
-                    temp = self.DFS(stop, dst, stops - 1, graph, cache, trace)
-                    if temp != -1:                                              #If can reach destination from intermediate stop, plus the result from last step with the price from start to intermediate stop to calculate the minPrice from start to destination through intermediate stop.
-                        minPrice = min(minPrice, temp + graph[src][stop])
-            if minPrice == 0x7fffffff:                                          #If minPrice is still max value, it means cannot find a way from start to destination.
-                minPrice = -1
-            cache[(src, dst, stops)] = minPrice                                 #Add result to cache for the tuple of the tuple of start, destination and stops
-        trace.remove(src)                                                       #Remove start from trace.
-        return minPrice                                                         #Return minPrice.
-            
-    def findCheapestPrice(self, n: 'int', flights: 'List[List[int]]', src: 'int', dst: 'int', K: 'int') -> 'int':
-        graph = defaultdict(dict)                                               #Use a dict of dict to represent the graph.
-        for e in flights:                                                       #For each flight, create an edge from start to destination with value to be price.
-            graph[e[0]][e[1]] = e[2]
-        cache = {}                                                              #Cache the result by a tuple of start, destination and stops.
-        trace = set()                                                           #Store the trace of BFS.
-        return self.DFS(src, dst, K + 1, graph, cache, trace)                   #BFS.
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        adjacentList = collections.defaultdict(list)                                                        #Initialize the adjacent list.
+        for x, y, p in flights:                                                                             #Build adjacent list with edge weight.
+            adjacentList[x].append((y, p))
+        minCost, minStop = [float('inf')] * n, [n] * n                                                      #Initialize the minCost and minStop to reach each city.
+        minCost[src], minStop[src] = 0, 0                                                                   #Both minCost[src] and minStop[stc] is 0.
+        q, count = [(src, 0)], 0                                                                            #Initialize queue with src and initial cost 0; also initialize the initial stop count, which is also 0.
+        while q and count <= k:                                                                             #Traverse while q is not empty and count is no greater than k.
+            newq = []                                                                                       #Initialize new queue.
+            for x, cost in q:                                                                               #Traverse each cities in queue with its current cost.
+                for y, p in adjacentList[x]:                                                                #Traverse each neighbor of city with flight price.
+                    if count < minStop[y] or cost + p < minCost[y]:                                         #If we can either reach neighbor with less stops or less cost, we can push it to new queue with new calculated cost.
+                        newq.append((y, cost + p))
+                        minCost[y], minStop[y] = min(minCost[y], cost + p), min(minStop[y], count)          #Also update minCost[y] or minStop[y] if necessary.
+            q = newq                                                                                        #Replace q with newq.
+            count += 1                                                                                      #Increase count.
+        return -1 if minCost[dst] == float('inf') else minCost[dst]                                         #If minCost[dst] is still float('inf'), we are not able to reach it within k stop, so return -1; otherwise, return minCost[dst].
