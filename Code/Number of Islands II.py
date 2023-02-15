@@ -1,46 +1,29 @@
-class Solution(object):
-    class UnionFind(object):                                                                  #Union Find Data Strcture
-        def __init__(self, x, y):
-            self.x = x
-            self.y = y
-            self.parent = None
-            
-        def Find(self):                                                                       #Find the root of current node. 
-            if self.parent != None:                                                           #If current node has parent, recursively find the root and then set parent as root.
-                self.parent = self.parent.Find()
-                return self.parent
-            else:                                                                             #Otherwise, return current node itself.
-                return self
+class UnionFind:                                                                                                            #Union find.
+    def __init__(self, position: (int, int)) -> None:
+        self.position = position
+        self.parent = None
+    
+    def find(self) -> 'UnionFind':                                                                                          #Find the parent of current node. 
+        if not self.parent:
+            return self
+        self.parent = self.parent.find()
+        return self.parent
+
+    def union(self, uf: 'UnionFind') -> bool:                                                                               #Union current node with another node, and return whether the union is needed.
+        if self.find().position != uf.find().position:
+            self.find().parent = uf.find()
+            return True
+        return False
         
-        def Union(self, uf):                                                                  #Merge current node and another node.
-            a = self.Find()                                                                   #Find the root of current node.
-            b = uf.Find()                                                                     #Find the root of another node.
-            if a is not b:                                                                    #If the 2 roots are not same, set the parent of root of another node as root of current node and return true.
-                b.parent = a
-                return True
-            else:                                                                             #Otherwise, the 2 nodes have the same root, return false.
-                return False
-                
-    def numIslands2(self, m, n, positions):
-        """
-        :type m: int
-        :type n: int
-        :type positions: List[List[int]]
-        :rtype: List[int]
-        """
-        dict = {}                                                                             #Use a dict to store UnionFind corresponding to coordinate.
-        count = 0                                                                             #Count the number of islands.
-        result = []                                                                           #Record the result after each operation.
-        for coordinate in positions:                                                          #Get the coordinate of each operation.
-            x = coordinate[0]
-            y = coordinate[1]
-            current = Solution.UnionFind(x, y)                                                #Create a new UnionFind.
-            dict[(x, y)] = current                                                            #Store it in dictionary according to coordinate.
-            count += 1                                                                        #Add 1 to the count of islands.
-            for direction in [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]:                #Go through the 4 directions of current island.
-                if direction in dict:                                                         #If it's island, find its root.
-                    neighbor = dict[direction].Find()
-                    if neighbor.Union(current):                                               #Merge current island and the neighbor, and if they don't have the same root, subtract count by 1.
+class Solution:
+    def numIslands2(self, m: int, n: int, positions: List[List[int]]) -> List[int]:
+        count, result, ufs = 0, [], {}                                                                                      #Initialize count, result and union finds.
+        for i, j in positions:                                                                                              #Traverse positions.
+            if (i, j) not in ufs:                                                                                           #If (i, j) is not in ufs, it's a new island.
+                ufs[(i, j)] = UnionFind((i, j))                                                                             #Create a new UnionFind for (i, j).
+                count += 1                                                                                                  #Increase count.
+                for x, y in [(i - 1, j), (i, j + 1), (i + 1, j), (i, j - 1)]:                                               #Traverse all neighbors.
+                    if 0 <= x < m and 0 <= y < n and (x, y) in ufs and ufs[(i, j)].union(ufs[(x, y)]):                      #If neighbor is valid and is island and can be unioned with current island, decrease count.
                         count -= 1
-            result.append(count)                                                              #Append count to result.
+            result.append(count)                                                                                            #Append count to result.
         return result
