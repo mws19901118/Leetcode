@@ -1,9 +1,6 @@
 class Solution:
     def minimumDeviation(self, nums: List[int]) -> int:
-        for i in range(len(nums)):                        #Even element can divide until it's odd; odd element can only double once to even.
-            if nums[i] & 1:                               #So, double all even elements in nums, so from now on all the operations are divide.
-                nums[i] <<= 1
-            nums[i] = -nums[i]                            #Make element negative to maintain a max heap.
+        nums = [-(x << (x & 1)) for x in nums]            #Even element can divide until it's odd; odd element can only double once to even. Double all odd elements in nums, so from now on all the operations are divide. Make element negative to maintain a max heap.
         minV = max(nums)                                  #Get the min value(in negative).
         heapq.heapify(nums)                               #Heapify nums.
         deviation = minV - nums[0]                        #Get the initial deviation.
