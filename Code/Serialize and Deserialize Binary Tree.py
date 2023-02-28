@@ -13,19 +13,19 @@ class Codec:
         :type root: TreeNode
         :rtype: str
         """
-        if root is None:                                          #If root is none, return '#'.
+        if not root:                                              #If root is none, return '#'.
             return "#"
         q = [root]                                                #Add root to queue.
         serial = [str(root.val)]                                  #Store the list of value.
-        while q != []:                                            #Serialize the tree level by level top down.
+        while q:                                                  #Serialize the tree level by level top down.
             newq = []                                             #Store the nodes in next level.
             for x in q:                                           #Check every nodes in current level.
-                if x.left is None:                                #If its left child is none, append '#' to serial.
+                if not x.left:                                    #If its left child is none, append '#' to serial.
                     serial.append('#')
                 else:                                             #Otherwise append the val of its left child to serial and add its left child to newq.
                     serial.append(str(x.left.val))
                     newq.append(x.left)
-                if x.right is None:                               #If its right child is none, append '#' to serial.
+                if not x.right:                                   #If its right child is none, append '#' to serial.
                     serial.append('#')
                 else:                                             #Otherwise append the val of its right child to serial and add its right child to newq.
                     serial.append(str(x.right.val))
@@ -45,7 +45,7 @@ class Codec:
         root = TreeNode(int(serial[0]))                           #Construct the root.
         q = [root]                                                #Store the nodes in current level.
         index = 1                                                 #Record current position in serial.
-        while q != [] and index < len(serial):                    #Construct the tree level by level top down.
+        while q and index < len(serial):                          #Construct the tree level by level top down.
             newq = []                                             #Store the nodes in next level.
             for x in q:                                           #Check every nodes in current level.
                 if serial[index] != '#':                          #If its left child is not none, construct the left child according to correspoding value and append the left child to newq.
