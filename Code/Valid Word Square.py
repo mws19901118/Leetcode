@@ -1,0 +1,6 @@
+class Solution:
+    def validWordSquare(self, words: List[str]) -> bool:
+        return all((len(x) <= len(words) and all(len(words[j]) > i and words[j][i] == words[i][j] for j in range(len(x))) and all(len(words[j]) < i + 1 for j in range(len(x), len(words)))) for i, x in enumerate(words))        #The following conditions have to satified for each row words[i] to make input a valid word square.
+                                                                                                                                                                                                                                  #1. It's length cannot exceed words length.
+                                                                                                                                                                                                                                  #2. For j from 0 to len(words[i]), len(words[j]) should be at least i + 1 and words[j][i] == words[i][j].
+                                                                                                                                                                                                                                  #3. For j from len(words[i]) to len(words), len(words[j] should be smaller than i + 1.
