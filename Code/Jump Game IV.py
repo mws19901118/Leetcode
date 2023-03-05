@@ -1,32 +1,24 @@
 class Solution:
     def minJumps(self, arr: List[int]) -> int:
-        indexes = defaultdict(list)
-        i = 0
-        while i < len(arr):                                             #Find the indexes in arr of each number.
-            j = i + 1
-            while j < len(arr) and arr[j] == arr[i]:
-                j += 1
-            indexes[arr[i]].append(i)
-            if j - i >= 2:                                              #For a number that appears at least 2 consecutive times in arr, we only need the start and end index.
-                indexes[arr[i]].append(j - 1)
-            i = j
-
-        steps = 0                                                       #Count steps.
-        q = [0]
-        visited = {0}
-        while q:                                                        #BFS.
-            newq = []
-            for x in q:
-                if x == len(arr) - 1:                                   #If reach the end, return steps.
-                    return steps
-                for y in indexes[arr[x]]:                               #Iterate over indexes with same value of arr[x].
-                    if y not in visited:                                #If it's not visited, add it to newq and visited.
-                        newq.append(y)
-                        visited.add(y)
-                indexes[arr[x]].clear()                                 #All indexes in indexes[arr[x]] are visited. Clear indexes[arr[x]] to avoid duplicate visit.
-                for y in [x - 1, x + 1]:                                #Visit the adjacent indexes if they are valid and not visited. 
-                    if 0 <= y < len(arr) and y not in visited:
-                        newq.append(y)
-                        visited.add(y)
-            steps += 1                                                  #Increase steps.
-            q = newq                                                    #Replace q with newq.
+        indexes = collections.defaultdict(set)                                      #Store the indexes in set by value.
+        for i, x in enumerate(arr):
+            indexes[x].add(i)
+        q, visited = set([0]), set([0])                                             #Initialize queue and visited set.
+        count = 0
+        while q:                                                                    #BFS.
+            newq = set()                                                            #Initialize new queue.
+            for x in q:                                                             #Traverse q.
+                if x == len(arr) - 1:                                               #If x is the end, return count.
+                    return count
+                if x - 1 >= 0 and x - 1 not in visited:                             #If x - 1 is valid and not visited, add (x - 1) to newq.
+                    newq.add(x - 1)
+                if x + 1 < len(arr) and x + 1 not in visited:                       #If x + 1 is valid and not visited, add (x + 1) to newq.
+                    newq.add(x + 1)
+                newq |= indexes[arr[x]]                                             #Add all indexes whose value is same as arr[x] to newq.
+                indexes[arr[x]].clear()                                             #Clear indexes[arr[x]].
+                if x in newq:                                                       #Remove if from newq if x is in newq.
+                    newq.remove(x)
+            q = newq                                                                #Replace q with newq.
+            visited |= newq                                                         #Update visited.
+            count += 1                                                              #Increase count.
+        return count
