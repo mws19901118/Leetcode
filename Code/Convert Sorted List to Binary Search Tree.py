@@ -10,15 +10,17 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def convert(self, values: List[int], start: int, end: int) -> TreeNode:
-        if start > end:                                                                                             #If start > end, return none.
+    def sortedListToBST(self, head: Optional[ListNode]) -> Optional[TreeNode]:
+        if not head:                                                                                            #If head is none, return none.
             return None
-        mid = (start + end) // 2                                                                                    #Get the mid point between start and end.
-        return TreeNode(values[mid], self.convert(values, start, mid - 1), self.convert(values, mid + 1, end))      #Construct BST node recursively.
-    
-    def sortedListToBST(self, head: ListNode) -> TreeNode:
-        values = []
-        while head:                                                                                                 #Store values of sorted list in an array.
-            values.append(head.val)
-            head = head.next
-        return self.convert(values, 0, len(values) - 1)                                                             #Convert sorted array to BST.
+        if not head.next:                                                                                       #If head only has one node, instantiate a tree node for it and return.
+            return TreeNode(head.val, None, None)
+        fast, slow = head, head                                                                                 #Use fast and slow pointers to find the mid of linked list.
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+        tail = head                                                                                             #Find the tail of first half and cut its link with slow.
+        while tail.next != slow:
+            tail = tail.next
+        tail.next = None
+        return TreeNode(slow.val, self.sortedListToBST(head), self.sortedListToBST(slow.next))                  #Construct the left subtree and right subtree from fitst hald and second half respectively in recursion, then instantiate root node and return.
