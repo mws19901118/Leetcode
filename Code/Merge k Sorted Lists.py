@@ -15,16 +15,14 @@ class Solution:
                 tail.next = l2
                 l2 = l2.next
             tail = tail.next
-        if l1:
-            tail.next = l1
-        else:
-            tail.next = l2
+        tail.next = l1 if l1 else l2
         return dummyHead.next
+    
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
         if len(lists) == 0:
             return None
         elif len(lists) == 1:
             return lists[0]
         mid = len(lists) // 2                                                                                  #Divide and conquer.
-        list1, list2 = self.mergeKLists(lists[:mid]), self.mergeKLists(lists[mid:])
+        list1, list2 = self.mergeKLists(lists[:len(lists) // 2]), self.mergeKLists(lists[len(lists) // 2:])
         return self.merge2Lists(list1, list2)
