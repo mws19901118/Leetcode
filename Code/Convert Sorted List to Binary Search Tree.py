@@ -15,12 +15,13 @@ class Solution:
             return None
         if not head.next:                                                                                       #If head only has one node, instantiate a tree node for it and return.
             return TreeNode(head.val, None, None)
-        fast, slow = head, head                                                                                 #Use fast and slow pointers to find the mid of linked list.
-        while fast and fast.next:
-            fast = fast.next.next
-            slow = slow.next
-        tail = head                                                                                             #Find the tail of first half and cut its link with slow.
-        while tail.next != slow:
+        count, curr = 0, head                                                                                   #Count number of nodes.
+        while curr:
+            count += 1
+            curr = curr.next
+        tail = head
+        for _ in range(count // 2 - 1):
             tail = tail.next
-        tail.next = None
+        mid = tail.next                                                                                         #Find mid point.
+        tail.next = None                                                                                        #Cut before mid.
         return TreeNode(slow.val, self.sortedListToBST(head), self.sortedListToBST(slow.next))                  #Construct the left subtree and right subtree from fitst hald and second half respectively in recursion, then instantiate root node and return.
