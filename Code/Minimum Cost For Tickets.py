@@ -1,25 +1,11 @@
-class Solution(object):
-    def mincostTickets(self, days, costs):
-        """
-        :type days: List[int]
-        :type costs: List[int]
-        :rtype: int
-        """
-        def dp(days, costs):
-            if len(days) == 0:                                            #If no days left, return 0.
-                return 0
-            if days[0] in cache:                                          #Read from cache if there is.
-                return cache[days[0]]
-            minCost = costs[0] + dp(days[1:], costs)                      #DP case 1: buy 1-day pass today.
-            index = 1
-            while index < len(days) and days[index] - days[0] < 7:        #Find the first travel day after 7 days.
-                index += 1
-            minCost = min(minCost, costs[1] + dp(days[index:], costs))    #DP case 2: buy 7-day pass today.
-            while index < len(days) and days[index] - days[0] < 30:       #Find the first travel day after 30 days.
-                index += 1
-            minCost = min(minCost, costs[2] + dp(days[index:], costs))    #DP case 3: buy 30-day pass today.
-            cache[days[0]] = minCost                                      #Write to cache.
-            return minCost
-        
-        cache = {}                                                        #Cache the result by starting day.
-        return dp(days, costs)
+class Solution:
+    def mincostTickets(self, days: List[int], costs: List[int]) -> int:
+        dollars = [0] * 366                                                                                                                     #Initialize dollars needed from day 0 to each day.
+        index = 0                                                                                                                               #Initialize the pointer to traverse in days.
+        for i in range(1, 366):                                                                                                                 #Traverse from 1 to 365.
+            if index < len(days) and i == days[index]:                                                                                          #If current day is a day to travel, calculate min cost till current day as the end of 1-day pass, 7-day pass and 30-day pass respectively.
+                dollars[i] = min(dollars[i - 1] + costs[0], dollars[max(0, i - 7)] + costs[1], dollars[max(0, i - 30)] + costs[2])
+                index += 1                                                                                                                      #Move forward index.
+            else:                                                                                                                               #Otherwise, the min cost is same as previous day.
+                dollars[i] = dollars[i - 1]
+        return dollars[-1]                                                                                                                      #Return the min cost for last day.
