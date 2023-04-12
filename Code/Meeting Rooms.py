@@ -1,20 +1,4 @@
-# Definition for an interval.
-# class Interval(object):
-#     def __init__(self, s=0, e=0):
-#         self.start = s
-#         self.end = e
-
-class Solution(object):
-    def canAttendMeetings(self, intervals):
-        """
-        :type intervals: List[Interval]
-        :rtype: bool
-        """
-        def cmpInterval(a, b):                              #Customize cmp method for Interval.
-            return a.start - b.start
-        intervals.sort(cmp = cmpInterval)
-        l = len(intervals)
-        for i in range(l - 1):                              #Find overlap one by one.
-            if intervals[i].end > intervals[i + 1].start:
-                return False
-        return True
+class Solution:
+    def canAttendMeetings(self, intervals: List[List[int]]) -> bool:
+        intervals.sort()                                                                                                #Sort intervals in ascending order.
+        return all(intervals[i][1] <= intervals[i + 1][0] for i in range(len(intervals) - 1))                           #Return all interval's ending time is not greater than next intervals's starting time.
