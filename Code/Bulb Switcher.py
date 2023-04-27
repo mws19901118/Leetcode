@@ -1,8 +1,3 @@
-import math
-class Solution(object):
-    def bulbSwitch(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
-        return int(math.sqrt(n))  #From 1 to n, only the bulbs whose index is a square number will be toggled an odd times, thus they are on at last.
+class Solution:
+    def bulbSwitch(self, n: int) -> int:
+        return int(sqrt(n))                   #For each position x, each of its divisors will toggle once. Only square number will be toggled odd times, so return int(sqrt(n)).
