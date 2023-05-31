@@ -8,14 +8,14 @@ class UndergroundSystem:
         self.customerDict[id] = (t, stationName)                                                                                        #Customer check in, add the current time and station name to customer dict.
 
     def checkOut(self, id: int, stationName: str, t: int) -> None:
-        startStationName = self.customerDict[id][1]                                                                                     #Customer check out, find the customer check in station first.
-        currentStats = self.travelDict[(startStationName, stationName)]                                                                 #Find the current total travel time and travel count between the check in station and check out station.
-        self.travelDict[(startStationName, stationName)] = (currentStats[0] + t - self.customerDict[id][0], currentStats[1] + 1)        #Update total travel time and travel count.
-        del self.customerDict[id]                                                                                                       #Delete customer from customer dict.
+        startTime, startStationName = self.customerDict[id]                                                                             #Customer check out, find the customer check in station first.
+        time, count = self.travelDict[(startStationName, stationName)]                                                                  #Find the current total travel time and travel count between the check in station and check out station.
+        self.travelDict[(startStationName, stationName)] = (time + t - startTime, count + 1)                                            #Update total travel time and travel count.
+        self.customerDict.pop(id)                                                                                                       #Pop customer from customer dict.
             
     def getAverageTime(self, startStation: str, endStation: str) -> float:
-        currentStats = self.travelDict[(startStation, endStation)]                                                                      #Calculate average time from total travel time and travel count.
-        return currentStats[0] * 1.0 / currentStats[1]
+        time, count = self.travelDict[(startStation, endStation)]                                                                       #Calculate average time from total travel time and travel count.
+        return time / count
 
 # Your UndergroundSystem object will be instantiated and called as such:
 # obj = UndergroundSystem()
