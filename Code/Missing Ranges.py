@@ -1,31 +1,4 @@
-class Solution(object):
-    def findMissingRanges(self, nums, lower, upper):
-        """
-        :type nums: List[int]
-        :type lower: int
-        :type upper: int
-        :rtype: List[str]
-        """
-        result = []
-        if len(nums) == 0:                                        #If the list is empty, directly add range from lower to upper.
-            if lower == upper:
-                result.append(str(lower))
-            else:
-                result.append(str(lower) + "->" + str(upper))
-            return result
-        if lower == nums[0] - 1:                                  #Deal with the range between lower and nums[0], if exists.
-            result.append(str(lower))
-        elif lower < nums[0] - 1:
-            result.append(str(lower) + "->" + str(nums[0] - 1))
-        for i in range(len(nums) - 1):
-            if nums[i + 1] > nums[i] + 1:                         #Deal with the range between nums[i] and nums[i + 1], if exists.
-                if nums[i + 1] - nums[i] == 2:
-                    result.append(str(nums[i] + 1))
-                elif nums[i + 1] - nums[i] > 2:
-                    result.append(str(nums[i] + 1) + "->" + str(nums[i + 1] - 1))
-        if upper == nums[-1] + 1:                                 #Deal with the range between nums[-1] and upper, if exists.
-            result.append(str(upper))
-        elif upper > nums[-1] + 1:
-            result.append(str(nums[-1] + 1) + "->" + str(upper))
-        return result
-        
+class Solution:
+    def findMissingRanges(self, nums: List[int], lower: int, upper: int) -> List[List[int]]:
+        nums = [lower - 1] + nums + [upper + 1]                                                                   #Add lower - 1 and upper + 1 to the both end of nums respectively.
+        return [[nums[i] + 1, nums[i + 1] - 1] for i in range(len(nums) - 1) if nums[i] + 1 < nums[i + 1]]        #Find all the adjacent number pairs in nums where the gap is larger than 1; convert the gap to range and return.
