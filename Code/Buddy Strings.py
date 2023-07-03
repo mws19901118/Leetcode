@@ -1,12 +1,8 @@
 class Solution:
-    def buddyStrings(self, A: str, B: str) -> bool:
-        if len(A) != len(B):                                                                    #The length of A and B must be equal.
+    def buddyStrings(self, s: str, goal: str) -> bool:
+        if len(s) != len(goal):                                                                                                #The length of s and goal must be equal.
             return False
-        d = []
-        for i in range(len(A)):                                                                 #Find all the different characters paires of A and B in same index.
-            if A[i] != B[i]:
-                d.append((A[i], B[i]))
-        if len(d) == 0:                                                                         #If A and B are same, both strings must contain a character which appears more than once.
-            countA, countB = Counter(A), Counter(B)
-            return any(x in countB and countA[x] >= 2 and countB[x] >= 2 for x in countA)
-        return len(d) == 2 and (d[0][0] == d[1][1] and d[0][1] == d[1][0])                      #If A and B are not same, there must be exactly 2 different characters paires. And they are able to swap.
+        misMatches = [[x, y] for x, y in zip(s, goal) if x != y]                                                               #Find the mismatch pairs between s and goal.
+        if not misMatches:                                                                                                     #If s and goal is same, s should contain at least one duplicated character.
+            return any(x > 1 for x in Counter(s).values())
+        return len(misMatches) == 2 and misMatches[0][0] == misMatches[1][1] and misMatches[0][1] == misMatches[1][0]          #If s and goal are not same, there must be exactly 2 mismatch paires and they are able to be swapped.
