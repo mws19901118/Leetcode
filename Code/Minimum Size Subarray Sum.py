@@ -1,24 +1,13 @@
 class Solution:
-    # @param {integer} s
-    # @param {integer[]} nums
-    # @return {integer}
-    def minSubArrayLen(self, s, nums):
-        sum=0
-        length=len(nums)
-        minl=length+1                                 #Record the minimal subarray length.
-        start=0
-        end=0
-        while not (start>=length and sum<s):          #If current sum is smaller than s, the start pointer will move forward, but we have to prevent it from stepping out of border.
-            if sum<s:
-                sum+=nums[start]                      #If current sum is smaller than s, add nums[start] to sum and move forward start pointer.
-                start+=1
-            else:                                     #If current sum is larger than or equal to s, delete nums[end] from sum and move forward end pointer.
-                if start-end<minl:                    #If length of current subarray whose sum is larger than or equal to s, update the minimal subarray length if necessary.
-                    minl=start-end
-                sum-=nums[end]
-                end+=1
-        
-        if minl==length+1:                            #If minimal subarray length is larger than length of the whole array, no subarray satisfies the requirement.
-            return 0
-        else:
-            return minl
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        length = len(nums) + 1                                    #Initialize length to be larger then length of nums.
+        start, end, s = 0, 0, 0                                   #Initialize sliding window nums[start:end] and its sum s.
+        while end < len(nums):                                    #Traverse nums.
+            while end < len(nums) and s < target:                 #While end is valid and s is smaller than target, add nums[end] to s and move end to the right.
+                s += nums[end]
+                end += 1
+            while s >= target:                                    #While s is larger than or equal to target, update length if end - start is larger, then substract nums[start] from s and move start to the right.
+                length = min(length, end - start)
+                s -= nums[start]
+                start += 1
+        return length if length < len(nums) + 1 else 0            #Return length if it's not greater than length of nums; otherwise return 0 because cannot find such subarray.
