@@ -1,14 +1,12 @@
 class Solution:
     def myPow(self, x: float, n: int) -> float:
-        b = format(abs(n), '0b')                                #Convert the abs value of n to binary.
-        p = [1, x]                                              #Use a list to store the powers of x. Initially, x^0 and x^1.
-        while len(p) <= len(b):                                 #While the length of p is not larger than that of b, keep expanding p so the new power is the square of previous power.
-            p.append(p[-1] * p[-1])
-        
-        result = 1                                              #Initalize result to be 1.
-        for i in range(len(b) - 1, -1, -1):                     #Traverse through b.
-            if b[i] == '1':                                     #If current bit is '1', multiply result with its corrsponding power(notice the order in p).
-                result *= p[len(b) - i]
-        if n < 0:                                               #If n is negative, let result be its reciprocal.
-            result = 1 / result
-        return result
+        if n < 0:                        #If n < 0, set n to its absolute value and set x to its reciprocal.
+            n = -n
+            x = 1 / x
+        power = 1                        #Initialize power to be 1.
+        while n:                         #Iterate while n is larger than 0.
+            if n & 1:                    #If last digit of n is 1, multiple power by x.
+                power *= x
+            n >>= 1                      #Right shift n 1 bit.
+            x **= 2                      #Replace x with its square.
+        return power                     #Return power.
