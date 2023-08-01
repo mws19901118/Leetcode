@@ -1,20 +1,13 @@
 class Solution:
-    # @return a list of lists of integers
-    def combine(self, n, k):
-        def backtrack(i,j):                     #Backtracking search; i is the current length and j is the current position.
-            if i==k:
-                temp=[]
-                for c in stack:                 #Deep copy.
-                    temp.append(c)
-                result.append(temp)             #Append temp to result.
-            else:
-                for v in range(j+1,n-k+i+2):    #Traverse all the possible value.
-                    stack.append(v)             #Push stack.
-                    backtrack(i+1, v)           #Backtracking search next value.
-                    stack.pop()                 #Pop stack.
-        result=[]
-        if n==0:
-            return []
-        stack=[]
-        backtrack(0, 0)                         #Start from length 0 and position 0.
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        def backtrack(length: int, last: int) -> None:             #Backtracking with current length and last value.
+            if length == k:                                        #If the length is k, add a copy of stack to result and return.
+                result.append(stack.copy())
+                return
+            for v in range(last + 1, n - k + length + 2):          #Traverse all the possible value.
+                stack.append(v)                                    #Push value to stack.
+                backtrack(length + 1, v)                           #Keep backtracking.
+                stack.pop()                                        #Pop value from stack.
+        result, stack = [], []                                     #Initialize result and stack.
+        backtrack(0, 0)                                            #Start from length 0 and last value 0.
         return result
