@@ -1,11 +1,9 @@
 class Solution:
-    def DFS(self, s: str, wordDict: List[str], cache: dict) -> bool:
-        if s == "":                                                                                     #If s is empty, return true.
-            return True
-        if s in cache:                                                                                  #If s in cache, return its value.
-            return cache[s]
-        cache[s] = any(s[:len(w)] == w and self.DFS(s[len(w):], wordDict, cache) for w in wordDict)     #DFS to find if there is any valid word break and update cache.
-        return cache[s]
-    
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        return self.DFS(s, wordDict, {})                                                                #DFS with cache.
+        @cache                                                                                        #Cache result.
+        def dp(index: int) -> bool:                                                                   #DP to find if s[index:] can be break.
+            if index == len(s):                                                                       #If index reaches the end of s, we find a break so return true.
+                return True
+            return any(s[index:index + len(x)] == x and dp(index + len(x)) for x in wordDict)         #For any word x in wordDict, if s[index:index + len(x)] is x and s[index + len(x):] can be break, then s[index:] can be break. 
+
+        return dp(0)                                                                                  #Return dp(0).
