@@ -5,16 +5,16 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def backtracking(self, nums: List[int]) -> List[Optional[TreeNode]]:    #Generate a list of unique BST for nums array.
-        if not nums:                                                        #If nums is empty, return [None].
-            return [None]
-        result = []                                                         #Initialize result.
-        for i, x in enumerate(nums):                                        #Traverse nums.
-            left = self.backtracking(nums[:i])                              #Generate all possible left subtrees for root x.
-            right = self.backtracking(nums[i + 1:])                         #Generate all possible right subtrees for root x.
-            for l, r in product(left, right):                               #Append BST with root x and each left subtree and each right subtree to result. 
-                result.append(TreeNode(x, l, r))
-        return result                                                       #Return result.
-    
     def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
-        return self.backtracking([i for i in range(1, n + 1)])              #Generate unique BST for [1, 2, ..., n].
+        @cache                                                                    #Cache result.
+        def dp(start: int, end: int) -> List[Optional[TreeNode]]:                 #DP to find all unique BST formed by [start, end].
+            if start > end:                                                       #If start > end, there is no valid BST, return [None].
+                return [None]
+            result = []                                                           #Initialize result.
+            for i in range(start, end + 1):                                       #Enumerate root from start to end.
+                left, right = dp(start, i - 1), dp(i + 1, end)                    #Find all unique BST for the left subtree and right subtree respectively.
+                for x, y in product(left, right):                                 #Emunerate each pair of left subtree and rifght subtree.
+                    result.append(TreeNode(i, x, y))                              #Append the BST to result.
+            return result                                                         #Return result.
+
+        return dp(1, n)                                                           #Return dp(1, n).
