@@ -15,7 +15,7 @@ class Solution:
                     start = mid + 1
                 else:
                     end = mid - 1
-            elif nums[mid] >= nums[start] and nums[mid] <= nums[end]:       #If nums[start] < nums[mid] < nums[end], it's a normal binary search.
+            elif nums[mid] > nums[start] and nums[mid] < nums[end]:         #If nums[start] < nums[mid] < nums[end], it's a normal binary search.
                 if nums[mid] < target:
                     start = mid + 1
                 else:
