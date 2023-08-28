@@ -2,24 +2,26 @@ class MyStack:
 
     def __init__(self):
         self.q = deque()                                            #Use a queue to simulate stack.
+        self.stackTop = None                                        #Store the top of stack,
+        self.length = 0                                             #Store size of stack.
 
     def push(self, x: int) -> None:
         self.q.append(x)                                            #Append x to queue.
+        self.stackTop = x                                           #Update stack top and length.
+        self.length += 1
 
     def pop(self) -> int:
-        n = len(self.q)                                             #Get current queue length.
-        for _ in range(n - 1):                                      #For the first n - 1 elements, popleft then append to queue.
-            self.q.append(self.q.popleft())
+        for _ in range(self.length - 1):                            #Popleft self.length - 1 elements then push them back to queue and update stack top.
+            self.stackTop = self.q.popleft()
+            self.q.append(self.stackTop)
+        self.length -= 1                                            #Update length.
         return self.q.popleft()                                     #Popleft the last element and return.
         
-    def top(self) -> int:
-        result = self.pop()                                         #Pop the element at "stack" top.
-        self.q.append(result)                                       #Append it to queue again.
-        return result                                               #Return result.
+    def top(self) -> int:                                           #Return stack top.
+        return self.stackTop
 
-    def empty(self) -> bool:
-        return not self.q                                           #Return if queue is empty.
-
+    def empty(self) -> bool:                                        #Return self.length.
+        return not self.length
 
 # Your MyStack object will be instantiated and called as such:
 # obj = MyStack()
