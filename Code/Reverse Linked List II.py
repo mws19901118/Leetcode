@@ -4,16 +4,17 @@
 #         self.val = val
 #         self.next = next
 class Solution:
-    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> ListNode:
-        dummyHead, dummyHeadForReverse = ListNode(0, head), ListNode()                      #Create a dummy head for current linked list and a dummy head for reversed linked list.
-        curr = dummyHead
-        for i in range(left - 1):                                                           #Traverse linked list to find the node before the position left.
-            curr = curr.next
-        tail = curr.next                                                                    #Point the tail of reversed linked list to the node on position left.
-        for i in range(right - left + 1):                                                   #Reverse from position left to position right.
-            temp = curr.next                                                                #Temporarily store current node.
-            curr.next = curr.next.next                                                      #Remove it from linked list.
-            temp.next, dummyHeadForReverse.next = dummyHeadForReverse.next, temp            #Insert it after the dummy head of reversed linked list.
-        tail.next = curr.next                                                               #Point next of tail to the node after position right.
-        curr.next = dummyHeadForReverse.next                                                #Point the next of node before position left to the next of dummy node of reversed linked list.
-        return dummyHead.next                                                               #Return the next of dummy head.
+    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+        dummyHead = ListNode(0, head)            #Append a dummy head before the beginning of haed.
+        rightTail = dummyHead                    #Find the right tail, which is the last node in reverse range.
+        for _ in range(right):
+            rightTail = rightTail.next
+        leftTail = dummyHead                     #Find the left tail, which is the node before the first node in reverse range.
+        for _ in range(left - 1):
+            leftTail = leftTail.next
+        for _ in range(left, right):             #Iterate right - left times.
+            t = leftTail.next                    #Detach the node afte left tail from linked list.
+            leftTail.next = t.next
+            t.next = rightTail.next              #Attach the node after right tail.
+            rightTail.next = t
+        return dummyHead.next                    #Return the next of dummy head.
