@@ -1,15 +1,9 @@
 class Solution:
-    def dp(self, nums: List[int], cache: dict, target: int) -> int:
-        if target in cache:                                                   #If target is already in cache, return cache[target].
-            return cache[target]
-        count = 0                                                             #Count the combination sum of target.
-        for x in nums:                                                        #Traverse nums.
-            if x > target:                                                    #If x is already greater than 0, stop.
-                break
-            else:                                                             #Otherwise, add the combination sum of target - x to count.
-                count += self.dp(nums, cache, target - x)
-        cache[target] = count                                                 #Add count to cache for target.
-        return count                                                          #Return count.
     def combinationSum4(self, nums: List[int], target: int) -> int:
-        nums.sort()                                                           #Sort nums.
-        return self.dp(nums, {0: 1}, target)                                  #Start dp with memorization and the combination sum of 0 is 1.
+        @cache                                                             #Cache result.
+        def dp(target: int) -> int:                                        #DP to find number of combinations for given target.
+            if not target:                                                 #If target is 0, return 1.
+                return 1
+            return sum(dp(target - x) for x in nums if x <= target)        #For all numbres in nums that are not greater than target, there are dp(target - x) ways to form given target with x.
+
+        return dp(target)                                                  #Return dp(target).
