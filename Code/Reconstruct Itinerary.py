@@ -1,28 +1,25 @@
-class Solution(object):
-    def findItinerary(self, tickets):
-        """
-        :type tickets: List[List[str]]
-        :rtype: List[str]
-        """
-        dict = {}                                 #Use dict to store the available destinations from a certain airport.
-        for t in tickets:
-            if t[0] not in dict:
-                dict[t[0]] = [t[1]]
-            else:
-                dict[t[0]].append(t[1])
-        stack = ['JFK']                           #Use stack to store the path. The initial airport is JFK.
-        def DFS(start):                           #DFS from certain airport.
-            if len(stack) == len(tickets) + 1:    #If all the tickets are used, return the path.
-                return stack
-            if start not in dict:                 #If current airport has no available destinations, return to the last level.
-                return
-            dest = sorted(dict[start])            #Sort available destinations of current airport in lexical order.
-            for end in dest:
-                dict[start].remove(end)           #Remove each destinations from dict.
-                stack.append(end)                 #Append each destinations to stack.
-                result = DFS(end)                 #Do DFS.
-                if result:                        #If find a possible result, return it.
-                    return result
-                stack.pop()                       #Pop each destinations from stack.
-                dict[start].append(end)           #Add each destination back to dict.
-        return DFS('JFK')                         #Start DFS at JFK.
+class Solution:        
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        def DFS() -> bool:
+            if len(itinerary) == len(tickets) + 1:                        #If the length of itinerary is the length of tickets plus 1, we found a valid itinerary so return True.
+                return itinerary
+            stop = itinerary[-1]                                          #Get the latest stop.
+            for destination in graph[stop]:                               #Traverse its neightbors.
+                if count[(stop, destination)] > 0:                        #If there is ticket remaining from stop to destination, keep DFS.
+                    itinerary.append(destination)                         #Append destination to itinerary.
+                    count[(stop, destination)] -= 1                       #Reduce ticket count.
+                    if DFS():                                             #If this direction yield a valid itinerary, return True.
+                        return True
+                    itinerary.pop()                                       #Otherwise pop itinerary and restore ticket count.
+                    count[(stop, destination)] += 1
+            return False                                                  #Return false at the end.
+
+        graph, count = defaultdict(list), defaultdict(int)                #Initialize graph and counter for each pair of cities.
+        for ticket in tickets:                                            #Build graph and update counter.
+            graph[ticket[0]].append(ticket[1])
+            count[(ticket[0], ticket[1])] += 1
+        for node in graph:                                                #Sort the destinations of each city.
+            graph[node].sort()
+        itinerary = ["JFK"]                                               #Start itinerary at JFK.
+        DFS()                                                             #DFS.
+        return itinerary                                                  #Return itinerary.
