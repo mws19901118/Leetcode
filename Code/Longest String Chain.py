@@ -1,10 +1,9 @@
 class Solution:
     def longestStrChain(self, words: List[str]) -> int:
+        indexes = {x: i for i, x in enumerate(words)}                                                               #Store the index of each word.
         wordByLength = defaultdict(list)                                                                            #Group words by length.
-        indexes = {}                                                                                                #Store the index of each word.
         for i, w in enumerate(words):                                                                               #Traverse words to populate wordByLength and indexes.
             wordByLength[len(w)].append(w)
-            indexes[w] = i
         
         chainLength = [1] * len(words)                                                                              #Initialize the max length of chain starting at each index.
         for i in reversed(sorted(wordByLength.keys())):                                                             #Traverse words by length in descending order.
