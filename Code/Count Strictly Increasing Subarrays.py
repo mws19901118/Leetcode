@@ -1,11 +1,7 @@
 class Solution:
     def countSubarrays(self, nums: List[int]) -> int:
-        result = 0
-        i = 0
-        while i < len(nums):                                                        #Traverse nums with 2 pointers.
-            j = 1
-            while i + j < len(nums) and nums[i + j] > nums[i + j - 1]:              #Find the a strictly increasing subarray as long as possible.
-                j += 1
-            result += (1 + j) * j // 2                                              #For a strictly increasing subarray of length j, there are total (1 + j) * j // 2 increasing subarrays.
-            i += j
-        return result
+        ount, current = 0, 0                                                    #Initialize total count and count of strictly increasing subarray ending at current number.
+        for i, x in enumerate(nums):                                            #Traverse nums.
+            current = 1 if i == 0 or nums[i - 1] >= x else current + 1          #If i == 0 or nums[i - 1] >= x, current should be 1; otherwise increase 1 to current.
+            count += current                                                    #Add current to count.
+        return count
