@@ -1,24 +1,9 @@
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
-        result = []
-        start, end = 0, len(nums) - 1
-        while start <= end:                                                                   #Binary search for the first position.
-            mid = (start + end) // 2
-            if nums[mid] == target and (mid - 1 < 0 or nums[mid - 1] < target):
-                result.append(mid)
-                break
-            elif nums[mid] < target:
-                start = mid + 1
-            else:
-                end = mid - 1
-        start, end = 0, len(nums) - 1
-        while start <= end:                                                                   #Binary search for the last position.
-            mid = (start + end) // 2
-            if nums[mid] == target and (mid + 1 >= len(nums) or nums[mid + 1] > target):
-                result.append(mid)
-                break
-            elif nums[mid] > target:
-                end = mid - 1
-            else:
-                start = mid + 1
-        return result if result else [-1, -1]                                                 #Return result if found first and last position; otherwise, return [-1, -1].
+        first = bisect_left(nums, target)                                #Binary search for the first position.
+        if first == len(nums) or nums[first] != target:                  #If it is invalid and the number on it is not target, set it to -1.
+            first = -1
+        last = bisect_right(nums, target) - 1                            #Binary search for the last position.
+        if last < 0 or nums[last] != target:                             #If it is invalid and the number on it is not target, set it to -1.
+            last = -1
+        return [first, last]                                             #Return [first, last].
