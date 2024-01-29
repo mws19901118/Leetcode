@@ -1,51 +1,6 @@
-class Solution(object):
-    def minCost(self, costs):                   #Ths same as Paint House II
-        """
-        :type costs: List[List[int]]
-        :rtype: int
-        """
-        m = len(costs)
-        if m == 0:
-            return 0
-        n = len(costs[0])
-        if n == 0:
-            return 0
-        minIndex = -1
-        firstMin = 0x7fffffff
-        secondMin = 0x7fffffff
-        for j in range(n):
-            if costs[0][j] < firstMin:
-                firstMin = costs[0][j]
-                minIndex = j
-        for j in range(n):
-            if j == minIndex:
-                continue
-            if costs[0][j] < secondMin:
-                secondMin = costs[0][j]
-        for i in range(1, m):
-            localMinIndex = -1
-            localFirstMin = 0x7fffffff
-            localSecondMin = 0x7fffffff
-            for j in range(n):
-                if j == minIndex:
-                    continue
-                if costs[i][j] < localFirstMin:
-                    localFirstMin = costs[i][j]
-                    localMinIndex = j
-            for j in range(n):
-                if j == minIndex or j == localMinIndex:
-                    continue
-                if costs[i][j] < localSecondMin:
-                    localSecondMin = costs[i][j]
-            temp = secondMin + costs[i][minIndex]
-            if temp < firstMin + localFirstMin:
-                secondMin = firstMin + localFirstMin
-                firstMin = temp
-            else:
-                if temp < firstMin + localSecondMin:
-                    secondMin = temp
-                else:
-                    secondMin = firstMin + localSecondMin
-                firstMin += localFirstMin
-                minIndex = localMinIndex
-        return firstMin
+class Solution:
+    def minCost(self, costs: List[List[int]]) -> int:
+        dp = [[0, 0, 0]]                                                                                                                #Initialize dp of min cost to paint houses so far.
+        for x in costs:                                                                                                                 #Traverse costs.
+            dp.append([x[0] + min(dp[-1][1], dp[-1][2]), x[1] + min(dp[-1][0], dp[-1][2]), x[2] + min(dp[-1][0], dp[-1][1])])           #For each color, the cost is paint current house this color plus the min cost of the other 2 colors in previous dp. 
+        return min(dp[-1])                                                                                                              #Return the min(dp[-1])
