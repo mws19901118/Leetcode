@@ -1,11 +1,12 @@
 class Solution:
-    def rangeBitwiseAnd(self, m: int, n: int) -> int:                           #Suppose S is the binary of n and T is the binary of m. Then the answer's binary is the common_prefix(S, T) padding the rest bits with 0.
-        k = 0                                                                   #Count unmatching bits.
-        while n != m:                                                           #While n != m, right shift m and n, update the count of unmatching bits.
-            n >>= 1
-            m >>= 1
+    def rangeBitwiseAnd(self, left: int, right: int) -> int:                                   #Suppose S is the binary of left and T is the binary of right. Then the answer's binary is the common_prefix(S, T) padding the rest bits with 0.
+        k = 0                                                                                  #Count unmatching bits.
+        while left != right:                                                                   #While left != right, right shift left and right, update the count of unmatching bits.
+            left >>= 1
+            right >>= 1
             k += 1
-        return n << k                                                           #Pad 0.
+        return right << k                                                                      #Pad 0.
     
-    def rangeBitwiseAnd(self, m: int, n: int) -> int:                           #Recursive version.
-        return self.rangeBitwiseAnd(m >> 1, n >> 1) << 1 if m != n else m       
+class Solution:
+    def rangeBitwiseAnd(self, left: int, right: int) -> int:
+        return self.rangeBitwiseAnd(left >> 1, right >> 1) << 1 if left != right else left     #Recursive version.
