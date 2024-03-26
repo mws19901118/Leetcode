@@ -1,8 +1,3 @@
 class Solution:
-    def intersection(self, nums1, nums2):
-        """
-        :type nums1: List[int]
-        :type nums2: List[int]
-        :rtype: List[int]
-        """
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
         return list(set(nums1).intersection(set(nums2)))    #Convert to set and find intersection then convert back to list.
