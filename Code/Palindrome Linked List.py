@@ -4,7 +4,7 @@
 #         self.val = val
 #         self.next = next
 class Solution:
-    def isPalindrome(self, head: ListNode) -> bool:
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
         fast, slow = head, head
         while fast.next and fast.next.next:                             #Use fast pointer and slow pointer to find the mid node of linked list.
             fast = fast.next.next
