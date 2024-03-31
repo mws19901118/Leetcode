@@ -7,7 +7,7 @@ class Solution:
                 i += 1
                 continue
             j = i                                                                       #Initialize the right boundary.
-            minK_q, maxK_q = collections.deque(), collections.deque()                   #Initialize the indexes of minK and maxK within current window.
+            minK_q, maxK_q = deque(), deque()                                           #Initialize the indexes of minK and maxK within current window.
             while j < len(nums) and minK <= nums[j] <= maxK:                            #Move the right boundary as far as possible.
                 if nums[j] == minK:                                                     #Push j to minK_q if nums[j] == minK.
                     minK_q.append(j)
