@@ -8,7 +8,4 @@ class Solution:
                 return True
             return any(word[length:i] in dictionary and dfs(word, i) for i in range(length + 1, len(word) + 1 - (1 if not length else 0)))      #Traverse from length + 1 to len(word) + 1 - (1 if not length else 0), because we need at lease 2 words to concatenate, then check if any of word[length:i] is in dictionary and dfs(word, i) is true.
 
-        for w in words:                                                                                                                         #Traverse each word.
-            if dfs(w, 0):                                                                                                                       #Start dfs at the beginning of current word; if the result is true, add current word to result.
-                result.append(w)
-        return result
+        return [w for w in words if dfs(w, 0)]                                                                                                  #Traverse each word and start dfs at the beginning of current word; if the result is true, add current word to result.
