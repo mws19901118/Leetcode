@@ -7,4 +7,7 @@ class Solution:
                 k -= 1
             stack.append(x)                                             #Append x to stack.
         stack = stack[:len(stack) - k]                                  #Remove the last k diigts from stack.
-        return str(int("".join(stack))) if stack else "0"               #If stack is not empty, join digits and convert to int then covert back to str to remove leading "0"; otherwise, return "0" directly.
+        i = 0
+        while i < len(stack) and stack[i] == "0":                       #Remove leading 0.
+            i += 1
+        return "".join(stack[i:]) if stack[i:] else "0"                 #If stack[i:] is not empty, join digits and convert to int then covert back to str to remove leading "0"; otherwise, return "0" directly.
