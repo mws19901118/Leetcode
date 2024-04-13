@@ -7,7 +7,7 @@ class Solution:
                 non_increasing += x - heapq.heappop(heap)             #Pop the heap, let's say it is y, then make x - y opeartions. Then the adjusted value of x, y count be any number between [y, x].
                 heapq.heappush(heap, x)                               #After adjust y to x, push x back to heap.
             heapq.heappush(heap, x)                                   #Push x to heap.
-                                                                      #Suppose there is an incoming number z(after adjustment). If z is smaller than y, x and y stay (y, y); if z is between y and x, x and y can be both z, z.
+                                                                      #Suppose there is an incoming number z. If z is smaller than y, x and y stay (y, y). if z is greater than the previous smallest number, p. z can be adjusted as well and falls in [y, x].
         non_decresing = 0                                             #Do the same thing to calulate the cost of making arrary non-decreasing.
         heap = []
         for n in nums:
