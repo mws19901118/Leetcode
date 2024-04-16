@@ -42,8 +42,8 @@
 #        """
 
 class Solution:
-    def calculate(self, nestedInteger: NestedInteger, depth: int) -> int:
-        return depth * nestedInteger.getInteger() if nestedInteger.isInteger() else sum(self.calculate(x, depth + 1) for x in nestedInteger.getList())              #Calculate depth sum for a nested integer with given sum. If it's integer, return the value multuply the depth; otherwise, calculate the depth sum for each nested integer in the list recursively.
-
     def depthSum(self, nestedList: List[NestedInteger]) -> int:
-        return sum(self.calculate(x, 1) for x in nestedList)                                                                                                        #Return the sum of depth sum for given nested integer list.
+        def dfs(weight: int, nestedList: List[NestedInteger]) -> int:                                                                #DFS to calculate the weight sum given nested list and weight for current nested list.
+            return sum((weight * x.getInteger() if x.isInteger() else dfs(weight + 1, x.getList()))for x in nestedList)              #Compute weight sum.
+            
+        return dfs(1, nestedList)                                                                                                    #Return the result of starting dfs for given nested list with weight 1.
