@@ -1,27 +1,23 @@
 # Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    def __init__(self):
-        self.minTrace = [26]                                      #Initialize the minimal trace. Since the max value of node is 25, we just use one 26.
+    def smallestFromLeaf(self, root: Optional[TreeNode]) -> str:
+        result = None                                                          #Initialize result.
+        def dfs(root: Optional[TreeNode], suffix: str) -> None:                #DFS with the suffix from upper level.
+            if not root:                                                       #If root is not none, directly return.
+                return
+            currentStr = chr(ord('a') + root.val) + suffix                     #Generate string from current node to root.
+            if not root.left and not root.right:                               #If root is leaf node, we don't need to go further.
+                nonlocal result
+                if result is None or currentStr < result:                      #If result is none or currentStr is smaller than result, set result to currentStr.
+                    result = currentStr
+                return
+            dfs(root.left, currentStr)                                         #DFS left subtree with currentStr as suffix.
+            dfs(root.right, currentStr)                                        #DFS right subtree with currentStr as suffix.
         
-    def DFS(self, node, trace):                                   #DFS.
-            trace.append(node.val)                                #Append current node value to trace.
-            if node.left:                                         #DFS left child.
-                self.DFS(node.left, trace)
-            if node.right:                                        #DFS right child.
-                self.DFS(node.right, trace)
-            if not node.left and not node.right:                  #If current node is leaf node, update minTrace with the smaller of minTrace and reverse of trace.
-                self.minTrace = min(self.minTrace, trace[::-1])
-            trace.pop()
-            
-    def smallestFromLeaf(self, root: 'TreeNode') -> 'str':        
-        self.DFS(root, [])                                        #Start DFS from root node with empty trace.
-        result = ""
-        for x in self.minTrace:                                   #Convert minTrace to result.
-            result += chr(ord('a') + x)
+        dfs(root, "")                                                          #Start DFS from root with empty suffix.
         return result
