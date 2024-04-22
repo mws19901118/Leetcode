@@ -1,6 +1,6 @@
 class UnionFind:                                                                                                            #Union find.
-    def __init__(self, position: (int, int)) -> None:
-        self.position = position
+    def __init__(self, label: int) -> None:
+        self.label = label
         self.parent = None
     
     def find(self) -> 'UnionFind':                                                                                          #Find the parent of current node. 
@@ -10,7 +10,7 @@ class UnionFind:                                                                
         return self.parent
 
     def union(self, uf: 'UnionFind') -> bool:                                                                               #Union current node with another node, and return whether the union is needed.
-        if self.find().position != uf.find().position:
+        if self.find().label != uf.find().label:
             self.find().parent = uf.find()
             return True
         return False
@@ -23,7 +23,7 @@ class Solution:
                 ufs[(i, j)] = UnionFind((i, j))                                                                             #Create a new UnionFind for (i, j).
                 count += 1                                                                                                  #Increase count.
                 for x, y in [(i - 1, j), (i, j + 1), (i + 1, j), (i, j - 1)]:                                               #Traverse all neighbors.
-                    if 0 <= x < m and 0 <= y < n and (x, y) in ufs and ufs[(i, j)].union(ufs[(x, y)]):                      #If neighbor is valid and is island and can be unioned with current island, decrease count.
+                    if (x, y) in ufs and ufs[(i, j)].union(ufs[(x, y)]):                                                    #If neighbor is valid and is island and can be unioned with current island, decrease count.
                         count -= 1
             result.append(count)                                                                                            #Append count to result.
         return result
