@@ -1,19 +1,13 @@
 class Solution:
-    def findK(self, nums: List[int], count: dict, k: int) -> int:           #Find the k-th frequent element.
-        smaller, larger = [], []
-        for x in nums[1:]:
-            if count[x] > count[nums[0]]:
-                larger.append(x)
-            else:
-                smaller.append(x)
-        if len(larger) == k - 1:
-            return nums[0]
-        elif len(larger) > k - 1:
-            return self.findK(larger, count, k)
-        else:
-            return self.findK(smaller, count, k - 1 - len(larger))
-        
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        count = Counter(nums)                                               #Count each element.
-        kth = self.findK(list(count.keys()), count, k)
-        return [x for x in count.keys() if count[x] >= count[kth]]          #Return elements whose count is larger than or equal to the count of k-th frequent element.
+        count = Counter(nums)                                            #Count each element.
+        numberByCount = defaultdict(list)                                #Map each number by its count.
+        for x, v in count.items():
+            numberByCount[v].append(x)
+        minV, maxV = min(count.values()), max(count.values())            #Find the min count and max count.
+        result = []
+        for x in reversed(range(minV, maxV + 1)):                        #Traverse from max count backward to min count.
+            result.extend(numberByCount[x])                              #Append all numbers with current count to result and since result is guaranteed to be unique so we don't need to add one by one and check after adding each.
+            k -= len(numberByCount[x])                                   #Reduce k by the number of numbers just added to result.
+            if k <= 0:                                                   #If k <= 0, we have already find the top J frequent elements, so return result.
+                return result
