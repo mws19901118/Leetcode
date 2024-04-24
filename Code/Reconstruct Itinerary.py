@@ -1,25 +1,12 @@
-class Solution:        
+class Solution:
     def findItinerary(self, tickets: List[List[str]]) -> List[str]:
-        def DFS() -> bool:
-            if len(itinerary) == len(tickets) + 1:                        #If the length of itinerary is the length of tickets plus 1, we found a valid itinerary so return True.
-                return itinerary
-            stop = itinerary[-1]                                          #Get the latest stop.
-            for destination in graph[stop]:                               #Traverse its neightbors.
-                if count[(stop, destination)] > 0:                        #If there is ticket remaining from stop to destination, keep DFS.
-                    itinerary.append(destination)                         #Append destination to itinerary.
-                    count[(stop, destination)] -= 1                       #Reduce ticket count.
-                    if DFS():                                             #If this direction yield a valid itinerary, return True.
-                        return True
-                    itinerary.pop()                                       #Otherwise pop itinerary and restore ticket count.
-                    count[(stop, destination)] += 1
-            return False                                                  #Return false at the end.
-
-        graph, count = defaultdict(list), defaultdict(int)                #Initialize graph and counter for each pair of cities.
-        for ticket in tickets:                                            #Build graph and update counter.
-            graph[ticket[0]].append(ticket[1])
-            count[(ticket[0], ticket[1])] += 1
-        for node in graph:                                                #Sort the destinations of each city.
-            graph[node].sort()
-        itinerary = ["JFK"]                                               #Start itinerary at JFK.
-        DFS()                                                             #DFS.
-        return itinerary                                                  #Return itinerary.
+        tickets.sort(reverse = True)                                        #Sort tickets in lexically desending order.
+        adjacentList = defaultdict(list)                                    #Build the adjacent list, and in each adjacent list the neighbors are also sorted in lexically desending order.
+        for x, y in tickets:
+            adjacentList[x].append(y)
+        result, stack = [], ['JFK']                                         #Initialize result and stack(starting from JFK).
+        while stack:                                                        #DFS.
+            while adjacentList[stack[-1]]:                                  #Since there is a guaranteed result and each flight is used once and only once, just keep going at the direction of last neighbor of current city on top of stack(so its lexically smallest) until there is no more.
+                stack.append(adjacentList[stack[-1]].pop())                 #Pop the neighbor from adjacent list and append it to stack.
+            result.append(stack.pop())                                      #Pop the last of stack and append it to result.
+        return result[::-1]                                                 #Reconstruct the routes backwards.
