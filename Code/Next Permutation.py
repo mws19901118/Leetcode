@@ -12,4 +12,4 @@ class Solution:
                 j -= 1
             nums[i - 1], nums[j] = nums[j], nums[i - 1]                         #Swap nums[i - 1] and nums[j], now nums[i:] is still in non-ascending order.
         for j in range((len(nums) - i) // 2):                                   #Reverse nums[i:]
-.            nums[i + j], nums[-(j + 1)] = nums[-(j + 1)], nums[i + j]
+            nums[i + j], nums[-(j + 1)] = nums[-(j + 1)], nums[i + j]
