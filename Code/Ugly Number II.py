@@ -1,9 +1,5 @@
-class Solution(object):
-    def nthUglyNumber(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
+class Solution:
+    def nthUglyNumber(self, n: int) -> int:
         ugly = [1]                              #1 is the 1st ugly number.
         i2, i3, i5 = 0, 0, 0                    #i2, i3, i5 indicates the index of previous ugly number to generate new ugly number by multiplying 2, 3 and 5 respectively/
         while len(ugly) < n:
