@@ -8,7 +8,7 @@
 
 class Solution:
     def leftMostColumnWithOne(self, binaryMatrix: 'BinaryMatrix') -> int:
-        rows, cols = binaryMatrix.dimensions()          #Get dimensions.
+        rows, cols = binaryMatrix.dimensions()          #Get the dimensions.
         result = -1
         x, y = 0, cols - 1                              #Start traversing from top right corner.
         while x < rows and y >= 0:
