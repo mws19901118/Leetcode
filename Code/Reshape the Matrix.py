@@ -1,6 +1,6 @@
 class Solution:
     def matrixReshape(self, mat: List[List[int]], r: int, c: int) -> List[List[int]]:
-        m, n = len(mat), len(mat[0])                            #Get dimensions.
+        m, n = len(mat), len(mat[0])                            #Get the dimensions.
         if m * n != r * c:                                      #If total number of elements do not match, cannot reshape so return mat.
             return mat
         reshape = [[0 for _ in range(c)] for _ in range(r)]     #Initialize the reshape matrix.
