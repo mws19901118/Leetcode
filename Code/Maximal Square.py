@@ -1,6 +1,6 @@
 class Solution:
     def maximalSquare(self, matrix: List[List[str]]) -> int:
-        m, n = len(matrix), len(matrix[0])                                          #Get dimensions.
+        m, n = len(matrix), len(matrix[0])                                          #Get the dimensions.
         dp = [[0 for j in range(n + 1)] for i in range(m + 1)]                      #Record the max side length of squares.
         maxLength = 0                                                               #Record current side length of square whose bottom right corner is matrix[i-1][j-1].
         for i, j in product(range(m), range(n)):                                    #Traverse matrix.
