@@ -1,6 +1,6 @@
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
-        m, n, count = len(grid), len(grid[0]), 0                                                #Get dimensions and initialize count.
+        m, n, count = len(grid), len(grid[0]), 0                                                #Get the dimensions and initialize count.
         for i, j in product(range(m), range(n)):                                                #Traverse each cell in grid.
             if grid[i][j] == "1":                                                               #If gird[i][j] is '1', we found an island.
                 q = deque([(i, j)])                                                             #Put (i, j) in a deque.
