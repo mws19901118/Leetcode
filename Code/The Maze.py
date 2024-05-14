@@ -1,6 +1,6 @@
 class Solution:
     def hasPath(self, maze: List[List[int]], start: List[int], destination: List[int]) -> bool:
-        m, n = len(maze), len(maze[0])                                                        #Get dimensions.
+        m, n = len(maze), len(maze[0])                                                        #Get the dimensions.
         q = [start]                                                                           #Push start to queue.
         maze[start[0]][start[1]] = -1                                                         #Mark start position as visited.
         while q:                                                                              #BFS.
