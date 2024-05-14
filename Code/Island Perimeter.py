@@ -1,6 +1,6 @@
 class Solution:
     def islandPerimeter(self, grid: List[List[int]]) -> int:
-        m, n = len(grid), len(grid[0])                      #Get dimensions.
+        m, n = len(grid), len(grid[0])                      #Get the dimensions.
         perimeter = 0
         for i, j in product(range(m), range(n)):            #Traverse through grid.
             if grid[i][j] == 1:                             #If current cell is island, add 4 to perimeter.
