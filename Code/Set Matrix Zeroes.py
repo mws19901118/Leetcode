@@ -3,7 +3,7 @@ class Solution:
         """
         Do not return anything, modify matrix in-place instead.
         """
-        m, n = len(matrix), len(matrix[0])                  #Get dimensions.
+        m, n = len(matrix), len(matrix[0])                  #Get the dimensions.
         firstRow, firstColumn = False, False                #Indicate if first row has 0 and first column has 0.
         for i, j in product(range(m), range(n)):            #Traverse matrix.
             if matrix[i][j] != 0:                           #If current cell is not 0, continue.
