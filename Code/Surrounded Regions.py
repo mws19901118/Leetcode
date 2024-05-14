@@ -1,6 +1,6 @@
 class Solution:
     def BFS(self, board: List[List[str]], coordinate: tuple) -> None:
-        m, n = len(board), len(board[0])                                                        #Get dimensions of board.
+        m, n = len(board), len(board[0])                                                        #Get the dimensions.
         q = [coordinate]                                                                        #Initialize queue.
         board[coordinate[0]][coordinate[1]] = 'V'                                               #Set current cell to 'V'.
         while q:                                                                                #BFS.
