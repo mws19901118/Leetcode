@@ -1,6 +1,6 @@
 class Solution:
     def shortestPath(self, grid: List[List[int]], k: int) -> int:
-        m, n = len(grid), len(grid[0])                                                                                                                                      #Get dimensions.
+        m, n = len(grid), len(grid[0])                                                                                                                                      #Get the dimensions.
         q = [(0, 0, k)]                                                                                                                                                     #Initialize q with upper left cell and number of obstacles I can remove now.
         visited = {(x, y): (m * n + 1, -1) for x, y in product(range(m), range(n))}                                                                                         #Store the step and remaining move can for visiting each cell, initially m * n + 1 and -1 respectively.
         step = 0                                                                                                                                                            #Initialize step.
