@@ -1,6 +1,6 @@
 class Solution:
     def countPaths(self, grid: List[List[int]]) -> int:
-        m, n = len(grid), len(grid[0])                                                    #Get dimensions.
+        m, n = len(grid), len(grid[0])                                                    #Get the dimensions.
         division = 10 ** 9 + 7                                                            #Set division.
 
         @cache                                                                            #Cache result.
