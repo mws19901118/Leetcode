@@ -22,7 +22,7 @@ class UnionFind:                                                                
 
 class Solution:
     def matrixRankTransform(self, matrix: List[List[int]]) -> List[List[int]]:
-        m, n = len(matrix), len(matrix[0])                                              #Get dimensions.
+        m, n = len(matrix), len(matrix[0])                                              #Get the dimensions.
         cells = defaultdict(list)                                                       #Store the coordinates of each cell by value.
         for i, j in product(range(m), range(n)):                                        #Traverse matrix to fill cells.
             cells[matrix[i][j]].append([i, j])
