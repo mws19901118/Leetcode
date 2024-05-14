@@ -1,6 +1,6 @@
 class Solution:
     def findDiagonalOrder(self, mat: List[List[int]]) -> List[int]:
-        m, n = len(mat), len(mat[0])                                                                                #Get dimensions.
+        m, n = len(mat), len(mat[0])                                                                                #Get the dimensions.
         result = []
         for i in range(m + n - 1):                                                                                  #For a matrix with dimension m and n, there are m + n - 1 diagonals.
             (u, v) = (-1, 1) if not i & 1 else (1, -1)                                                              #Calculate the delta based on direction.
