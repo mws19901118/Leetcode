@@ -1,6 +1,6 @@
 class Solution:
     def maxSumSubmatrix(self, matrix: List[List[int]], k: int) -> int:
-        m, n = len(matrix), len(matrix[0])                                              #Get dimensions. 
+        m, n = len(matrix), len(matrix[0])                                              #Get the dimensions. 
         result = -1000001                                                               #Initialize result to be the smaller than the possible minimum value.
         rowPrefixSum = [[0] * (n + 1) for _ in range(m)]                                #Initialize prefix sum of each row.
         for col1 in range(n):                                                           #Enumerate the right edge column of rectangle in matrix.
