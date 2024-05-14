@@ -1,6 +1,6 @@
 class Solution:
     def candyCrush(self, board: List[List[int]]) -> List[List[int]]:
-        m, n = len(board), len(board[0])                                            #Get dimensions.
+        m, n = len(board), len(board[0])                                            #Get the dimensions.
         crush = True                                                                #Indicate if there is crush in current iteration; initially set to true to start loop.
         while crush:                                                                #Iterate.
             crush = False                                                           #New iteration start with no crush.
