@@ -1,6 +1,6 @@
 class Solution:
     def nearestExit(self, maze: List[List[str]], entrance: List[int]) -> int:
-        m, n = len(maze), len(maze[0])                                                                                #Get dimensions.
+        m, n = len(maze), len(maze[0])                                                                                #Get the dimensions.
         q = [(entrance[0], entrance[1])]                                                                              #Initialize queue.
         maze[entrance[0]][entrance[1]] = '-'                                                                          #Mark entrance as visited.
         step = 0                                                                                                      #Initialize step to exit.
