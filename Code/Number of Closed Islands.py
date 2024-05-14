@@ -1,6 +1,6 @@
 class Solution:
     def closedIsland(self, grid: List[List[int]]) -> int:
-        m, n = len(grid), len(grid[0])                                                                  #Get dimensions.
+        m, n = len(grid), len(grid[0])                                                                  #Get the dimensions.
         count = 0
         for i, j in product(range(m), range(n)):                                                        #Traverse grid.
             if grid[i][j] != 0:                                                                         #If grid[i][j] is not 0, continue.
