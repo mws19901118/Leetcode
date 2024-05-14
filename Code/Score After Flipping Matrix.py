@@ -1,6 +1,6 @@
 class Solution:
     def matrixScore(self, grid: List[List[int]]) -> int:
-        m, n = len(grid), len(grid[0])                                    #Get dimensions.
+        m, n = len(grid), len(grid[0])                                    #Get the dimensions.
         for i in range(m):                                                #Traverse each row.
             if not grid[i][0]:                                            #If the start of row is 0, flip the entire row. Because we want the first column of all rows to be 1 to maximize the score.
                 for j in range(n):
