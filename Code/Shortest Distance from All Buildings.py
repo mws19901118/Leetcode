@@ -14,7 +14,7 @@ class Solution:
                 q = newq
                 distance += 1
 
-        m, n = len(grid), len(grid[0])                                                                      #Get dimensions.
+        m, n = len(grid), len(grid[0])                                                                      #Get the dimensions.
         buildingCount = 0                                                                                   #Count buildings.
         distanceSum = defaultdict(int)                                                                      #Store the distance sum for each valid land in a defaultdict.
         for i, j in product(range(m), range(n)):                                                            #Traverse grid.
