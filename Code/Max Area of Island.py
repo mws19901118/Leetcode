@@ -3,7 +3,7 @@ class Solution:
         if grid[i][j] == 0:                                                                         #If current position is 0, return 0.
             return 0
         grid[i][j] = -1                                                                             #Set current position to -1 as it's visited.
-        m, n = len(grid), len(grid[0])                                                              #Get grid dimensions.
+        m, n = len(grid), len(grid[0])                                                              #Get the dimensions.
         area = 0                                                                                    #Initialize area.
         q = [(i, j)]                                                                                #Initialize queue with current position.
         while q:                                                                                    #BFS while q is not empty.
