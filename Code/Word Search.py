@@ -13,5 +13,5 @@ class Solution:
             board[x][y] = t                                                                                             #Restore board[x][y].
             return False                                                                                                #Return false if not found.
 
-        m, n = len(board), len(board[0])                                                                                #Get dimensions.
+        m, n = len(board), len(board[0])                                                                                #Get the dimensions.
         return any(find(i, j, word) for i, j in product(range(m), range(n)))                                            #Return if the word can be found.
