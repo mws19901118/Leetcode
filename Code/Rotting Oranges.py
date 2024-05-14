@@ -1,6 +1,6 @@
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
-        m, n = len(grid), len(grid[0])                                                          #Get dimensions.
+        m, n = len(grid), len(grid[0])                                                          #Get the dimensions.
         count, time = 0, 0                                                                      #Intialize fresh count and total time.
         q = []                                                                                  #Intialize queue.
         for i, j in product(range(m), range(n)):                                                #Traverse grid.
