@@ -1,6 +1,6 @@
 class Solution:
     def countSquares(self, matrix: List[List[int]]) -> int:
-        m, n = len(matrix), len(matrix[0])                                                                                  #Get matrix dimensions.
+        m, n = len(matrix), len(matrix[0])                                                                                  #Get the dimensions.
         result = 0                                                                                                          #Count squares.
         sideLength = [[0 for j in range(n)] for i in range(m)]                                                              #Use a matrix with same dimension to store the max square side length of each coordinate.
         for i in range(m):
