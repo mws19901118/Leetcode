@@ -1,6 +1,6 @@
 class Solution:
     def shortestDistance(self, maze: List[List[int]], start: List[int], destination: List[int]) -> int:
-        m, n = len(maze), len(maze[0])                                                            #Get dimensions.
+        m, n = len(maze), len(maze[0])                                                            #Get the dimensions.
         q = [(start[0], start[1], 0)]                                                             #Initialize queue to be the starting cell and 0 distance.
         result = float('inf')                                                                     #Initialize result to be positive infinity.
         visited = {}                                                                              #Store the min distance visiting cell (x, y) with direction (u, v).
