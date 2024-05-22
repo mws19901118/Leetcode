@@ -1,34 +1,25 @@
-class Solution(object):
-    def backtrack(self,pattern, str, patterntoword, wordtopattern):
-        l = len(pattern)
-        n = len(str)
-        if l == 0 and n == 0:                                                                     #If both str and pattern reach the end, we find a bijection and return true.
-            return True
-        if l == 0 and n != 0:                                                                     #If pattern reach the end while str doesn't, it's invalid, so return false.
-            return False
-        if pattern[0] in patterntoword:                                                           #If the first character of pattern has already in the patterntoword dict, get the corresponding word.
-            t = patterntoword[pattern[0]]
-            if str[:len(t)] != t:                                                                 #If str doesn't begin with t, it's invalid and return false. 
+class Solution:
+    def wordPatternMatch(self, pattern: str, s: str) -> bool:
+        pToSMap, sToPMap = {}, {}                                                                                                                                                #Map pattern to word and vice versa.
+
+        def backtracking(pIndex: int, sIndex: int):
+            if sIndex == len(s) and pIndex == len(pattern):                                                                                                                      #If both pIndex and sIndex reach the end, we find a bijection and return true.
+                return True
+            if sIndex == len(s) or pIndex == len(pattern):                                                                                                                       #If only one of pIndex and sIndex reaches the end, it's invalid.
                 return False
-            else:                                                                                 #If str begins with t, keep backtracking on the remainning str and pattern.
-                return self.backtrack(pattern[1:], str[len(t):], patterntoword, wordtopattern)
-        else:                                                                                     #Otherwise, check every possible word for current pattern.
-            for i in range(n - len(pattern) + 1):                                                 #Leave enough space to following patterns.
-                if str[:i + 1] not in wordtopattern:                                              #The word should not be mapped to another pattern before.
-                    patterntoword[pattern[0]] = str[:i + 1]                                       #Add current word to patterntoword according to current pattern.
-                    wordtopattern[str[:i + 1]] = pattern[0]                                       #Add current pattern to wordtopattern according to current word.
-                    r = self.backtrack(pattern[1:], str[i + 1:], patterntoword, wordtopattern)    #Keep backtracking.
-                    del patterntoword[pattern[0]]                                                 #Restore patterntoword.
-                    del wordtopattern[str[:i + 1]]                                                #Restore wordtopattern.
-                    if r is True:                                                                 #If find a bijection, return true.
-                        return r
-            return False                                                                          #If can't find a bijection, return false.
-    def wordPatternMatch(self, pattern, str):
-        """
-        :type pattern: str
-        :type str: str
-        :rtype: bool
-        """
-        patterntoword = {}                                                                      #Map word to pattern.
-        wordtopattern = {}                                                                      #Map pattern to word.
-        return self.backtrack(pattern, str, patterntoword, wordtopattern)                       #Backtracking.
+            if pattern[pIndex] in pToSMap:                                                                                                                                       #If the character on pIndex is seen, get the word from  pattern to word map.
+                word = pToSMap[pattern[pIndex]]
+                return backtracking(pIndex + 1, sIndex + len(word)) if sIndex + len(word) <= len(s) and s[sIndex:sIndex + len(word)] == word else False                          #If s[sIndex:sIndex + len(word)] is valid and equals word, the pattern matches word, so return the result of recursively moving forward; otherwise, return false as it is invalid.
+            for i in range(sIndex, len(s)):                                                                                                                                      #Check every possible word for current pattern.
+                word = s[sIndex:i + 1]
+                if word in sToPMap:                                                                                                                                              #If word is already mapped, skip it.
+                    continue
+                pToSMap[pattern[pIndex]] = word                                                                                                                                  #Add current word to pattern to word map by current pattern.
+                sToPMap[word] = pattern[pIndex]                                                                                                                                  #Add current pattern to word to pattern map by current word.
+                if backtracking(pIndex + 1, sIndex + len(word)):                                                                                                                 #Move forward, if the result is true then return true.
+                    return True
+                sToPMap.pop(word)                                                                                                                                                #Restore word to pattern map.
+                pToSMap.pop(pattern[pIndex])                                                                                                                                     #Restore pattern to word map.
+            return False                                                                                                                                                         #If can't find a bijection, return false.
+
+        return backtracking(0, 0)                                                                                                                                                #Return the result of backtracking at 0 and 0.
