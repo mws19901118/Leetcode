@@ -1,18 +1,16 @@
 # Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-class Solution(object):
-    def traverse(self, root: Optional[TreeNode]) -> (int, int):
-        if not root:                                                                                                                                                                                                #If root is none, return 0 and 0.
-            return (0, 0)
-        l, r = self.traverse(root.left), self.traverse(root.right)                                                                                                                                                  #Get the result from left child and right child.
-        maxPathSumFromRoot = max(root.val, root.val + l[1], root.val + r[1])                                                                                                                                        #Find the max path sum from root.
-        maxPathSum = max(l[0] if root.left else maxPathSumFromRoot, r[0] if root.right else maxPathSumFromRoot, (root.val + l[1] + r[1]) if root.left and root.right else maxPathSumFromRoot, maxPathSumFromRoot)   #Max path sum is the max of max path sum from root, max path sum of left child if left child is not none, max path sum of right child if right child is not none and root.val plus both max path sum of both children if both children is not none.
-        return maxPathSum, maxPathSumFromRoot                                                                                                                                                                       #Return maxPathSum and maxPathSumFromRoot.
-    
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
-        return self.traverse(root)[0]
+        def traverse(root: Optional[TreeNode]) -> (int, int):                                                        #Traverse subtree to return the max path sum in subtree and max path sum from root.
+            if not root:                                                                                             #If root is none, return -inf and -inf.
+                return -inf, -inf
+            leftMax, leftRootMax = traverse(root.left)                                                               #Traverse left subtree.
+            rightMax, rightRootMax = traverse(root.right)                                                            #Traverse right subtree.
+            currRootMax = max(leftRootMax, rightRootMax, 0) + root.val                                               #Calculate current max path sum from root.
+            return max(leftMax, rightMax, currRootMax, leftRootMax + rightRootMax + root.val), currRootMax           #Return new max path sum and current max path sum from root.
+        return traverse(root)[0]                                                                                     #Return the max path sum of of traversing starting from root.
