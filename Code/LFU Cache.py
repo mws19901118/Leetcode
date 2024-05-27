@@ -1,43 +1,40 @@
 class LFUCache:
 
     def __init__(self, capacity: int):
-        self.capacity = capacity                                                                                                #Store capacity.
-        self.key_to_frequency = collections.defaultdict(int)                                                                    #Store the frequency of each key.
-        self.frequency_to_key_value = collections.defaultdict(OrderedDict)                                                      #Store the key value pair by frequency in an ordered dict.
-        self.min_frequency = 0                                                                                                  #Maintain the min frequency.
-
-    def update_frequency(self, key: int, value: int = None) -> int:
-        f = self.key_to_frequency[key]                                                                                          #Get the frequency of key.
-        v = self.frequency_to_key_value[f].pop(key)                                                                             #Remove the key from current frequency ordered dict.
-        if value:                                                                                                               #Update to new value if any.
-            v = value
-
-        self.frequency_to_key_value[f + 1][key] = v                                                                             #Add the key to current frequency plust 1.
-        self.key_to_frequency[key] += 1                                                                                         #Update the frequency of key.
-        if self.min_frequency == f and not self.frequency_to_key_value[f]:                                                      #Increase min frequency if no keys are with min frequency.
-            self.min_frequency += 1
-
-        return v                                                                                                                #Return value.
+        self.capacity = capacity                                                            #Store capacity.
+        self.count = Counter()                                                              #Store count of each key.
+        self.itemByCount = defaultdict(OrderedDict)                                         #Store key value pair in OrderedDict by count.
+        self.minCount = 0                                                                   #Track the minimum count.
 
     def get(self, key: int) -> int:
-        if key not in self.key_to_frequency:                                                                                    #If key is not found, return -1.
+        if key not in self.count:                                                           #If key is not in count, return -1.
             return -1
-
-        return self.update_frequency(key)                                                                                       #Update the frequency of key.
+        result = self.itemByCount[self.count[key]][key]                                     #First find key count then get the value by key in corresponding OrderedDict.
+        self.increaseCount(key)                                                             #Process increasing key count. 
+        return result                                                                       #Return result.
 
     def put(self, key: int, value: int) -> None:
-        if not self.capacity:                                                                                                   #If capacity is 0, cannot put anything.
-            return
+        if key not in self.count:                                                           #If key is not in count, initialize the count to be 0.
+            self.count[key] = 0
+        self.itemByCount[self.count[key]][key] = value                                      #First find key count then update the value by key in corresponding OrderedDict.
+        self.increaseCount(key)                                                             #Process increasing key count. 
 
-        if key in self.key_to_frequency:                                                                                        #If key is in cache, updatet the value and frequency of key.
-            self.update_frequency(key, value)
-        else:
-            if len(self.key_to_frequency) == self.capacity:                                                                     #If cache is full, pop the least frequently used key with min frequency and delete it.
-                self.key_to_frequency.pop(self.frequency_to_key_value[self.min_frequency].popitem(last = False)[0])
+    def increaseCount(self, key: int) -> None:
+        if len(self.count) > self.capacity:                                                 #If length of count is greater than capacity, we need to evict the least frequent key.
+            keyToPop = self.itemByCount[self.minCount].popitem(last = False)[0]             #Pop the first inserted key from the OrderDict of min count.
+            keyToPopCount = self.count[keyToPop]                                            #Pop key from count.
+            self.count.pop(keyToPop)
+            if not len(self.itemByCount[self.minCount]):                                    #If now the OrderDict of min count is empty, pop it from items count.
+                self.itemByCount.pop(self.minCount)                                         #No need to update min count now as it is during insertion and min count will be update later to the new insertion.
 
-            self.min_frequency = 1                                                                                              #Add new key value pair with frequency 1, also set min frequency to 1.
-            self.key_to_frequency[key] = 1
-            self.frequency_to_key_value[1][key] = value
+        value = self.itemByCount[self.count[key]].pop(key)                                  #Pop key value value from OrderDict of key count.
+        if not len(self.itemByCount[self.count[key]]):                                      #If this OrderDict is empty, pop it from items count.
+            self.itemByCount.pop(self.count[key])
+            if self.count[key] == self.minCount:                                            #If current count is min count, increase min count, because current count is about to be increase so there is guarenteed a key value pair at min count plus 1.
+                self.minCount += 1
+        self.count[key] += 1                                                                #Increase key count.
+        self.itemByCount[self.count[key]][key] = value                                      #Set the key value in OrderDict of new count.
+        self.minCount = min(self.minCount, self.count[key])                                 #Update min count.
 
 
 # Your LFUCache object will be instantiated and called as such:
