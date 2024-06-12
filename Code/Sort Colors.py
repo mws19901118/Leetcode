@@ -3,9 +3,8 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        i = 0
-        start, end = 0, len(nums) - 1
-        while i < len(nums) and i <= end:
+        i, start, end = 0, 0, len(nums) - 1
+        while i <= end:
             if nums[i] == 1:                                            #If current value is 1, simply increase i by 1.
                 i += 1
             elif nums[i] == 0:                                          #If current value is 0, to move it to front, swap nums[i] with nums[start] and increase start by 1.
