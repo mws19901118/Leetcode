@@ -8,6 +8,5 @@ class Solution:
                 index += 1
             if not heap:                                                      #If heap is empty, no task can be picked up, so jump out of loop.
                 break
-            p = heapq.heappop(heap)                                           #Pop the heap top.
-            w -= p                                                            #Add the profit to w.
+            w -= heapq.heappop(heap)                                          #Pop the heap top and add the profit to w.
         return w                                                              #Return w.
