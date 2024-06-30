@@ -9,7 +9,7 @@ class UnionFind:                                                                
         self.parent = self.parent.find()
         return self.parent
 
-  def union(self, uf: 'UnionFind') -> bool:                                                                                                                                                 #If 2 union finds are not unioned already, union them and return true; otherwise, return false.
+    def union(self, uf: 'UnionFind') -> bool:                                                                                                                                                 #If 2 union finds are not unioned already, union them and return true; otherwise, return false.
         if not self.find().label == uf.find().label:
             self.find().parent = uf.find()
             return True
