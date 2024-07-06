@@ -1,16 +1,19 @@
 class Solution:
-    def backtracking(self, candidates: List[int], stack: List[int], currentSum: int, target: int, result: List[List[int]]):
-        if currentSum == target:                                                        #If current sum equals target, add a deep copy of stack to result.                
-            result.append(copy.deepcopy(stack))
-        for i, x in enumerate(candidates):                                              #Traverse candidates.
-            if currentSum + x > target:                                                 #If current sum plus current number will exceed target, break.
-                break
-            stack.append(x)                                                             #Append current number to stack.
-            self.backtracking(candidates[i:], stack, currentSum + x, target, result)    #Keep backtracting.
-            stack.pop()                                                                 #Pop stack.
-            
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        candidates.sort()                                                               #Sort the candidates.
-        result = []                                                                     #Record the possible combination.
-        self.backtracking(candidates, [], 0, target, result)                            #Backtracking.
-        return result
+        @cache                                                            #Cache result.
+        def backtrack(index: int, cap: int) -> List[int]:                 #Back track to find all combination sum of cap in candidates[i:].
+            if index == len(candidates):                                  #If reaches the end of candidates, return an empty list.
+                return []
+            result = []
+            for i in range(index, len(candidates)):                       #Traverse candidates[i:].
+                if candidates[i] < cap:                                   #If candidates[i] < cap, append [candidates[i]] extended by each combination sum of cap - candidates[i] in candidates[i + 1:] to result. 
+                    for x in backtrack(i, cap - candidates[i]):
+                        result.append([candidates[i]] + x)
+                elif candidates[i] == cap:                                #If candidates[i] == cap, append [candidates[i]] tp result.
+                    result.append([candidates[i]])
+                else:                                                     #Otherwise, break.
+                    break
+            return result                                                 #Return result.
+
+        candidates.sort()                                                 #Sort candidate.
+        return backtrack(0, target)                                       #Return the result of backtrack starting from index 0 and target.
