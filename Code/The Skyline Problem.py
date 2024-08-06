@@ -43,28 +43,22 @@ class Solution:
 #Heap solution:
 class Solution:
     def getSkyline(self, buildings: List[List[int]]) -> List[List[int]]:
-        points = []
-        end = {}
+        points, heap, removed = [], [], Counter()                               #Initialize points, max heap and a counter for heights to be removed from heap.
         for l, r, h in buildings:                                               #Convert every building to 2 points.
             points.append((l, -h))                                              #The first one is the upperleft point with negative height indicating the beginning of building.
             points.append((r, h))                                               #The second one is the uppreright point with positive height indicationg the end of building.
-            end[(l, -h)] = (r, h)                                               #Use a dict to store the map relation of beginning point and end point of same building.
         points.sort()                                                           #Sort points according to x coordinate.
-        heap = []                                                               #Use a min heap to store current buildings. The heap top is the beginning point(y coordinate in the first) of current highest building(smallest negative height).
         result = []
         for x, y in points:                                                     #Check every point.
             if y < 0:                                                           #If it's a beginning point and heap is empty or y is smaller than y of the heap top, add current point to result(positive height).
-                if not heap or heap[0][0] > y:
+                if not heap or heap[0] > y:
                     result.append([x, -y])
-                heapq.heappush(heap, (y, x))                                    #Push current point to heap.
+                heapq.heappush(heap, y)                                         #Push current height to heap.
             else:
-                while heap != [] and end[(heap[0][1], heap[0][0])][0] <= x:     #If it's an ending point, pop every beginning points whose x of corresponding ending point is smaller than current x.
-                    heapq.heappop(heap)
-                r = []
-                if not heap:                                                    #If heap is empty now, potential result point r is current x as x and 0 as y.
-                    r = [x, 0]
-                elif heap[0][0] > -y:                                           #Otherwise, if the y of heap top is smaller than current y, potential result point r is current x as x and -y of heap top as y.
-                    r = [x, -heap[0][0]]
-                if r != [] and result[-1] != r:                                 #If r exists and does not equal to last point of result, append r to result.
-                    result.append(r)
+                removed[-y] += 1                                                #If it's an ending point, increase -h in removed.
+                while heap and removed[heap[0]]:                                #While the top of heap should be removed, pop it from heap and update removed.
+                    removed[heapq.heappop(heap)] -= 1
+                height = -heap[0] if heap else 0                                #If heap is empty now, current height for result point is 0; otherwise, it is -y of heap top as y.
+                if not result or result[-1][1] != height:                       #If result is empty or current height does not equal to the height of last point of result, append [x, height] to result.
+                    result.append([x, height])
         return result                                                           #Return result.
