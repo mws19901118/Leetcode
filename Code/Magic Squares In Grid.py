@@ -1,25 +1,14 @@
-class Solution(object):
-    def numMagicSquaresInside(self, grid):
-        """
-        :type grid: List[List[int]]
-        :rtype: int
-        """
-        length = len(grid)
-        width = len(grid[0])
-        result = 0
-        for i in range(length - 2):                           #Traverse each square in the matrix.
-            for j in range(width - 2):
-                columnSum = [0, 0, 0]
-                rowSum = [0, 0, 0]
-                diagonalSum = [0, 0]
-                integers = [0] * 15
-                for k in range(3):
-                    for l in range(3):
-                        rowSum[k] += grid[i + k][j + l]       #Calculate row sums.
-                        columnSum[k] += grid[i + l][j + k]    #Calculate column sums.
-                        integers[grid[i + k][j + l]] += 1     #Check the integerss are between 1 to 9.
-                    diagonalSum[0] += grid[i + k][j + k]      #Calculate diagonal sums.
-                    diagonalSum[1] += grid[i + 2 - k][j + k]
-                if all(map(lambda x: x == 15, rowSum)) and all(map(lambda x: x == 15, columnSum)) and all(map(lambda x: x == 15, diagonalSum)) and all(map(lambda x: x == 1, integers[1:10])):
-                    result += 1
-        return result
+class Solution:
+    def numMagicSquaresInside(self, grid: List[List[int]]) -> int:
+        def isMagic(x: int, y: int) -> bool:                                                                                                                                                                                                  #Given the top left corner of a 3 * 3 grid, determine if it is magic square.
+            if any(sum(grid[x + u][y + v] for u, v in t) != 15 for t in triplet):                                                                                                                                                             #Every row, column and diagnol should sum up to 15; otherwise return false.
+                return False
+            s = set()                                                                                                                                                                                                                         #Store numbers in set.
+            for u, v in [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]:                                                                                                                                             #Traverse grid and add number to the set.
+                s.add(grid[x + u][y + v])
+            if len(s) != 9 or any(i not in s for i in range(1, 10)):                                                                                                                                                                          #The set should have 9 numbers and exactly from 1 to 9.
+                return False
+            return True                                                                                                                                                                                                                       #Return true at the end. 
+        triplet = [[(0, 0), (0, 1), (0, 2)], [(1, 0), (1, 1), (1, 2)], [(2, 0), (2, 1), (2, 2)], [(0, 0), (1, 0), (2, 0)], [(0, 1), (1, 1), (2, 1)], [(0, 2), (1, 2), (2, 2)], [(0, 0), (1, 1), (2, 2)], [(0, 2), (1, 1), (2, 0)]]            #Initialize the list of offset triplets for each row, column and diagnol.
+        m, n = len(grid), len(grid[0])                                                                                                                                                                                                        #Get dimensions.
+        return sum(isMagic(i, j) for i, j in product(range(m - 2), range(n - 2)))                                                                                                                                                             #Traverse matrix to enumerate top left corner of 3 * 3 grid and count magic squares.
