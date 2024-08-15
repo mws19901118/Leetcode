@@ -1,27 +1,20 @@
 class Solution:
-    def lemonadeChange(self, bills):
-        """
-        :type bills: List[int]
-        :rtype: bool
-        """
-        fiveDollars = 0
-        tenDollars = 0
-        for b in bills:
-            if b == 5:
-                fiveDollars += 1
-            elif b == 10:
-                if fiveDollars < 1:
+    def lemonadeChange(self, bills: List[int]) -> bool:
+        count_5, count_10 = 0, 0                        #Count 5 dollar bill and 10 dollar bill.
+        for x in bills:                                 #Traverse bills.
+            if x == 5:                                  #Scenario x == 5: increase count_5.
+                count_5 += 1
+            elif x == 10:                               #Scenario x == 10: if count_5 is 0, return false; otherwise, decrease count_5 and increase count_10.
+                if not count_5:
                     return False
-                fiveDollars -= 1
-                tenDollars += 1
-            else:
-                if tenDollars > 0:          #If the bill is $20, prioritize to provide exchange in $10.
-                    tenDollars -= 1
-                    if fiveDollars < 1:
-                        return False
-                    fiveDollars -= 1
-                else:
-                    if fiveDollars < 3:
-                        return False
-                    fiveDollars -= 3
-        return True
+                count_5 -= 1
+                count_10 += 1
+            elif x == 20:                               #Scenario x == 20:
+                if count_10 and count_5:                #If both count_10 and count_5 is not 0, decrease count_10 and count_5.
+                    count_10 -= 1
+                    count_5 -= 1
+                elif count_5 >= 3:                      #If count_5 is greater than or equal to 3, decrease count_5 by 3.
+                    count_5 -= 3
+                else:                                   #Otherwise, return false.
+                    return False
+        return True                                     #Return true at the end.
