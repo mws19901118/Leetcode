@@ -1,24 +1,29 @@
+class UnionFind:                                                                    #UnionFind class.
+    def __init__(self, label):
+        self.parent = None
+        self.label = label
+
+    def find(self) -> 'UnionFind':
+        if not self.parent:
+            return self
+        self.parent = self.parent.find()
+        return self.parent
+
+    def union(self, uf: 'UnionFind'):
+        if self.find().label != uf.find().label:
+            self.find().parent = uf.find()
+
 class Solution:
     def removeStones(self, stones: List[List[int]]) -> int:
-        rows, columns = defaultdict(set), defaultdict(set)                  #Store the stones by rows and columns.
-        for x, y in stones:                                                 #Treat them as a graph: each stone is a node and if 2 stones are in same row or column, there is an edge linking them.
-            rows[x].add(y)
-            columns[y].add(x)
-        count = 0                                                           #Initialize the overall count of stones to remove.
-        for s in stones:                                                    #Traverse stones. For each connected component in graph, we can remove them until there is only one node left.
-            group = 0                                                       #Initialize the stones count for current connected component.
-            stack = [s]                                                     #Pushing current stone to stack.
-            while stack:                                                    #DFS while stack is not empty.
-                x, y = stack.pop()                                          #Pop top of stack.
-                if y not in rows[x] or x not in columns[y]:                 #If y not in rows[x] or x not in columns[y], then stone is already removed.
-                    group = max(group, 1)                                   #Set the group count to at least 1, handling the case that the initial stone of this group is already removed, and continue DFS.
-                    continue
-                rows[x].remove(y)                                           #Remove stone, removintg y from rows[x] and x from columns[y].
-                columns[y].remove(x)
-                for ny in rows[x]:                                          #For all the neighbors in rows[x], append [x, ny] to stack.
-                    stack.append([x, ny])
-                for nx in columns[y]:                                       #For all the neighbors in columns[y]. append [nx, y] to stack.
-                    stack.append([nx, y])
-                group += 1                                                  #Increase group count.
-            count += group - 1                                              #Update overall count.
-        return count                                                        #Return.
+        rows, columns = {}, {}                                                      #Store the index of first stone in each row and column.
+        ufs = [UnionFind((x, y)) for x, y in stones]                                #Initialize a union find for each stone.
+        for i, (x, y) in enumerate(stones):                                         #Traverse stones.
+            if x not in rows:                                                       #If x not in rows, set rows[x] to i.
+                rows[x] = i
+            else:                                                                   #Otherwise, union ufs[i] with ufs[rows[x]].
+                ufs[i].union(ufs[rows[x]])
+            if y not in columns:                                                    #If x not in columns, set columns[y] to i.
+                columns[y] = i
+            else:                                                                   #Otherwise, union ufs[i] with ufs[columns[x]].
+                ufs[i].union(ufs[columns[y]])
+        return len(stones) - len(set(uf.find().label for uf in ufs))                #Group ufs by the label of their parents. We can leave one stone for each group and remove the rest.
