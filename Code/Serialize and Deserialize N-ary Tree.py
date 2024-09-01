@@ -51,7 +51,7 @@ class Codec:
             q = newq                                                                  #Replace q with newq.
         return root                                                                   #Return root.
     
-    def parse(self, nodeData: str) -> ('Node', count):                                #Parse each node.
+    def parse(self, nodeData: str) -> ('Node', int):                                  #Parse each node.
         node = Node()                                                                 #Initialize node.
         index = nodeData.find('_')                                                    #Find the index of delimiter.
         node.val, count = int(nodeData[:index]), int(nodeData[index + 1:])            #Update node value and children count.
