@@ -1,31 +1,27 @@
-class Vector2D(object):
+class Vector2D:
 
-    def __init__(self, vec2d):
-        """
-        Initialize your data structure here.
-        :type vec2d: List[List[int]]
-        """
-        self.vec2d = vec2d                                                              #Store the 2d vector.
-        self.row = 0                                                                    #Record the index of current row.
-        self.column = 0                                                                 #Record the index of current column.
+    def __init__(self, vec: List[List[int]]):
+        self.vec = vec                                                                            #Store the vec.
+        self.indexX = 0                                                                           #Store the index for x coordinate.
+        self.indexY = 0                                                                           #Store the index for y coordinate.
+        self.advance()                                                                            #Move to next number.
 
-    def next(self):
-        """
-        :rtype: int
-        """
-        temp = self.vec2d[self.row][self.column]                                        #Get the value.
-        self.column += 1                                                                #Update current index of column.
-        return temp
+    def advance(self):
+        while self.indexX < len(self.vec) and self.indexY >= len(self.vec[self.indexX]):          #While self.indexX is valid and self.indexY reaches the end of self.vec[self.indexX], increase self.indexX and reset self.indexY to 0.
+            self.indexX += 1
+            self.indexY = 0
 
-    def hasNext(self):
-        """
-        :rtype: bool
-        """
-        while self.row != len(self.vec2d) and self.column == len(self.vec2d[self.row]): #If current element reaches the end of current row, go to the next row.
-            self.row += 1
-            self.column = 0
-        return self.row != len(self.vec2d)                                              #If current row equals to the length of 2d vector, return false; otherwise, return true.
+    def next(self) -> int:
+        result = self.vec[self.indexX][self.indexY]                                               #Get result.
+        self.indexY += 1                                                                          #Increase self.indexY.
+        self.advance()                                                                            #Move to next number.
+        return result
+
+    def hasNext(self) -> bool:
+        return self.indexX < len(self.vec) and self.indexY < len(self.vec[self.indexX])           #Return if self.indexX is valid and self.indexY is not at the end of self.vec[self.indexX].
+
 
 # Your Vector2D object will be instantiated and called as such:
-# i, v = Vector2D(vec2d), []
-# while i.hasNext(): v.append(i.next())
+# obj = Vector2D(vec)
+# param_1 = obj.next()
+# param_2 = obj.hasNext()
