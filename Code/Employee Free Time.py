@@ -1,29 +1,25 @@
-# Definition for an interval.
-# class Interval:
-#     def __init__(self, s=0, e=0):
-#         self.start = s
-#         self.end = e
-import heapq
+"""
+# Definition for an Interval.
+class Interval:
+    def __init__(self, start: int = None, end: int = None):
+        self.start = start
+        self.end = end
+"""
+
 class Solution:
-    def employeeFreeTime(self, schedule: List[List[Interval]]) -> List[Interval]:
-        heap = []
-        for s in schedule:                                              #Put each interval in a list as list.
-            for i in s:
-                heap.append([i.start, i.end])
-        
-        heapq.heapify(heap)                                             #Heapify list to build a min heap so it's ordered by start time.
-        periods = []                                                    #Store merged intervals as list. 
-        period = [-1, -1]                                               #Initialize a dummy starter.
-        while len(heap):                                                #While there is elements in min heap.
-            x = heapq.heappop(heap)                                     #Pop the heap top.
-            if x[0] <= period[1]:                                       #If it's overlapping with current interval, merge it with current interval.
-                period[1] = max(period[1], x[1])
-            else:                                                       #Otherwise, append the current interval to periods and use it as new current interval.
-                periods.append(period)
-                period = x
-        periods.append(period)                                          #Append the last current interval to periods.
-        
-        result = []
-        for i in range(1, len(periods) - 1):                            #Traverse periods from 1, because of the dummy starter.
-            result.append(Interval(periods[i][1], periods[i + 1][0]))   #The gap between each interval is free time, convert them to interval.
-        return result
+    def employeeFreeTime(self, schedule: '[[Interval]]') -> '[Interval]':
+        allIntervals = []                                                                                        #Put all inervals as tuple in one list.
+        for employee in schedule:
+            allIntervals.extend([(x.start, x.end) for x in employee])
+        allIntervals.sort()                                                                                      #Sort the list.
+        index = 0
+        occupiedTime = []                                                                                        #Store the union of occupied time intervals.
+        while index < len(allIntervals):                                                                         #Traverse all intervals.
+            end = allIntervals[index][1]                                                                         #Get the end of current interval.
+            i = index + 1
+            while i < len(allIntervals) and allIntervals[i][0] <= end:                                           #Traverse from index + 1 until its start is greater than current end.
+                end = max(end, allIntervals[i][1])                                                               #Update end.
+                i += 1
+            occupiedTime.append((allIntervals[index][0], end))                                                   #Append current occupied time interval.
+            index = i
+        return [Interval(occupiedTime[i][1], occupiedTime[i + 1][0]) for i in range(len(occupiedTime) - 1)]      #The gap between the end and next start of each pair of adjacent occupied time intervals is the free time.
