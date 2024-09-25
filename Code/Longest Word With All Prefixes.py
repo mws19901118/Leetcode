@@ -1,11 +1,11 @@
 class Trie:                                                                                                      #Trie.
     def __init__(self):                    
-        self.hasNode = False
+        self.hasWord = False
         self.children = defaultdict(lambda: Trie())
 
     def insert(self, word) -> None:
         if not word:
-            self.hasNode = True
+            self.hasWord = True
             return
         self.children[word[0]].insert(word[1:])
 
@@ -19,7 +19,7 @@ class Solution:
         for s in words:                                                                                         #Traverse words.
             node = trie                                                                                         #Point node to trie.
             index = 0                                                                                           #Traverse s.
-            while node and index < len(s) and s[index] in node.children and (index == 0 or node.hasNode):       #Iterate while node is not none, index not reaching the end of s, s[index] is in node.children and either index is 0 or node has node. Then, the current prefix s[:index] is in trie.=.
+            while node and index < len(s) and s[index] in node.children and (index == 0 or node.hasWord):       #Iterate while node is not none, index not reaching the end of s, s[index] is in node.children and either index is 0 or node has word. Then, the current prefix s[:index] is in trie.=.
                 node = node.children[s[index]]                                                                  #Move node to ndoe.children[s[index]].
                 index += 1                                                                                      #Increase index.
             if index == len(s):                                                                                 #If index reaches the end, s is a candidate.
