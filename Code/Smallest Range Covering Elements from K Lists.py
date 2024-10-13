@@ -1,7 +1,7 @@
 class Solution:
     def smallestRange(self, nums: List[List[int]]) -> List[int]:
         heap = []                                                                   #Initialize a min heap.
-        minV, maxV = float('inf'), float('-inf')                                    #Initialize the min value and max value of heap.
+        minV, maxV = inf, -inf                                                      #Initialize the min value and max value of heap.
         for i, x in enumerate(nums):                                                #Push the first element of each list to heap and update minV and maxV.
             heapq.heappush(heap, (x[0], i, 0))
             minV = min(minV, x[0])
