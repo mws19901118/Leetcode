@@ -1,38 +1,29 @@
-class DoubleLinkedListNode:                           #Double linked list node.
-    def __init__(self, x):
-        self.value = x
-        self.prev = None
-        self.next = None
-        
 class FirstUnique:
 
-    def __init__(self, nums: List[int]):              #Use a double linked list to store all unique numbers.
-        self.map = {}                                 #Use a dict to store the location of unique number in double linked list.
-        self.head = DoubleLinkedListNode(-1)          #Double linked list head, value -1.
-        self.tail = DoubleLinkedListNode(-1)          #Double linked list tail, value -1.
-        self.head.next = self.tail
-        self.tail.prev = self.head
-        for x in nums:                                #Initially, add all elements in order.
-            self.add(x)
+    def __init__(self, nums: List[int]):
+        self.queue = deque(nums)                                        #Initialize queue.
+        self.isDuplicate = {}                                           #Add use a dictionary 
+        for x in nums:                                                  #Process initial input. 
+            if x not in self.isDuplicate:
+                self.isDuplicate[x] = False
+            else:
+                self.isDuplicate[x] = True
+        self.nextUnique()                                               #Move out duplicate in front of the queue.
+
+    def nextUnique(self) -> None:
+        while self.queue and self.isDuplicate[self.queue[0]]:           #Popleft queue until the top of queue is unique.
+            self.queue.popleft()
 
     def showFirstUnique(self) -> int:
-        return self.head.next.value                   #Always return the value of next node of head.
+        return -1 if not self.queue else self.queue[0]                  #Return -1 if queue is empty; otherwise return top of queue.
 
     def add(self, value: int) -> None:
-        if value not in self.map:                     #If value is a new number, append it to before the double linked lisk tail and add the location to dict.
-            node = DoubleLinkedListNode(value)
-            node.prev = self.tail.prev
-            node.next = self.tail
-            self.tail.prev.next = node
-            self.tail.prev = node
-            self.map[value] = node
-        elif self.map[value] is not None:             #If value is not new but only appears once, remove the previous appearance from double linked list and set the location of it to none.
-            node = self.map[value]
-            node.next.prev = node.prev
-            node.prev.next = node.next
-            node.prev = None
-            node.next = None
-            self.map[value] = None
+        if value not in self.isDuplicate:                               #If value is not seen, append it to queue and mark it as no-duplicate.
+            self.queue.append(value)
+            self.isDuplicate[value] = False
+        elif not self.isDuplicate[value]:                               #Otherwise, mark it as duplicate.
+            self.isDuplicate[value] = True
+        self.nextUnique()                                               #Move out duplicate in front of the queue.
 
 # Your FirstUnique object will be instantiated and called as such:
 # obj = FirstUnique(nums)
