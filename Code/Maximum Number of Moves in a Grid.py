@@ -1,6 +1,6 @@
 class Solution:
     def maxMoves(self, grid: List[List[int]]) -> int:
-        m, n = len(grid), len(grid[0])                                                                                          #Get dimensions.
+        m, n = len(grid), len(grid[0])                                                                                          #Get the dimensions.
         dp = [1] * m                                                                                                            #Initialize dp to be the length of sequence with valid moves starting at current cell.
         for j in reversed(range(n - 1)):                                                                                        #Traverse columns backward starting from column n - 1.
             newdp = [0] * m                                                                                                     #Initialize new dp.
