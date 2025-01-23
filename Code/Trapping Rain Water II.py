@@ -1,6 +1,6 @@
 class Solution:
     def trapRainWater(self, heightMap: List[List[int]]) -> int:
-        m, n = len(heightMap), len(heightMap[0])                                                                                    #Get dimensions.
+        m, n = len(heightMap), len(heightMap[0])                                                                                    #Get the dimensions.
         heap = [(heightMap[i][j], i, j) for i, j in product(range(m), range(n)) if i == 0 or j == 0 or i == m - 1 or j == n - 1]    #Find all the edge cells.
         heapq.heapify(heap)                                                                                                         #Store them in a min heap by the height.
         visited = set()                                                                                                             #Store visited cells in a set.
