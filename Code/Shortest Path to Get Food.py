@@ -1,6 +1,6 @@
 class Solution:
     def getFood(self, grid: List[List[str]]) -> int:
-        m, n = len(grid), len(grid[0])                                                                #Get dimensions.
+        m, n = len(grid), len(grid[0])                                                                #Get the dimensions.
         q = [(i, j) for i, j in product(range(m), range(n)) if grid[i][j] == '*']                     #Find starting point.
         count = 1
         while q:                                                                                      #BFS.
