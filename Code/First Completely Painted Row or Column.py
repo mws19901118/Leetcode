@@ -1,6 +1,6 @@
 class Solution:
     def firstCompleteIndex(self, arr: List[int], mat: List[List[int]]) -> int:
-        m, n = len(mat), len(mat[0])                                                #Get dimensions.
+        m, n = len(mat), len(mat[0])                                                #Get the dimensions.
         coordinates = {mat[i][j]: (i, j) for i, j in product(range(m), range(n))}   #Build a dictionary mapping each number to its coordinate.
         countRow, countColumn = Counter(), Counter()                                #Count painted cells in each row and column.
         for i, x in enumerate(arr):                                                 #Traverse arr.
