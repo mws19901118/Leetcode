@@ -1,6 +1,6 @@
 class Solution:
     def minFlips(self, mat: List[List[int]]) -> int:
-        m, n = len(mat), len(mat[0])                                                #Get dimensions.
+        m, n = len(mat), len(mat[0])                                                #Get the dimensions.
         masks = [1 << (i * n + j) for i, j in product(range(m), range(n))]          #Assign a bit mask for each cell.
         result = m * n + 1                                                          #Initialize result to a large number.
         for b in range(1 << (m * n)):                                               #Traverse bit masks from 0 to 2 ** (m * n).
