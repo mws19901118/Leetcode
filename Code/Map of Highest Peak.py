@@ -1,6 +1,6 @@
 class Solution:
     def highestPeak(self, isWater: List[List[int]]) -> List[List[int]]:
-        m, n = len(isWater), len(isWater[0])                                            #Get dimensions.
+        m, n = len(isWater), len(isWater[0])                                            #Get the dimensions.
         q = [(i, j) for i, j in product(range(m), range(n)) if isWater[i][j]]           #Find all water cells.
         visited = set(q)                                                                #Store visited cells.
         height = 0                                                                      #Initialize height.
