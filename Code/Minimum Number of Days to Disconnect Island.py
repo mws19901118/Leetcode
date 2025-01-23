@@ -1,6 +1,6 @@
 class Solution:
     def minDays(self, grid: List[List[int]]) -> int:
-        m, n = len(grid), len(grid[0])                                                                  #Get dimensions.
+        m, n = len(grid), len(grid[0])                                                                  #Get the dimensions.
         islandCells = set([(i, j) for i, j in product(range(m), range(n)) if grid[i][j]])               #Get all island cells.
         def isConnected():                                                                              #Check if current grid is connected.
             if not islandCells:                                                                         #If no island cells, return false.
