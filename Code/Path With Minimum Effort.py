@@ -1,6 +1,6 @@
 class Solution:
     def minimumEffortPath(self, heights: List[List[int]]) -> int:                             #Dijkstra algorithm.
-        m, n = len(heights), len(heights[0])                                                  #Get dimensions of heights.
+        m, n = len(heights), len(heights[0])                                                  #Get the dimensions of heights.
         efforts = [[1000001] * n for _ in range(m)]                                           #Initialize min efforts at each cell with a value greater than max value of height.
         efforts[0][0] = 0                                                                     #Set the min effort at starting cell to be 0.
         heap = [(0, 0, 0)]                                                                    #Put all currently reachable cells into a heap, priority ordered by the corresponding current effort;
