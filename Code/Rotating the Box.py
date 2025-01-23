@@ -1,6 +1,6 @@
 class Solution:
     def rotateTheBox(self, box: List[List[str]]) -> List[List[str]]:
-        m, n = len(box), len(box[0])                              #Get dimensions.
+        m, n = len(box), len(box[0])                              #Get the dimensions.
         result = [["." for _ in range(m)] for _ in range(n)]      #Initialize result.
         for i, r in enumerate(box):                               #Traverse each row.
             count = 0                                             #Initailize count.
