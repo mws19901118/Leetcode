@@ -1,6 +1,6 @@
 class Solution:
     def minCost(self, grid: List[List[int]]) -> int:
-        m, n = len(grid), len(grid[0])                                                              #Get dimensions.
+        m, n = len(grid), len(grid[0])                                                              #Get the dimensions.
         cost = 0                                                                                    #Initialize cost.
         directions = {1: (0, 1), 2: (0, -1), 3: (1, 0), 4: (-1, 0)}                                 #Map the directions based on cell value.
         dq, visited = deque([(0, 0)]), set([(0, 0)])                                                #Initialize deque and visited set.
