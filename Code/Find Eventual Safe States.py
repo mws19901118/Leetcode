@@ -8,7 +8,7 @@ class Solution:
                 isSafe[x] = False
                 return False
             visited.add(x)                                                            #Add x to visited.
-            isSafe[x] = not graph[x] or all(DFS(y, visited) for y in graph[x])        #If x has no outgoing edge or all nodes that outgoing edges are pointing to are safe o\nodes, x is safe.
+            isSafe[x] = not graph[x] or all(DFS(y, visited) for y in graph[x])        #If x has no outgoing edge or all nodes that outgoing edges are pointing to are safe nodes, x is safe.
             visited.remove(x)                                                         #Remove x from visited.
             return isSafe[x]                                                          #Return isSafe[x].
 
