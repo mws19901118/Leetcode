@@ -20,6 +20,6 @@ class Solution:
         ufs = [UnionFind(i + 1) for i in range(len(edges))]                         #Create a union find for each node.
         result = []                                                                 #Initialize result.
         for x, y in edges:                                                          #Traverse edges.
-            if not ufs[x - 1].union(ufs[y - 1]):                                    #If union ufs[x - 1] and ufs[y - 1] and update result to [x, y] if they already are in same component.
+            if ufs[x - 1].union(ufs[y - 1]):                                        #If union ufs[x - 1] and ufs[y - 1] and update result to [x, y] if they already are in same component.
                 result = [x, y]
         return result
