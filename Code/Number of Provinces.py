@@ -9,11 +9,9 @@ class UnionFind:                                                        #Union-F
         self.parent = self.parent.find()
         return self.parent
 
-    def union(self, uf: 'UnionFind') -> bool:
-        if self.find().label == uf.find().label:
-            return True
-        self.find().parent = uf.find()
-        return False
+    def union(self, uf: 'UnionFind') -> None:
+        if not self.find().label == uf.find().label:
+            self.find().parent = uf.find()
 
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
