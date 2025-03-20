@@ -1,7 +1,7 @@
-class UnionFind:                                                                                                       #Union find.
+class UnionFind:                                                                                                        #Union-Find class.
     def __init__(self, x: int):
-        self.label = x
         self.parent = None
+        self.label = x
 
     def find(self) -> 'UnionFind':
         if not self.parent:
@@ -9,9 +9,11 @@ class UnionFind:                                                                
         self.parent = self.parent.find()
         return self.parent
 
-    def union(self, uf: 'UnionFind') -> None:
-        if not self.find().label == uf.find().label:
-            self.find().parent = uf.find()
+    def union(self, uf: 'UnionFind') -> bool:
+        if self.find().label == uf.find().label:
+            return True
+        self.find().parent = uf.find()
+        return False
 
 class Solution:
     def numSimilarGroups(self, strs: List[str]) -> int:
@@ -19,10 +21,10 @@ class Solution:
             unMatches = [(x, y) for x, y in zip(s1, s2) if x != y]                                                      #Find all unmatched pairs.
             return not unMatches or (len(unMatches) == 2 and (unMatches[1][1], unMatches[1][0]))                        #There should be either no unmatched pairs or only 2 unmatched pairs and the second one is the reverse of first one.
 
-        ufs = [UnionFind(i) for i in range(len(strs))]                                                                  #Initialize a union find for each string.
+        ufs = [UnionFind(i) for i in range(len(strs))]                                                                  #Initialize a Union-Find for each string.
         for i in range(len(strs)):
             for j in range(i + 1, len(strs)):                                                                           #Traverse each string pair.
-                if isSimilar(strs[i], strs[j]):                                                                         #If they are similar, union the 2 union finds.
+                if isSimilar(strs[i], strs[j]):                                                                         #If they are similar, union the 2 Union-Finds.
                     ufs[i].union(ufs[j])
         
-        return len(set([uf.find().label for uf in ufs]))                                                                #Return the size of union find parent label.
+        return len(set([uf.find().label for uf in ufs]))                                                                #Return the size of Union-Find parent label.
