@@ -1,7 +1,7 @@
-class UnionFind:                                                        #Union find.
+class UnionFind:                                                        #Union-Find class.
     def __init__(self, x: int):
-        self.label = x
         self.parent = None
+        self.label = x
 
     def find(self) -> 'UnionFind':
         if not self.parent:
@@ -9,14 +9,16 @@ class UnionFind:                                                        #Union f
         self.parent = self.parent.find()
         return self.parent
 
-    def union(self, uf: 'UnionFind') -> None:
-        if self.find().label != uf.find().label:
-            self.find().parent = uf.find()
+    def union(self, uf: 'UnionFind') -> bool:
+        if self.find().label == uf.find().label:
+            return True
+        self.find().parent = uf.find()
+        return False
 
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         n = len(isConnected)                                            #Get the number of cities.
-        ufs = [UnionFind(i) for i in range(n)]                          #Initialize a UnionFind for each city.
+        ufs = [UnionFind(i) for i in range(n)]                          #Initialize a Union-Find for each city.
         for i in range(n):                                              #Traverse each edge in adjacent matrix and union the two cities on the edge.
             for j in range(i + 1, n):
                 if isConnected[i][j]:
