@@ -11,9 +11,9 @@ class UnionFind:                                                                
 
     def union(self, uf: 'UnionFind') -> bool:
         if self.find().label == uf.find().label:
-            return True
+            return False
         self.find().parent = uf.find()
-        return False
+        return True
 
 class Solution:
     def findCriticalAndPseudoCriticalEdges(self, n: int, edges: List[List[int]]) -> List[List[int]]:
@@ -30,7 +30,7 @@ class Solution:
             for j, (w, a, b, i) in enumerate(sortedEdges):                                    #Traverse sorted edges.
                 if j == skipIndex or j == fixIndex:                                           #Skip edge to skip and edg to fix(already processed).
                     continue
-                if not ufs[a].union(ufs[b]):                                                  #If the vertexes on edge are not unioned, union them, add edge weight to mst and increase count.
+                if ufs[a].union(ufs[b]):                                                      #If the vertexes on edge are not unioned, union them, add edge weight to mst and increase count.
                     mst += w
                     count += 1
                 if count == n:                                                                #If all vertexes are unioned, return mst.
