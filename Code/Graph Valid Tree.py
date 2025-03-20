@@ -1,15 +1,15 @@
-class UnionFind:                                                                            #Union Find class.
-    def __init__(self, x: int):                                                             #Initialize.
-        self.label = x
+class UnionFind:                                                                            #Union-Find class.
+    def __init__(self, x: int):
         self.parent = None
+        self.label = x
 
-    def find(self) -> 'UnionFind':                                                          #Find and update parent.
+    def find(self) -> 'UnionFind':
         if not self.parent:
             return self
         self.parent = self.parent.find()
         return self.parent
 
-    def union(self, uf: 'UnionFind') -> bool:                                               #Union with another union find and return if they are in different compoment before union.
+    def union(self, uf: 'UnionFind') -> bool:
         if self.find().label == uf.find().label:
             return True
         self.find().parent = uf.find()
