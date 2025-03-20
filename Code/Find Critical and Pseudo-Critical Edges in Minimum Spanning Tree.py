@@ -1,19 +1,19 @@
-class UnionFind:                                                                              #Union Find class.
+class UnionFind:                                                                               #Union-Find class.
     def __init__(self, x: int):
-        self.label = x
         self.parent = None
+        self.label = x
 
-    def find(self) -> Optional['UnionFind']:                                                  #Find the parent of current union find.
+    def find(self) -> 'UnionFind':
         if not self.parent:
             return self
         self.parent = self.parent.find()
         return self.parent
 
-    def union(self, uf: Optional['UnionFind']) -> bool:                                       #Union 2 union finds and return if they actually need to be unioned.
+    def union(self, uf: 'UnionFind') -> bool:
         if self.find().label == uf.find().label:
-            return False
+            return True
         self.find().parent = uf.find()
-        return True
+        return False
 
 class Solution:
     def findCriticalAndPseudoCriticalEdges(self, n: int, edges: List[List[int]]) -> List[List[int]]:
@@ -21,7 +21,7 @@ class Solution:
         critical, pseudoCritical = [], []                                                     #Initialize critical edges and pseudo critical edges.
 
         def calculateMST(skipIndex: int, fixIndex: tuple) -> int:                             #Calculate MST using Kruskal algorithm with the index of edge to skip and index of edge to fix.
-            ufs = [UnionFind(i) for i in range(n)]                                            #Initialize a union find for each vertex.
+            ufs = [UnionFind(i) for i in range(n)]                                            #Initialize a union-Find for each vertex.
             mst, count = 0, 1                                                                 #Initialize mst weight sum and count of vertexes unioned.
             if fixIndex != -1:                                                                #If there is an edge to be fixed in MST, union the vertexes on edge, add edge weight to mst and increase count.
                 ufs[sortedEdges[fixIndex][1]].union(ufs[sortedEdges[fixIndex][2]])
@@ -30,7 +30,7 @@ class Solution:
             for j, (w, a, b, i) in enumerate(sortedEdges):                                    #Traverse sorted edges.
                 if j == skipIndex or j == fixIndex:                                           #Skip edge to skip and edg to fix(already processed).
                     continue
-                if ufs[a].union(ufs[b]):                                                      #If the vertexes on edge are not unioned, union them, add edge weight to mst and increase count.
+                if not ufs[a].union(ufs[b]):                                                  #If the vertexes on edge are not unioned, union them, add edge weight to mst and increase count.
                     mst += w
                     count += 1
                 if count == n:                                                                #If all vertexes are unioned, return mst.
