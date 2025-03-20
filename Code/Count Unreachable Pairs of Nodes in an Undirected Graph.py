@@ -1,7 +1,7 @@
-class UnionFind:                                                                    #Union Find.
+class UnionFind:                                                                     #Union-Find class.
     def __init__(self, x: int):
-        self.label = x
         self.parent = None
+        self.label = x
 
     def find(self) -> 'UnionFind':
         if not self.parent:
@@ -10,13 +10,12 @@ class UnionFind:                                                                
         return self.parent
 
     def union(self, uf: 'UnionFind') -> None:
-        if self.find().label == uf.find().label:
-            return
-        self.find().parent = uf.find()
+        if not self.find().label == uf.find().label:
+            self.find().parent = uf.find()
 
 class Solution:
     def countPairs(self, n: int, edges: List[List[int]]) -> int:
-        ufs = [UnionFind(i) for i in range(n)]                                      #Initialize an union find for each node. 
+        ufs = [UnionFind(i) for i in range(n)]                                      #Initialize a Union-Find for each node. 
         for x, y in edges:                                                          #For each edge, union the 2 union finds of nodes on edge.
             ufs[x].union(ufs[y])
 
