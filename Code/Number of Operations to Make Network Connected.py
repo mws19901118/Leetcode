@@ -1,7 +1,7 @@
-class UnionFind:                                                                                        #UnionFind.
+class UnionFind:                                                                                       #Union-Find class.
     def __init__(self, x: int):
-        self.label = x
         self.parent = None
+        self.label = x
 
     def find(self) -> 'UnionFind':
         if not self.parent:
@@ -9,13 +9,15 @@ class UnionFind:                                                                
         self.parent = self.parent.find()
         return self.parent
 
-    def union(self, x: 'UnionFind') -> None:
-        if self.find().label != x.find().label:
-            self.find().parent = x
+    def union(self, uf: 'UnionFind') -> bool:
+        if self.find().label == uf.find().label:
+            return True
+        self.find().parent = uf.find()
+        return False
 
 class Solution:
     def makeConnected(self, n: int, connections: List[List[int]]) -> int:
-        ufs = [UnionFind(i) for i in range(n)]                                                          #Initialize a union find for each node.
+        ufs = [UnionFind(i) for i in range(n)]                                                          #Initialize a Union-Find for each node.
         for x, y in connections:                                                                        #For each connection, union the 2 nodes connected.
             ufs[x].union(ufs[y])
         component = Counter()                                                                           #Count the size of each component.
