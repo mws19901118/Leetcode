@@ -11,9 +11,9 @@ class UnionFind:                                                                
 
     def union(self, uf: 'UnionFind') -> bool:
         if self.find().label == uf.find().label:
-            return False
+            return True
         self.find().parent = uf.find()
-        return True
+        return False
 
 class Solution:
     def minimumCost(self, n: int, edges: List[List[int]], query: List[List[int]]) -> List[int]:
