@@ -7,7 +7,7 @@ class Solution:
                     last_min = i
                 if nums[i] == maxK:                                    #Update last_max.
                     last_max = i
-                if last_min != -1 and last_max != -1:                  #If both minK and maxK is visited, all subarrays starting in nums[start:min(last_min, last_max) + 1] and ending at nums[i] are fixed-bound.
+                if last_min != -1 and last_max != -1:                  #If both minK and maxK is visited, all subarrays starting in from start to min(last_min, last_max) and ending at i are fixed-bound.
                     count += min(last_min, last_max) - start + 1
             return count
 
