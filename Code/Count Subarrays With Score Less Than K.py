@@ -8,5 +8,5 @@ class Solution:
                 window_sum -= nums[start]                #Deduct nums[start] from window sum.
                 start += 1
                 score = window_sum * (i - start + 1)     #Re-calculate the score.
-            result += i - start + 1                      #Now every subarray starting at nums[start:i + 1] and ending at x will have a score smaller than k, because k will only decrease while the window shrinks.
+            result += i - start + 1                      #Now every subarray starting at and after start and ending at i will have a score smaller than k, because k will only decrease while the window shrinks.
         return result
