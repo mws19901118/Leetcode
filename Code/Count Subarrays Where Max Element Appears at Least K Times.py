@@ -6,5 +6,5 @@ class Solution:
             while count >= k:                               #While count is greater than or equal to k, move forward start and update count.
                 count -= nums[start] == max_v
                 start += 1
-            result += start                                 #Now, for all subarrays starting in nums[:start] and ending at x will have at least k max value.
+            result += start                                 #Now, for all subarrays starting before start and ending at i will have at least k max value.
         return result
