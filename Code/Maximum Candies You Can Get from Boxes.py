@@ -1,18 +1,18 @@
 class Solution:
     def maxCandies(self, status: List[int], candies: List[int], keys: List[List[int]], containedBoxes: List[List[int]], initialBoxes: List[int]) -> int:
-        boxesLocked, keysGot = set(), set()            #Store locked boxes and keys got in 2 sets.
-        q = deque(initialBoxes)                        #Initialize the deque to be initialBoxes.
-        count = 0                                      #Count candy.
-        while q:                                       #BFS.
-            x = q.popleft()                            #Get the box at the head of deque.
-            if not status[x] and x not in keysGot:     #If it is locked and we don't have key yet, add it to boxesLocked and continue.
-                boxesLocked.add(x)
-                continue
-            count += candies[x]                        #Grab all candies in current box.
-            for k in keys[x]:                          #Traverse the keys in current box.
-                keysGot.add(k)                         #Add it to keysGot.
-                if k in boxesLocked:                   #If the key can unlock a box, append the box to deque and remove it from boxesLocked.
-                    q.append(k)
-                    boxesLocked.remove(k)
-            q.extend(containedBoxes[x])                #Append all boxes in current box to deque.
-        return count
+        q, locked = deque([x for x in initialBoxes if status[x]]), set([x for x in initialBoxes if not status[x]])            #For each initial boxes, if it is open, put it in a deque; otherwise, put it in a set of locked boxes.
+        result = 0
+        while q:                                                                                                              #BFS.
+            x = q.popleft()                                                                                                   #Popleft q to get current box.
+            result += candies[x]                                                                                              #Take all the candies inside.
+            for y in keys[x]:                                                                                                 #Traverse the keys inside.
+                status[y] = 1                                                                                                 #Mark the corresponding box as open.
+                if y in locked:                                                                                               #If the box is previously locked, now it can be opened, so append it to q and remove it from locked.
+                    q.append(y)
+                    locked.remove(y)
+            for y in containedBoxes[x]:                                                                                       #Traverse the boxes inside.
+                if not status[y]:                                                                                             #If it is closed, add it to locked.
+                    locked.add(y)
+                else:                                                                                                         #Otherwise, append it to q.
+                    q.append(y)
+        return result
