@@ -17,9 +17,7 @@ class UnionFind:                                                                
     
 class Solution:
     def smallestEquivalentString(self, s1: str, s2: str, baseStr: str) -> str:
-        letters = 'abcdefghijklmnopqrstuvwxyz'                                            #Initialize all letters.
-        ufs = {x: UnionFind(x) for x in letters}                                          #Instentiate a UnionFind for each letter.
+        ufs = {x: UnionFind(x) for x in 'abcdefghijklmnopqrstuvwxyz'}                     #Instentiate a UnionFind for each letter.
         for x, y in zip(s1, s2):                                                          #Traverse s1 and s2 simultaneously.
             ufs[x].union(ufs[y])                                                          #Union the 2 letters.
-        mapping = {x: ufs[x].find().label for x in letters}                               #Build the mapping of each letter to its parent.
-        return "".join([mapping[x] for x in baseStr])                                     #Map each letter in baseStr and join to get the lexicographically smallest equivalent string.
+        return "".join(ufs[x].find().label for x in baseStr)                              #Find the UnionFind parent label for each letter in baseStr and join to get the lexicographically smallest equivalent string.
