@@ -1,11 +1,8 @@
 class Solution:
     def findLHS(self, nums: List[int]) -> int:
-        c = Counter()                                   #Use a counter to store count of each element.
-        result = 0                                      #Initialize result to be 0.
-        for x in nums:                                  #Traverse nums.
-            c[x] += 1                                   #Increase count of x.
-            if c[x - 1]:                                #If c[x - 1] > 0, update result to c[x] + c[x - 1] if it's greater than result.
-                result = max(c[x] + c[x - 1], result)
-            if c[x + 1]:                                #If c[x + 1] > 0, update result to c[x] + c[x + 1] if it's greater than result.
-                result = max(c[x] + c[x + 1], result)
+        count = Counter(nums)                                            #Count nums.
+        result = 0
+        for x in count:                                                  #Traverse count.
+            if count[x] > 0 and count[x + 1] > 0:                        #If both count[x] and count[x + 1] is greater than 0, the subsequence formed by all occurrences of x and all occurrences of x + 1 is harmonious. 
+                result = max(result, count[x] + count[x + 1])            #Update result if necessary.
         return result
