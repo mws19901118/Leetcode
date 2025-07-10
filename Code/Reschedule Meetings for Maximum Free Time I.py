@@ -1,6 +1,6 @@
 class Solution:
     def maxFreeTime(self, eventTime: int, k: int, startTime: List[int], endTime: List[int]) -> int:
-        startTime, endTime = startTime + [eventTime], [0] + endTime        #Add eventTime to the end of startTime anad 0 to the start of endTime.
+        startTime, endTime = startTime + [eventTime], [0] + endTime        #Add eventTime to the end of startTime and 0 to the start of endTime.
         gaps = [s - e for s, e in zip(startTime, endTime)]                 #Calculate the gaps of each adjacent meetings, including the gap before first meeting and gap after last meeting.
         q = deque()                                                        #Store the consective gap in a queue.
         result, s = 0, 0                                                   #Intialize result and sum.
