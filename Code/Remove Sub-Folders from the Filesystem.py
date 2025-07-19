@@ -1,30 +1,31 @@
 class Trie:                                                            #Trie node.
     def __init__(self):
-        self.wordIndex = -1                                            #Link the trie node with the original index of folder.
-        self.children = defaultdict(lambda: Trie())
+        self.hasFolder = False
+        self.children = defaultdict(Trie)
 
-    def insert(self, path: List[str], index: int) -> None:
-        if not path:
-            self.wordIndex = index
+    def insert(self, nodes: List[str]) -> None:
+        if not nodes:
+            self.hasFolder = True
             return
-        self.children[path[0]].insert(path[1:], index)
+        self.children[nodes[0]].insert(nodes[1:])
 
 class Solution:
     def removeSubfolders(self, folder: List[str]) -> List[str]:
         trie = Trie()                                                  #Initialize the trie root.
         for i, x in enumerate(folder):                                 #Traverse folders.
-            trie.insert(x.split("/")[1:], i)                           #Parse folder and insert path into trie with index.
+            trie.insert(x.split("/")[1:])                              #Parse folder and insert path into trie with index.
 
-        result = []
-        def dfs(stack: List['Trie']) -> None:                          #DFS.
-            node = stack[-1]
-            if node.wordIndex != -1:                                   #If current node is a complete folder, append the folder to result and return.
-                result.append(folder[node.wordIndex])
+        result, stack = [], [""]                                       #Initialize result; also initialize stack for DFS with an empty string representing the root node.
+        def dfs(node: Trie) -> None:                                   #DFS.
+            if not node:                                               #If node is none, return.
                 return
-            for x in node.children.values():                           #Traverse the children of current node.
-                stack.append(x)                                        #Append child to stack.
-                dfs(stack)                                             #Keep DFS.
+            if node.hasFolder:                                         #If node has folder, join stack by "/" and append it to result; then return.
+                result.append("/".join(stack))
+                return
+            for x in node.children:                                    #Traverse the children of node.
+                stack.append(x)                                        #Append x to stack.
+                dfs(node.children[x])                                  #Keep DFS in node.children[x].
                 stack.pop()                                            #Pop stack.
-
-        dfs([trie])                                                    #Start DFS from trie root.
+        
+        dfs(trie)                                                      #DFS from root.
         return result
