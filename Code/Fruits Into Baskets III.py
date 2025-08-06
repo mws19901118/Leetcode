@@ -1,8 +1,8 @@
 class SegTree:                                                                                        #Segment tree class.
     def __init__(self, baskets):
-        size = 1 << (len(baskets) - 1).bit_length() + 1
+        size = 1 << (len(baskets) - 1).bit_length() + 1                                               #The size of segment tree is the smallest power of 2 that is at least twice of the length of baskets.
         self.segments = [0] * size                                                                    #Initialize segments.
-        self.build(baskets, 1, 0, len(baskets) - 1)                                                   #Build the segment tree.
+        self.build(baskets, 1, 0, len(baskets) - 1)                                                   #Build the segment tree, ignoring the first element in self.segements(dummy).
 
     def maintain(self, node: int):                                                                    #Maintain the segment root node has the max value in current segment.
         self.segments[node] = max(self.segments[node * 2], self.segments[node * 2 + 1])
