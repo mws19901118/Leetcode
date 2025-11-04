@@ -3,7 +3,7 @@ class Solution:
         count = Counter(nums[:k])                                               #Count numbers in nums[:k].
         sortedCount = SortedList((-j, -i) for i, j in count.items())            #Store the number and count pair in a sorted list in descending order.
         xSum = sum(i * j for i, j in sortedCount[:x])                           #Calculate the xSum for nums[:k].
-        result = []
+        result = [xSum]                                                         #Initialize result with current xSum.
 
         def add(index: int) -> None:                                            #Add a number and count pair by index of original nums to sorted count then update xSum.
             nonlocal xSum
