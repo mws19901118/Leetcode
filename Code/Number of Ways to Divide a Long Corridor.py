@@ -4,16 +4,12 @@ class Solution:
         if total & 1 or not total:                                         #If number of seats is 0 or odd, return 1 as there is no valid way to divide the corridor.
             return 0
         division = 10 ** 9 + 7                                             #Initialize division.
-        i, count, result = 0, 0, 1                                         #Initialize pointer, running count of seat and result.
-        while count < total - 1:                                           #Traverse while not entering the last section.
-            if corridor[i] == 'S':                                         #Increase count if corridor[i] is seat.
-                count += 1
-            if corridor[i] == 'P' and count > 0 and not count & 1:         #Find the number of plants between 2 sections.
-                j = i + 1
-                while j < len(corridor) and corridor[j] == 'P':
-                    j += 1
-                result = result * (j - i + 1) % division                   #There are j - i + 1 ways to divide plants between 2 sections.
-                i = j
-            else:
-                i += 1
+        index, result = -1, 1                                              #Initialize last index of seat and result.
+        for i, x in enumerate(corridor):                                   #Traverse corridor.
+            if x == 'P':                                                   #If current position is plant, skip.
+                continue
+            if index != -1 and not total & 1:                              #If index is not -1 and total is even now, we can insert a divider any place between index and i.
+                result = (result * (i - index)) % division
+            index = i                                                      #Update index.
+            total -= 1                                                     #Decrease total.
         return result
