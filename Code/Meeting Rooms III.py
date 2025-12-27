@@ -18,6 +18,4 @@ class Solution:
             heapq.heappush(meetingsInProgress, (actualStartTime + y - x, room))                     #Push current meeting to meetingsInProgress with actual end time and room.
             count[room] += 1                                                                        #Increase the usage of current room.
         maxCount = max(count.values())                                                              #Find the max usage of rooms.
-        for i in range(n):                                                                          #Traverse rooms, when current room's usage is the max usage, return current room.
-            if count[i] == maxCount:
-                return i
+        return [i for i in range(n) if count[i] == maxCount][0]                                     #Traverse rooms, return the first room whose count is max count.
