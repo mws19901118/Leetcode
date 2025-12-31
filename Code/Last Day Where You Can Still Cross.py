@@ -18,17 +18,14 @@ class UnionFind:                                                                
 
 class Solution:
     def latestDayToCross(self, row: int, col: int, cells: List[List[int]]) -> int:
-        days = 0                                                                              #Initialize days.
         ufDict = {}                                                                           #Store union finds based on the coordinate.
-        for x, y in cells:                                                                    #Traverse cells.
+        for i, [x, y] in enumerate(cells):                                                    #Traverse cells.
             ufDict[(x, y)] = UnionFind(y, y)                                                  #Create a union find for current water cell.
             for u, v in product([x - 1, x, x + 1], [y - 1, y, y + 1]):                        #Traverse all neighbors in 8 directions.
                 if (u, v) == (x, y) or (u, v) not in ufDict:                                  #If it's same as current cell or is not seen yet in ufDicts, skip.
                     continue
                 uf = ufDict[(x, y)].find()                                                    #Find the parent of current union find.
                 uf.union(ufDict[u, v])                                                        #Union it with neighbor.
-                if uf.find().leftBound == 1 and uf.find().rightBound == col:                  #After union, If the left bound of parent is 1 and right bound of parent is col, this union find set can block all culumns, so return days.
-                    return days
-            days += 1                                                                         #Increase days.
-        return days                                                                           #Return days if no blocking at the end. 
-
+                if uf.find().leftBound == 1 and uf.find().rightBound == col:                  #After union, If the left bound of parent is 1 and right bound of parent is col, this union find set can block all culumns, so return current i as previous day.
+                    return i
+        return len(cells)                                                                     #Return length of cells if no blocking at the end. 
