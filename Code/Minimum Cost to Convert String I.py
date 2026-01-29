@@ -8,9 +8,5 @@ class Solution:
         for k, i, j in product(range(26), range(26), range(26)):                                                          #Use floyd-warshall algorithm to precompute the cost from one character to another.
             if matrix[i][j] > matrix[i][k] + matrix[k][j]:
                 matrix[i][j] = matrix[i][k] + matrix[k][j]
-        result = 0
-        for x, y in zip(source, target):                                                                                  #Traverse source and target simultonously.
-            if matrix[ord(x) - ord('a')][ord(y) - ord('a')] == inf:                                                       #If cannot convert current pair, return -1.
-                return -1
-            result += matrix[ord(x) - ord('a')][ord(y) - ord('a')]                                                        #Add cost to result.
-        return result
+        result = sum(matrix[ord(x) - ord('a')][ord(y) - ord('a')] for x, y in zip(source, target))                        #Sum up cost.
+        return result if result < inf else -1                                                                             #Return result if it is not inf; otherwise, return -1.
