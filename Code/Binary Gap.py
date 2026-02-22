@@ -1,15 +1,9 @@
 class Solution:
-    def binaryGap(self, N):
-        """
-        :type N: int
-        :rtype: int
-        """
-        binary = bin(N)[2:]                 #Covert to binary in string and ignore the '0b' prefix.
-        dis = 0
-        i = 0
-        last = 0
-        for i in range(len(binary)):        #Find the longest distance in one pass.
-            if binary[i] == '1':
-                dis = max(i - last, dis)
+    def binaryGap(self, n: int) -> int:
+        binary = "{0:b}".format(n)                    #Covert to n binary in string.
+        result, last = 0, 0
+        for i, x in enumerate(binary):                #Traverse binary string and find the longest distance.
+            if x == '1':
+                result = max(i - last, result)
                 last = i
-        return dis     
+        return result     
