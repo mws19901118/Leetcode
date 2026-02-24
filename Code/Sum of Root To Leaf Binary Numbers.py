@@ -5,16 +5,12 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def traverse(self, root: TreeNode, path: int, numbers: List[int]) -> None:      #Traverse the tree.
-        if not root:
-            return
-        path = path << 1 | root.val                                                 #Update the sum in path.
-        if not root.left and not root.right:                                        #If current node is leaf, add sum to numbers list.
-            numbers.append(path)
-        else:                                                                       #Otherwise keep traversing through left subtree and right subtree.
-            self.traverse(root.left, path, numbers)
-            self.traverse(root.right, path, numbers)
-    def sumRootToLeaf(self, root: TreeNode) -> int:
-        numbers = []
-        self.traverse(root, 0, numbers)
-        return sum(numbers)                                                         #Return the sum of numbers list.
+    def sumRootToLeaf(self, root: Optional[TreeNode]) -> int:
+        def traverse(node: Optional[TreeNode], b: int) -> int:                        #Traverse the tree to get the sum of root to leaf.
+            if not node:                                                              #If node is none, return 0.
+                return 0
+            b = (b << 1) | node.val                                                   #Update the binary number from root to current node.
+            if not node.left and not node.right:                                      #If current node is leaf, return the binary number.
+                return b
+            return traverse(node.left, b) + traverse(node.right, b)                   #Otherwise keep traversing through left subtree and right subtree.
+        return traverse(root, 0)                                                      #Return the result of traversing from root.
