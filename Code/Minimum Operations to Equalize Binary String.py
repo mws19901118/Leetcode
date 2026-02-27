@@ -8,9 +8,9 @@ class Solution:
             for x in q:                                                                           #Traverse q.
                 if not x:                                                                         #If x is 0, return count.
                     return count
-                l, r = x + k - 2 * min(x, k), x + k - 2 * max(k - len(s) + x, 0)
+                l, r = x + k - 2 * min(x, k), x + k - 2 * max(k - len(s) + x, 0)                  #We can select at most min(x, k) and at least max(k - len(s) + x, 0) '0'(at most len(s) - x '1'). So, the lower bound of count of '0' after operation is x - min(x, k) + k - min(x, k) = x + k - 2 * min(x, k). Similarly, upper bound of count of '0' is x + k - 2 * max(k - len(s) + x, 0). 
                 target = unvisited[l % 2]                                                         #Find the target by oddity.
-                index = target.bisect_left(l)                                                     #Binary seaerch the left bound index in target.
+                index = target.bisect_left(l)                                                     #Binary seaerch the lower bound index in target.
                 while index < len(target) and target[index] <= r:                                 #Iterate while index is not the end and target[index] is not greater than the upper bound.
                     newq.append(target[index])                                                    #Append target[index] to newq.
                     target.pop(index)                                                             #Pop the index from target.
