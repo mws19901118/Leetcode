@@ -1,7 +1,7 @@
 class Solution:
     def countSubmatrices(self, grid: List[List[int]], k: int) -> int:
         m, n = len(grid), len(grid[0])                      #Get the dimensions.
-        s = [0] * (n + 1)                                   #Intialize the prefix sum; in row i,  s[j + 1] means the prefix sum from the top left corner to grid[i][j].
+        s = [0] * (n + 1)                                   #Intialize the prefix sum; in row i, s[j + 1] means the prefix sum from the top left corner to grid[i][j].
         result = 0
         for i in range(m):                                  #Traverse each row.
             prev = 0                                        #Store the prefix sum from top left corner to grid[i - 1][j - 1]; initially it is 0 as such submatrix does not exist.
