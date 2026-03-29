@@ -14,11 +14,10 @@ class Solution:
             if False not in used:                                                                                     #If all letters are used, return "" as not letter can be assigned to current position.
                 return ""
             s.append(chr(ord('a') + used.index(False)))                                                               #Find the smallest unused character and append it to s.
-        for i in range(n - 1):
+        for i in range(n - 1):                                                                                        #Traverse the half above diagonal and validate the 
             for j in range(i + 1, n):
-                for k in range(lcp[i][j]):
-                    if s[j + k] != s[i + k]:
-                        return ""
-                if j + lcp[i][j] < n and s[j + lcp[i][j]] == s[i + lcp[i][j]]:
+                if s[i] != s[j] and lcp[i][j]:                                                                        #If s[i] != s[j] but lcp[i][j] is greater than 0, s is invalid, return "".
+                    return ""
+                elif s[i] == s[j] and lcp[i][j] != 1 + (0 if j == n - 1 else lcp[i + 1][j + 1]):                      #If s[i] == s[j] but lcp[i][j] is not equal to 1(j is the end) or 1 + lc[[i + 1][j + 1](j is not the end), s is invalid, return "".
                     return ""
         return "".join(s)                                                                                             #Join s and return.
