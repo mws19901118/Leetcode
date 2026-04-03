@@ -1,0 +1,21 @@
+class Solution:
+    def maxWalls(self, robots: List[int], distance: List[int], walls: List[int]) -> int:
+        def destroy(start: int, end: int) -> int:                                                                                                                #Calculate the walls can be destroyed in interval [start, end].
+            return bisect_right(walls, end) - bisect_left(walls, start)                                                                                          #Binary search the rightmost index to insert end and binary search the leftmost index to insert start then return the diff.
+
+        walls.sort()                                                                                                                                             #Sort walls in ascending order.
+        sortedRobots = sorted((r, d) for r, d in zip(robots, distance))                                                                                          #Bundle robots and distance together and sort it in ascending order.
+        dp = []                                                                                                                                                  #Initialize dp.
+        for i, (r, d) in enumerate(sortedRobots):                                                                                                                #Traverse sortedRobots.
+            rightEnd = min(r + d, (sortedRobots[i + 1][0] - 1) if i + 1 < len(sortedRobots) else inf)                                                            #Calculate the end of shooting right, which is the min value of r + d and sortedRobots[i + 1][0] - 1 if i + 1 is not ouf of bound.
+            rightDestroy = destroy(r, rightEnd)                                                                                                                  #Calculate the walls destroyed of shooting right.
+            if not i:                                                                                                                                            #For the first robot, there is no robots to the left.
+                leftDestroy = destroy(r - d, r)                                                                                                                  #Calculate the walls destroyed of shooting left.
+                dp.append([(leftDestroy, r), (rightDestroy, rightEnd)])                                                                                          #Append the walls destroyed and interval end of shooting left and right respectively to dp. 
+            else:
+                leftStart0 = max(r - d, dp[-1][0][1] + 1)                                                                                                        #When the previous robot shoots left, the interval start of shooting left cannot reach the interval end of previous robot shooting left; so it is max(r - d, dp[-1][0][1] + 1).
+                leftDestroy0 = destroy(leftStart0, r)                                                                                                            #Calculate the walls destroyed of shooting left with previous robot shoots left.
+                leftStart1 = max(r - d, dp[-1][1][1] + 1)                                                                                                        #When the previous robot shoots right, the interval start of shooting left cannot reach the interval end of previous robot shooting right; so it is max(r - d, dp[-1][1][1] + 1).
+                leftDestroy1 = destroy(leftStart1, r)                                                                                                            #Calculate the walls destroyed of shooting left with previous robot shoots right.
+                dp.append([(max(dp[-1][0][0] + leftDestroy0, dp[-1][1][0] + leftDestroy1), r), (rightDestroy + max(dp[-1][0][0], dp[-1][1][0]), rightEnd)])      #Append the max walls destroyed and interval end of shooting left and right respectively to dp. 
+        return max(dp[-1][0][0], dp[-1][1][0])                                                                                                                   #Return the max walls destroyed at dp[-1].
