@@ -1,0 +1,12 @@
+class Solution:
+    def minimumDistance(self, word: str) -> int:
+        coordinates = {x:divmod(i, 6) for i, x in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ")}                                                                                #Initialize the coordinate for each letter.
+        dp = defaultdict(lambda:inf)                                                                                                                                      #Initialize dp; dp[(x, y)] means the minimum distance for current prefix with first finger on x and second finger on y.
+        dp[("", "")] = 0                                                                                                                                                  #Before typing, both fingers are not on the keyboard, thus distance is 0.
+        for c in word:                                                                                                                                                    #Traverse word.
+            newdp = defaultdict(lambda:inf)                                                                                                                               #Initialize new dp.
+            for (x, y), d in dp.items():                                                                                                                                  #Traverse current dp.
+                newdp[(c, y)] = min(newdp[(c, y)], d + (0 if not x else abs(coordinates[c][0] - coordinates[x][0]) + abs(coordinates[c][1] - coordinates[x][1])))         #Calculate the min distance for first finger moving to c; if first finger is not on keyboard before, the distance is not changed; otherwise add the distance from x to c to current distance.
+                newdp[(x, c)] = min(newdp[(x, c)], d + (0 if not y else abs(coordinates[c][0] - coordinates[y][0]) + abs(coordinates[c][1] - coordinates[y][1])))         #Calculate the min distance for second finger moving to c; if second finger is not on keyboard before, the distance is not changed; otherwise add the distance from y to c to current distance.
+            dp = newdp                                                                                                                                                    #Replace dp with newdp.
+        return min(dp.values())                                                                                                                                           #Return the min values in the values of dp.
