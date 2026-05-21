@@ -1,11 +1,9 @@
 class Trie:                                                                         #Trie.
     def __init__(self):
-        self.hasNode = False
         self.children = defaultdict(lambda: Trie())
 
     def insert(self, word) -> None:
         if not word:
-            self.hasNode = True
             return
         self.children[word[0]].insert(word[1:])
 
