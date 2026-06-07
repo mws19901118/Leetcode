@@ -24,10 +24,10 @@ class Solution:
             result = 0
             for length in range(1, n):                                                                              #Sum up waviness of all numbers with fewer digits than num.
                 result += sum(dp(i, length, 0) for i in range(1, 10))
-            trend = 0                                                                                               #Process n-digit numbers up to num; first initialize the trend
+            trend = 0                                                                                               #Process n-digit numbers up to num; first initialize the trend.
             for i, x in enumerate(digits):                                                                          #Traverse digits.
                 start = 1 if not i else 0                                                                           #Set start to 0 if not first digit; otherwise 1.
-                for d in range(start, x):                                                                           #Traverse from start to x - 1, basically the numbers smaller than num at current digit. 
+                for d in range(start, x):                                                                           #Traverse from start to x - 1, basically the numbers smaller than num at current digit.
                     newTrend = 0 if not i else calculateTrend(digits[i - 1], d)                                     #Calculate the new trend into d.
                     if isPeakOrValley(trend, newTrend):                                                             #If digits[i - 1](must be valid since if i == 0, both trend and new trend is 0) is a peak or valley, add 10 ** (n - i - 1) to result because all remaining numbers with same prefix num[:i] + d will have the wave.
                         result += 10 ** (n - i - 1)
