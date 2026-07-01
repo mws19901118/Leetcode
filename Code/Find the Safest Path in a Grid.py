@@ -1,10 +1,10 @@
 class Solution:
     def maximumSafenessFactor(self, grid: List[List[int]]) -> int:
         def populateDistance() -> None:                                                        #Populate distance.
-            for x, y in thieves:                                                               #Set the distance to 0 for each cell that has a thief.
-                distance[x][y] = 0
             count = 1                                                                          #Initialize the distance.
-            q = thieves
+            q = [(i, j) for i, j in product(range(n), range(n)) if grid[i][j]]                 #Start with the coordinates for all thieves.
+            for x, y in q:                                                                     #Set the distance to 0 for each cell that has a thief.
+                distance[x][y] = 0
             while q:                                                                           #BFS starting from all thieves.
                 newq = []                                                                      #Initialize new queue.
                 for x, y in q:                                                                 #Traverse current queue.
@@ -16,7 +16,6 @@ class Solution:
                 q = newq
 
         n = len(grid)                                                                          #Get the diemension.
-        thieves = [(i, j) for i, j in product(range(n), range(n)) if grid[i][j]]               #Find coordinates for all thieves.
         distance = [[2 * n for x in range(n)] for y in range(n)]                               #Initialize minimum manhatten distance for each cell to any thief.
         populateDistance()                                                                     #Populate the distance.
         heap = [(-distance[0][0], 0, 0)]                                                       #Use a max heap to store the visited coordinates by min distance.
@@ -51,10 +50,10 @@ class Solution:
             return False                                                                                                          #Return false if cannot reach.
         
         def populateDistance() -> None:
-            for x, y in thieves:
+            q = [(i, j) for i, j in product(range(n), range(n)) if grid[i][j]]
+            for x, y in q:
                 distance[x][y] = 0
             count = 1
-            q = thieves
             while q:
                 newq = []
                 for x, y in q:
@@ -66,7 +65,6 @@ class Solution:
                 q = newq
 
         n = len(grid)
-        thieves = [(i, j) for i, j in product(range(n), range(n)) if grid[i][j]]
         distance = [[2 * n for x in range(n)] for y in range(n)]
         populateDistance()
         start, end = 0, 2 * n - 2                                                                                                 #Binary search from 0 to 2 * n - 2, which is the max possible distance.
